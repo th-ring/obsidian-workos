@@ -1,5 +1,6 @@
-﻿# Node & Development Dependencies
+# Node & Development Dependencies
 node_modules/
+.node_modules/
 dist/
 *.log
 npm-debug.log*
