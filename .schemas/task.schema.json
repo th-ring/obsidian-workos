@@ -1,0 +1,72 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "WorkOSTask",
+  "description": "Schema for an atomic task markdown frontmatter in Obsidian WorkOS",
+  "type": "object",
+  "required": ["type", "title", "status", "priority", "created"],
+  "properties": {
+    "type": {
+      "type": "string",
+      "const": "task"
+    },
+    "title": {
+      "type": "string",
+      "description": "Short, clear title of the task"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["inbox", "backlog", "todo", "in_progress", "blocked", "done", "archived"],
+      "default": "todo"
+    },
+    "priority": {
+      "type": "string",
+      "enum": ["low", "medium", "high", "urgent"],
+      "default": "medium"
+    },
+    "workstream": {
+      "type": ["string", "null"],
+      "description": "Wikilink to workstream, e.g. [[Workstream Name]]"
+    },
+    "due": {
+      "type": ["string", "null"],
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "description": "Due date in YYYY-MM-DD format"
+    },
+    "created": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "description": "Creation date in YYYY-MM-DD format"
+    },
+    "tags": {
+      "type": "array",
+      "items": { "type": "string" },
+      "default": []
+    },
+    "assigned_to": {
+      "type": "string",
+      "enum": ["user", "agent", "hybrid"],
+      "default": "user"
+    },
+    "review_status": {
+      "type": ["string", "null"],
+      "enum": ["pending", "approved", "rejected", null],
+      "default": null
+    },
+    "agent_state": {
+      "type": ["string", "null"],
+      "enum": ["idle", "processing", "done", null],
+      "default": "idle",
+      "description": "Concurrency lock state for AI agent operations"
+    },
+    "locked_by": {
+      "type": ["string", "null"],
+      "default": null,
+      "description": "Identifier of the agent holding the lock (e.g. agent:antigravity)"
+    },
+    "locked_at": {
+      "type": ["string", "null"],
+      "default": null,
+      "description": "ISO timestamp when the lock was acquired"
+    }
+  }
+}

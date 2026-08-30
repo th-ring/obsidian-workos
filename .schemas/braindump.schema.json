@@ -1,0 +1,53 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "WorkOSBraindump",
+  "description": "Schema for quick capture / braindump frontmatter in Obsidian WorkOS",
+  "type": "object",
+  "required": ["type", "title", "status", "created"],
+  "properties": {
+    "type": {
+      "type": "string",
+      "const": "braindump"
+    },
+    "title": {
+      "type": "string",
+      "description": "Short headline or summary of the thought"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["unprocessed", "triaged", "archived"],
+      "default": "unprocessed"
+    },
+    "source": {
+      "type": "string",
+      "enum": ["quick-capture", "agent", "mobile", "web", "voice"],
+      "default": "quick-capture"
+    },
+    "created": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "description": "Creation date in YYYY-MM-DD format"
+    },
+    "tags": {
+      "type": "array",
+      "items": { "type": "string" },
+      "default": []
+    },
+    "agent_state": {
+      "type": ["string", "null"],
+      "enum": ["idle", "processing", "done", null],
+      "default": "idle",
+      "description": "Concurrency lock state for AI agent operations"
+    },
+    "locked_by": {
+      "type": ["string", "null"],
+      "default": null,
+      "description": "Identifier of the agent holding the lock (e.g. agent:antigravity)"
+    },
+    "locked_at": {
+      "type": ["string", "null"],
+      "default": null,
+      "description": "ISO timestamp when the lock was acquired"
+    }
+  }
+}

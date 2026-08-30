@@ -1,0 +1,57 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "WorkOSNote",
+  "description": "Schema for permanent notes, meetings, and knowledge items in Obsidian WorkOS",
+  "type": "object",
+  "required": ["type", "title", "category", "created"],
+  "properties": {
+    "type": {
+      "type": "string",
+      "const": "note"
+    },
+    "title": {
+      "type": "string",
+      "description": "Note title"
+    },
+    "category": {
+      "type": "string",
+      "enum": ["architecture", "concept", "meeting", "reference", "snippet", "general"],
+      "default": "general"
+    },
+    "workstream": {
+      "type": ["string", "null"],
+      "description": "Optional linked workstream, e.g. [[Workstream Name]]"
+    },
+    "created": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "description": "Creation date in YYYY-MM-DD format"
+    },
+    "updated": {
+      "type": ["string", "null"],
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "description": "Last updated date in YYYY-MM-DD format"
+    },
+    "tags": {
+      "type": "array",
+      "items": { "type": "string" },
+      "default": []
+    },
+    "agent_state": {
+      "type": ["string", "null"],
+      "enum": ["idle", "processing", "done", null],
+      "default": "idle",
+      "description": "Concurrency lock state for AI agent operations"
+    },
+    "locked_by": {
+      "type": ["string", "null"],
+      "default": null,
+      "description": "Identifier of the agent holding the lock (e.g. agent:antigravity)"
+    },
+    "locked_at": {
+      "type": ["string", "null"],
+      "default": null,
+      "description": "ISO timestamp when the lock was acquired"
+    }
+  }
+}

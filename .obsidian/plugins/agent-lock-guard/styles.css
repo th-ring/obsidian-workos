@@ -1,0 +1,342 @@
+﻿/* ==========================================================================
+   Agent Lock Guard - Styles
+   ========================================================================== */
+
+/* --- Floating In-Note Banner --- */
+.agent-lock-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 16px;
+  margin-bottom: 12px;
+  background: var(--background-secondary);
+  border: 1px solid var(--interactive-accent);
+  border-left: 4px solid var(--interactive-accent);
+  border-radius: var(--radius-m);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  animation: agentLockFadeIn 0.25s ease-out;
+  user-select: none;
+}
+
+@keyframes agentLockFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.agent-lock-banner-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.agent-lock-pulse {
+  width: 10px;
+  height: 10px;
+  background-color: var(--interactive-accent);
+  border-radius: 50%;
+  animation: agentLockPulse 1.8s infinite ease-in-out;
+  flex-shrink: 0;
+}
+
+@keyframes agentLockPulse {
+  0% {
+    transform: scale(0.9);
+    box-shadow: 0 0 0 0 rgba(var(--interactive-accent-rgb, 120, 80, 255), 0.7);
+  }
+  70% {
+    transform: scale(1.1);
+    box-shadow: 0 0 0 8px rgba(var(--interactive-accent-rgb, 120, 80, 255), 0);
+  }
+  100% {
+    transform: scale(0.9);
+    box-shadow: 0 0 0 0 rgba(var(--interactive-accent-rgb, 120, 80, 255), 0);
+  }
+}
+
+.agent-lock-icon {
+  display: flex;
+  align-items: center;
+  color: var(--interactive-accent);
+}
+
+.agent-lock-icon svg {
+  width: 20px;
+  height: 20px;
+}
+
+.agent-lock-text-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.agent-lock-title {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-normal);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.agent-lock-agent-name {
+  color: var(--interactive-accent);
+  font-family: var(--font-monospace);
+  font-size: 0.82rem;
+  background: var(--background-modifier-accent);
+  padding: 1px 6px;
+  border-radius: var(--radius-s);
+}
+
+.agent-lock-desc {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+.agent-lock-banner-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.agent-lock-timer-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  background: var(--background-primary);
+  border: 1px solid var(--background-modifier-border);
+  border-radius: var(--radius-s);
+  font-size: 0.8rem;
+  font-family: var(--font-monospace);
+  color: var(--text-muted);
+}
+
+.agent-lock-timer-icon svg {
+  width: 13px;
+  height: 13px;
+}
+
+.agent-lock-unlock-btn {
+  background: var(--interactive-accent);
+  color: var(--text-on-accent);
+  border: none;
+  border-radius: var(--radius-s);
+  padding: 6px 12px;
+  font-size: 0.82rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: opacity 0.15s ease, transform 0.1s ease;
+  white-space: nowrap;
+}
+
+.agent-lock-unlock-btn:hover {
+  opacity: 0.9;
+  transform: scale(1.02);
+}
+
+.agent-lock-unlock-btn:active {
+  transform: scale(0.98);
+}
+
+/* --- Status Bar --- */
+.agent-lock-status-bar {
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.82rem;
+  transition: color 0.15s ease;
+}
+
+.agent-lock-status-bar.has-active-locks {
+  color: var(--interactive-accent);
+  font-weight: 600;
+}
+
+.agent-lock-status-bar.has-active-locks .agent-lock-status-icon {
+  animation: agentLockPulse 2s infinite ease-in-out;
+}
+
+/* --- Overview Modal --- */
+.agent-lock-modal {
+  padding: 8px 4px;
+}
+
+.agent-lock-modal-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+  border-bottom: 1px solid var(--background-modifier-border);
+  padding-bottom: 12px;
+}
+
+.agent-lock-modal-header h2 {
+  margin: 0;
+  font-size: 1.25rem;
+}
+
+.agent-lock-modal-count-badge {
+  background: var(--interactive-accent);
+  color: var(--text-on-accent);
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 12px;
+}
+
+.agent-lock-modal-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 36px 16px;
+  text-align: center;
+  color: var(--text-muted);
+}
+
+.agent-lock-modal-empty-icon svg {
+  width: 48px;
+  height: 48px;
+  color: var(--text-accent);
+  margin-bottom: 12px;
+}
+
+.agent-lock-modal-empty-text {
+  font-size: 0.95rem;
+  margin: 0 0 16px 0;
+}
+
+.agent-lock-modal-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 380px;
+  overflow-y: auto;
+  margin-bottom: 20px;
+}
+
+.agent-lock-modal-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 14px;
+  background: var(--background-secondary);
+  border: 1px solid var(--background-modifier-border);
+  border-radius: var(--radius-m);
+  gap: 12px;
+}
+
+.agent-lock-modal-item-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.agent-lock-modal-item-title-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.agent-lock-file-icon svg {
+  width: 16px;
+  height: 16px;
+  color: var(--text-muted);
+}
+
+.agent-lock-modal-file-link {
+  font-weight: 600;
+  color: var(--text-normal);
+  text-decoration: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+}
+
+.agent-lock-modal-file-link:hover {
+  color: var(--interactive-accent);
+  text-decoration: underline;
+}
+
+.agent-lock-modal-item-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+.agent-lock-modal-agent-badge {
+  background: var(--background-modifier-accent);
+  color: var(--text-normal);
+  padding: 1px 6px;
+  border-radius: var(--radius-s);
+  font-family: var(--font-monospace);
+}
+
+.agent-lock-modal-item-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.agent-lock-btn-secondary {
+  background: var(--background-primary);
+  border: 1px solid var(--background-modifier-border);
+  color: var(--text-normal);
+  padding: 5px 10px;
+  border-radius: var(--radius-s);
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.agent-lock-btn-secondary:hover {
+  background: var(--background-modifier-hover);
+}
+
+.agent-lock-btn-unlock-small {
+  background: var(--interactive-accent);
+  color: var(--text-on-accent);
+  border: none;
+  padding: 5px 10px;
+  border-radius: var(--radius-s);
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.agent-lock-btn-unlock-small:hover {
+  opacity: 0.9;
+}
+
+.agent-lock-modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  border-top: 1px solid var(--background-modifier-border);
+  padding-top: 14px;
+}
+
+.agent-lock-btn-danger {
+  background: var(--text-error);
+  color: #ffffff;
+  border: none;
+  padding: 7px 14px;
+  border-radius: var(--radius-s);
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.agent-lock-btn-danger:hover {
+  opacity: 0.9;
+}

@@ -1,0 +1,47 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "WorkOSWorkstream",
+  "description": "Schema for workstream frontmatter in Obsidian WorkOS",
+  "type": "object",
+  "required": ["type", "title", "status", "priority", "created"],
+  "properties": {
+    "type": {
+      "type": "string",
+      "const": "workstream"
+    },
+    "title": {
+      "type": "string",
+      "description": "Workstream title"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["planning", "active", "on_hold", "completed", "archived"],
+      "default": "active"
+    },
+    "priority": {
+      "type": "string",
+      "enum": ["low", "medium", "high", "urgent"],
+      "default": "medium"
+    },
+    "target_date": {
+      "type": ["string", "null"],
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "description": "Target completion date in YYYY-MM-DD format"
+    },
+    "created": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "description": "Creation date in YYYY-MM-DD format"
+    },
+    "lead": {
+      "type": "string",
+      "enum": ["user", "agent", "team"],
+      "default": "user"
+    },
+    "tags": {
+      "type": "array",
+      "items": { "type": "string" },
+      "default": []
+    }
+  }
+}
