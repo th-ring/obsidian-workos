@@ -59,9 +59,10 @@ Obsidian WorkOS/
 
 ## 🏛️ Das modulare WorkOS Ökosystem (GitHub Repositories)
 
-Das Gesamtsystem ist modular in 4 spezialisierte Repositories unterteilt:
+Das Gesamtsystem ist modular in 5 spezialisierte Repositories unterteilt:
 
 1. 🏛️ **[Obsidian-WorkOS](https://github.com/th-ring/Obsidian-WorkOS)** (Dieser Vault): Reines Wissen, Notizen, Workstreams & Schemas.
 2. 📊 **[obsidian-workos-dashboard](https://github.com/th-ring/obsidian-workos-dashboard)**: React 18 + Tailwind Kanban Dashboard, Swimlanes & Agent Hub.
 3. 🤖 **[obsidian-workos-agent-suite](https://github.com/th-ring/obsidian-workos-agent-suite)**: Headless MCP-Server, CLI-Runner & Plugin Bridge.
 4. 🛡️ **[obsidian-agent-lock-guard](https://github.com/th-ring/obsidian-agent-lock-guard)**: Concurrency Control, Live-Banner & Read-Only Guard.
+5. 🌐 **[obsidian-workos-knowledge-graph](https://github.com/th-ring/obsidian-workos-knowledge-graph)**: 2D/3D Force Graph & Workstream Mindmap Plugin.
