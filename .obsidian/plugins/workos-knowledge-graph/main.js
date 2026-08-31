@@ -1099,11 +1099,11 @@ var require_react_development = __commonJS({
           var dispatcher = resolveDispatcher();
           return dispatcher.useReducer(reducer, initialArg, init8);
         }
-        function useRef3(initialValue) {
+        function useRef4(initialValue) {
           var dispatcher = resolveDispatcher();
           return dispatcher.useRef(initialValue);
         }
-        function useEffect4(create2, deps) {
+        function useEffect5(create2, deps) {
           var dispatcher = resolveDispatcher();
           return dispatcher.useEffect(create2, deps);
         }
@@ -1115,11 +1115,11 @@ var require_react_development = __commonJS({
           var dispatcher = resolveDispatcher();
           return dispatcher.useLayoutEffect(create2, deps);
         }
-        function useCallback2(callback, deps) {
+        function useCallback3(callback, deps) {
           var dispatcher = resolveDispatcher();
           return dispatcher.useCallback(callback, deps);
         }
-        function useMemo2(create2, deps) {
+        function useMemo3(create2, deps) {
           var dispatcher = resolveDispatcher();
           return dispatcher.useMemo(create2, deps);
         }
@@ -1882,18 +1882,18 @@ var require_react_development = __commonJS({
         exports.memo = memo;
         exports.startTransition = startTransition;
         exports.unstable_act = act;
-        exports.useCallback = useCallback2;
+        exports.useCallback = useCallback3;
         exports.useContext = useContext;
         exports.useDebugValue = useDebugValue;
         exports.useDeferredValue = useDeferredValue;
-        exports.useEffect = useEffect4;
+        exports.useEffect = useEffect5;
         exports.useId = useId;
         exports.useImperativeHandle = useImperativeHandle;
         exports.useInsertionEffect = useInsertionEffect;
         exports.useLayoutEffect = useLayoutEffect;
-        exports.useMemo = useMemo2;
+        exports.useMemo = useMemo3;
         exports.useReducer = useReducer;
-        exports.useRef = useRef3;
+        exports.useRef = useRef4;
         exports.useState = useState3;
         exports.useSyncExternalStore = useSyncExternalStore;
         exports.useTransition = useTransition;
@@ -26258,94 +26258,6 @@ async function parseGraphData(app, filterConfig) {
   }
   return { nodes: nodesArray, links };
 }
-function buildMindmapTree(graphData) {
-  const root3 = {
-    id: "root-workos",
-    name: "Obsidian WorkOS",
-    type: "other",
-    path: "",
-    children: []
-  };
-  const workstreams = graphData.nodes.filter((n2) => n2.type === "workstream");
-  const globalTasks = graphData.nodes.filter((n2) => n2.type === "task" && !n2.workstream);
-  const globalNotes = graphData.nodes.filter((n2) => n2.type === "note" && !n2.workstream);
-  const braindumps = graphData.nodes.filter((n2) => n2.type === "braindump");
-  for (const ws of workstreams) {
-    const wsNode = {
-      id: ws.id,
-      name: ws.name,
-      type: "workstream",
-      path: ws.path,
-      status: ws.status,
-      priority: ws.priority,
-      tags: ws.tags,
-      children: []
-    };
-    const childNodes = graphData.nodes.filter(
-      (n2) => n2.workstream && (n2.workstream.toLowerCase() === ws.name.toLowerCase() || ws.path.toLowerCase().includes(`/${n2.workstream.toLowerCase()}/`))
-    );
-    for (const child of childNodes) {
-      wsNode.children.push({
-        id: child.id,
-        name: child.name,
-        type: child.type,
-        path: child.path,
-        status: child.status,
-        priority: child.priority,
-        tags: child.tags
-      });
-    }
-    root3.children.push(wsNode);
-  }
-  if (globalTasks.length > 0) {
-    root3.children.push({
-      id: "group-global-tasks",
-      name: "Globale Tasks (10_Tasks)",
-      type: "task",
-      path: "10_Tasks",
-      children: globalTasks.map((t3) => ({
-        id: t3.id,
-        name: t3.name,
-        type: "task",
-        path: t3.path,
-        status: t3.status,
-        priority: t3.priority,
-        tags: t3.tags
-      }))
-    });
-  }
-  if (globalNotes.length > 0) {
-    root3.children.push({
-      id: "group-global-notes",
-      name: "Globale Notizen (30_Notes)",
-      type: "note",
-      path: "30_Notes",
-      children: globalNotes.map((n2) => ({
-        id: n2.id,
-        name: n2.name,
-        type: "note",
-        path: n2.path,
-        tags: n2.tags
-      }))
-    });
-  }
-  if (braindumps.length > 0) {
-    root3.children.push({
-      id: "group-braindumps",
-      name: "Inbox Braindumps (00_Inbox)",
-      type: "braindump",
-      path: "00_Inbox",
-      children: braindumps.map((b2) => ({
-        id: b2.id,
-        name: b2.name,
-        type: "braindump",
-        path: b2.path,
-        tags: b2.tags
-      }))
-    });
-  }
-  return root3;
-}
 
 // node_modules/lucide-react/dist/esm/createLucideIcon.js
 var import_react = __toESM(require_react());
@@ -26421,16 +26333,6 @@ var CheckSquare = createLucideIcon("CheckSquare", [
 // node_modules/lucide-react/dist/esm/icons/check.js
 var Check = createLucideIcon("Check", [["path", { d: "M20 6 9 17l-5-5", key: "1gmf2c" }]]);
 
-// node_modules/lucide-react/dist/esm/icons/chevron-down.js
-var ChevronDown = createLucideIcon("ChevronDown", [
-  ["path", { d: "m6 9 6 6 6-6", key: "qrunsl" }]
-]);
-
-// node_modules/lucide-react/dist/esm/icons/chevron-right.js
-var ChevronRight = createLucideIcon("ChevronRight", [
-  ["path", { d: "m9 18 6-6-6-6", key: "mthhwq" }]
-]);
-
 // node_modules/lucide-react/dist/esm/icons/external-link.js
 var ExternalLink = createLucideIcon("ExternalLink", [
   ["path", { d: "M15 3h6v6", key: "1q9fwt" }],
@@ -26494,6 +26396,9 @@ var Lock = createLucideIcon("Lock", [
   ["path", { d: "M7 11V7a5 5 0 0 1 10 0v4", key: "fwvmzm" }]
 ]);
 
+// node_modules/lucide-react/dist/esm/icons/minus.js
+var Minus = createLucideIcon("Minus", [["path", { d: "M5 12h14", key: "1ays0h" }]]);
+
 // node_modules/lucide-react/dist/esm/icons/network.js
 var Network = createLucideIcon("Network", [
   ["rect", { x: "16", y: "16", width: "6", height: "6", rx: "1", key: "4q2zg0" }],
@@ -26503,12 +26408,24 @@ var Network = createLucideIcon("Network", [
   ["path", { d: "M12 12V8", key: "2874zd" }]
 ]);
 
+// node_modules/lucide-react/dist/esm/icons/plus.js
+var Plus = createLucideIcon("Plus", [
+  ["path", { d: "M5 12h14", key: "1ays0h" }],
+  ["path", { d: "M12 5v14", key: "s699le" }]
+]);
+
 // node_modules/lucide-react/dist/esm/icons/refresh-cw.js
 var RefreshCw = createLucideIcon("RefreshCw", [
   ["path", { d: "M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8", key: "v9h5vc" }],
   ["path", { d: "M21 3v5h-5", key: "1q7to0" }],
   ["path", { d: "M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16", key: "3uifl3" }],
   ["path", { d: "M8 16H3v5", key: "1cv678" }]
+]);
+
+// node_modules/lucide-react/dist/esm/icons/rotate-ccw.js
+var RotateCcw = createLucideIcon("RotateCcw", [
+  ["path", { d: "M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8", key: "1357e3" }],
+  ["path", { d: "M3 3v5h5", key: "1xhq8a" }]
 ]);
 
 // node_modules/lucide-react/dist/esm/icons/search.js
@@ -26586,6 +26503,21 @@ var X = createLucideIcon("X", [
 // node_modules/lucide-react/dist/esm/icons/zap.js
 var Zap = createLucideIcon("Zap", [
   ["polygon", { points: "13 2 3 14 12 14 11 22 21 10 12 10 13 2", key: "45s27k" }]
+]);
+
+// node_modules/lucide-react/dist/esm/icons/zoom-in.js
+var ZoomIn = createLucideIcon("ZoomIn", [
+  ["circle", { cx: "11", cy: "11", r: "8", key: "4ej97u" }],
+  ["line", { x1: "21", x2: "16.65", y1: "21", y2: "16.65", key: "13gj7c" }],
+  ["line", { x1: "11", x2: "11", y1: "8", y2: "14", key: "1vmskp" }],
+  ["line", { x1: "8", x2: "14", y1: "11", y2: "11", key: "durymu" }]
+]);
+
+// node_modules/lucide-react/dist/esm/icons/zoom-out.js
+var ZoomOut = createLucideIcon("ZoomOut", [
+  ["circle", { cx: "11", cy: "11", r: "8", key: "4ej97u" }],
+  ["line", { x1: "21", x2: "16.65", y1: "21", y2: "16.65", key: "13gj7c" }],
+  ["line", { x1: "8", x2: "14", y1: "11", y2: "11", key: "durymu" }]
 ]);
 
 // src/components/GraphHeader.tsx
@@ -136835,38 +136767,20 @@ var ForceGraph3DView = ({
     }
     const initialWidth = containerRef.current.clientWidth || window.innerWidth || 800;
     const initialHeight = containerRef.current.clientHeight || window.innerHeight || 600;
-    const fg = ForceGraph3DFactory()(containerRef.current).width(initialWidth).height(initialHeight).graphData(data).backgroundColor("#0a0a0e").nodeId("id").nodeVal("val").nodeLabel((n2) => `${n2.name} [${n2.type.toUpperCase()}]`).nodeColor((n2) => n2.color || "#64748b").nodeThreeObject((node) => {
-      const isWorkstream = node.type === "workstream";
-      const radius = Math.max(3, Math.sqrt(node.val || 5) * 2.2);
-      const group = new Group3();
-      const geometry = new SphereGeometry2(radius, 16, 16);
-      const material = new MeshLambertMaterial2({
-        color: node.color || "#64748b",
-        transparent: true,
-        opacity: 0.9
-      });
-      const mesh = new Mesh2(geometry, material);
-      group.add(mesh);
-      if (isWorkstream) {
-        const haloGeo = new SphereGeometry2(radius * 1.3, 12, 12);
-        const haloMat = new MeshBasicMaterial2({
-          color: "#a855f7",
-          wireframe: true,
-          transparent: true,
-          opacity: 0.3
-        });
-        group.add(new Mesh2(haloGeo, haloMat));
+    const fg = ForceGraph3DFactory()(containerRef.current).width(initialWidth).height(initialHeight).graphData(data).backgroundColor("#0a0a0e").nodeId("id").nodeVal("val").nodeRelSize(4).nodeResolution(16).nodeLabel((n2) => `<div style="background:rgba(10,10,14,0.9);padding:4px 8px;border-radius:6px;border:1px solid rgba(255,255,255,0.1);font-family:sans-serif;font-size:11px;color:#fff;"><b>${n2.name}</b> <span style="opacity:0.6">(${n2.type})</span></div>`).nodeColor((n2) => n2.color || "#64748b").nodeOpacity(0.95).linkOpacity(0.35).linkColor((link) => link.color || "#475569").linkWidth((link) => link.type === "workstream_child" ? 2 : 1).linkDirectionalParticles(filterConfig.showParticles ? (link) => link.particles || 1 : 0).linkDirectionalParticleSpeed(6e-3).linkDirectionalParticleWidth(2.5).linkDirectionalParticleColor((link) => link.type === "workstream_child" ? "#c084fc" : "#38bdf8").onNodeClick((node, event) => {
+      const distance3 = 120;
+      const distRatio = 1 + distance3 / Math.hypot(node.x || 1, node.y || 1, node.z || 1);
+      if (typeof fg.cameraPosition === "function") {
+        fg.cameraPosition(
+          { x: (node.x || 0) * distRatio, y: (node.y || 0) * distRatio, z: (node.z || 0) * distRatio },
+          { x: node.x || 0, y: node.y || 0, z: node.z || 0 },
+          1e3
+        );
       }
-      return group;
-    }).linkOpacity(0.3).linkColor((link) => link.color || "#475569").linkWidth((link) => link.type === "workstream_child" ? 1.5 : 0.8).linkDirectionalParticles(filterConfig.showParticles ? (link) => link.particles || 1 : 0).linkDirectionalParticleSpeed(6e-3).linkDirectionalParticleWidth(2.5).linkDirectionalParticleColor((link) => link.type === "workstream_child" ? "#c084fc" : "#38bdf8").onNodeClick((node, event) => {
-      const distance3 = 80;
-      const distRatio = 1 + distance3 / Math.hypot(node.x || 0, node.y || 0, node.z || 0);
-      fg.cameraPosition(
-        { x: (node.x || 0) * distRatio, y: (node.y || 0) * distRatio, z: (node.z || 0) * distRatio },
-        { x: node.x || 0, y: node.y || 0, z: node.z || 0 },
-        1e3
-      );
-      onSelectNode(node, { x: event.clientX, y: event.clientY });
+      onSelectNode(node, {
+        x: event.clientX || window.innerWidth / 2,
+        y: event.clientY || window.innerHeight / 2
+      });
     }).onBackgroundClick(() => {
       onClearSelection();
     });
@@ -136892,7 +136806,14 @@ var ForceGraph3DView = ({
     return () => {
       resizeObserver.disconnect();
       if (fgRef.current) {
-        fgRef.current._destructor?.();
+        try {
+          fgRef.current.pauseAnimation?.();
+          fgRef.current._destructor?.();
+        } catch (e2) {
+        }
+      }
+      if (containerRef.current) {
+        containerRef.current.innerHTML = "";
       }
     };
   }, []);
@@ -136927,10 +136848,21 @@ var ForceGraph3DView = ({
 var import_react4 = __toESM(require_react());
 var import_jsx_runtime4 = __toESM(require_jsx_runtime());
 var MindmapView = ({ data, app, onSelectNode }) => {
-  const tree = buildMindmapTree(data);
+  const containerRef = (0, import_react4.useRef)(null);
   const [collapsedMap, setCollapsedMap] = (0, import_react4.useState)({});
+  const [pan, setPan] = (0, import_react4.useState)({ x: 0, y: 0 });
+  const [zoom2, setZoom] = (0, import_react4.useState)(1);
+  const [isDragging, setIsDragging] = (0, import_react4.useState)(false);
+  const dragStartRef = (0, import_react4.useRef)({ x: 0, y: 0 });
+  (0, import_react4.useEffect)(() => {
+    if (containerRef.current) {
+      const { clientWidth, clientHeight } = containerRef.current;
+      setPan({ x: clientWidth / 2, y: clientHeight / 2 });
+      setZoom(0.9);
+    }
+  }, []);
   const toggleCollapse = (id2, e2) => {
-    e2.stopPropagation();
+    e2?.stopPropagation();
     setCollapsedMap((prev) => ({ ...prev, [id2]: !prev[id2] }));
   };
   const handleOpenDoc = (path, e2) => {
@@ -136946,6 +136878,198 @@ var MindmapView = ({ data, app, onSelectNode }) => {
       onSelectNode(fullNode, { x: e2.clientX, y: e2.clientY });
     }
   };
+  const layout = (0, import_react4.useMemo)(() => {
+    const workstreams = data.nodes.filter((n2) => n2.type === "workstream");
+    const globalTasks = data.nodes.filter((n2) => n2.type === "task" && !n2.workstream);
+    const globalNotes = data.nodes.filter((n2) => n2.type === "note" && !n2.workstream);
+    const braindumps = data.nodes.filter((n2) => n2.type === "braindump");
+    const root3 = {
+      id: "root-workos",
+      name: "Obsidian WorkOS",
+      type: "other",
+      path: "",
+      side: "root",
+      depth: 0,
+      x: 0,
+      y: 0,
+      width: 180,
+      height: 48,
+      children: [],
+      collapsed: false,
+      color: "#a855f7"
+    };
+    const rawBranches = [];
+    workstreams.forEach((ws) => {
+      const childNodes = data.nodes.filter(
+        (n2) => n2.id !== ws.id && n2.workstream && (n2.workstream.toLowerCase() === ws.name.toLowerCase() || ws.path.toLowerCase().includes(`/${n2.workstream.toLowerCase()}/`) || n2.path.toLowerCase().includes(`/${ws.name.toLowerCase()}/`))
+      );
+      rawBranches.push({
+        id: ws.id,
+        name: ws.name,
+        type: "workstream",
+        path: ws.path,
+        status: ws.status,
+        priority: ws.priority,
+        tags: ws.tags,
+        children: childNodes
+      });
+    });
+    if (globalTasks.length > 0) {
+      rawBranches.push({
+        id: "branch-global-tasks",
+        name: "Globale Tasks",
+        type: "task",
+        path: "10_Tasks",
+        children: globalTasks
+      });
+    }
+    if (globalNotes.length > 0) {
+      rawBranches.push({
+        id: "branch-global-notes",
+        name: "Wissensnotizen",
+        type: "note",
+        path: "30_Notes",
+        children: globalNotes
+      });
+    }
+    if (braindumps.length > 0) {
+      rawBranches.push({
+        id: "branch-braindumps",
+        name: "Inbox Braindumps",
+        type: "braindump",
+        path: "00_Inbox",
+        children: braindumps
+      });
+    }
+    const rightBranches = [];
+    const leftBranches = [];
+    rawBranches.forEach((b2, idx) => {
+      if (idx % 2 === 0)
+        rightBranches.push(b2);
+      else
+        leftBranches.push(b2);
+    });
+    const layoutSide = (branches, side) => {
+      const xOffset = side === "right" ? 260 : -260;
+      const childXOffset = side === "right" ? 560 : -560;
+      const nodeWidth = 200;
+      const childWidth = 220;
+      const nodeHeight = 44;
+      const childHeight = 38;
+      const vGap = 16;
+      const branchHeights = branches.map((b2) => {
+        const isCollapsed = collapsedMap[b2.id] ?? false;
+        if (isCollapsed || b2.children.length === 0) {
+          return nodeHeight + vGap;
+        }
+        return Math.max(nodeHeight, b2.children.length * (childHeight + vGap));
+      });
+      const totalSideHeight = branchHeights.reduce((acc, h2) => acc + h2, 0);
+      let currentY = -totalSideHeight / 2;
+      return branches.map((b2, bIdx) => {
+        const bHeight = branchHeights[bIdx];
+        const branchY = currentY + bHeight / 2 - nodeHeight / 2;
+        const isCollapsed = collapsedMap[b2.id] ?? false;
+        const layoutNode = {
+          id: b2.id,
+          name: b2.name,
+          type: b2.type,
+          path: b2.path,
+          status: b2.status,
+          priority: b2.priority,
+          tags: b2.tags,
+          side,
+          depth: 1,
+          x: side === "right" ? xOffset : xOffset - nodeWidth,
+          y: branchY,
+          width: nodeWidth,
+          height: nodeHeight,
+          children: [],
+          collapsed: isCollapsed,
+          color: getNodeColor(b2.type, b2.status)
+        };
+        if (!isCollapsed && b2.children.length > 0) {
+          const totalChildrenHeight = b2.children.length * (childHeight + vGap);
+          let childYStart = branchY + nodeHeight / 2 - totalChildrenHeight / 2;
+          layoutNode.children = b2.children.map((child, cIdx) => {
+            const cY = childYStart + cIdx * (childHeight + vGap);
+            return {
+              id: child.id,
+              name: child.name,
+              type: child.type,
+              path: child.path,
+              status: child.status,
+              priority: child.priority,
+              subtasksCount: child.subtasksCount,
+              subtasksDone: child.subtasksDone,
+              tags: child.tags,
+              side,
+              depth: 2,
+              x: side === "right" ? childXOffset : childXOffset - childWidth,
+              y: cY,
+              width: childWidth,
+              height: childHeight,
+              children: [],
+              collapsed: false,
+              color: getNodeColor(child.type, child.status)
+            };
+          });
+        }
+        currentY += bHeight;
+        return layoutNode;
+      });
+    };
+    const rightNodes = layoutSide(rightBranches, "right");
+    const leftNodes = layoutSide(leftBranches, "left");
+    root3.children = [...rightNodes, ...leftNodes];
+    return root3;
+  }, [data, collapsedMap]);
+  const handleMouseDown = (e2) => {
+    if (e2.button === 0) {
+      setIsDragging(true);
+      dragStartRef.current = { x: e2.clientX - pan.x, y: e2.clientY - pan.y };
+    }
+  };
+  const handleMouseMove = (e2) => {
+    if (isDragging) {
+      setPan({
+        x: e2.clientX - dragStartRef.current.x,
+        y: e2.clientY - dragStartRef.current.y
+      });
+    }
+  };
+  const handleMouseUp = () => {
+    setIsDragging(false);
+  };
+  const handleWheel = (e2) => {
+    e2.preventDefault();
+    const zoomFactor = e2.deltaY < 0 ? 1.08 : 0.92;
+    const newZoom = Math.min(Math.max(0.3, zoom2 * zoomFactor), 3);
+    setZoom(newZoom);
+  };
+  const handleResetZoom = () => {
+    if (containerRef.current) {
+      const { clientWidth, clientHeight } = containerRef.current;
+      setPan({ x: clientWidth / 2, y: clientHeight / 2 });
+      setZoom(0.9);
+    }
+  };
+  const renderCurve = (fromX, fromY, toX, toY, color3) => {
+    const dx = Math.abs(toX - fromX) * 0.5;
+    const pathD = `M ${fromX} ${fromY} C ${fromX + (toX > fromX ? dx : -dx)} ${fromY}, ${toX - (toX > fromX ? dx : -dx)} ${toY}, ${toX} ${toY}`;
+    return /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(
+      "path",
+      {
+        d: pathD,
+        fill: "none",
+        stroke: color3,
+        strokeWidth: "2",
+        strokeOpacity: "0.5",
+        strokeLinecap: "round"
+      },
+      `${fromX}-${fromY}->${toX}-${toY}`
+    );
+  };
   const getEntityIcon = (type) => {
     switch (type) {
       case "workstream":
@@ -136960,96 +137084,186 @@ var MindmapView = ({ data, app, onSelectNode }) => {
         return /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(Hash, { className: "w-3.5 h-3.5 text-neutral-400 shrink-0" });
     }
   };
-  return /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { className: "w-full h-full overflow-auto custom-scrollbar p-12 pt-24 bg-[#0a0a0e] text-neutral-200", children: /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { className: "max-w-4xl mx-auto space-y-6", children: [
-    /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { className: "flex items-center justify-center mb-8", children: /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { className: "workos-glass-card px-6 py-3 rounded-2xl border border-purple-500/30 flex items-center gap-3 shadow-2xl", children: [
-      /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { className: "w-8 h-8 rounded-xl bg-gradient-to-tr from-purple-600 to-cyan-500 flex items-center justify-center text-white shadow-lg", children: /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(Layers, { className: "w-4 h-4" }) }),
-      /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { children: [
-        /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("h2", { className: "text-base font-semibold text-white tracking-tight", children: tree.name }),
-        /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("p", { className: "text-xs text-neutral-400", children: [
-          tree.children?.length || 0,
-          " Hauptbereiche / Workstreams aktiv"
-        ] })
-      ] })
-    ] }) }),
-    /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { className: "space-y-4", children: tree.children?.map((branch) => {
-      const isCollapsed = collapsedMap[branch.id] ?? false;
-      const childCount = branch.children?.length || 0;
-      return /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)(
-        "div",
-        {
-          className: "workos-glass-card rounded-2xl p-4 border border-white/10 transition-all hover:border-white/20",
-          children: [
-            /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)(
-              "div",
-              {
-                onClick: (e2) => handleNodeClick(branch, e2),
-                className: "flex items-center justify-between cursor-pointer group",
-                children: [
-                  /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { className: "flex items-center gap-3", children: [
-                    /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(
-                      "button",
-                      {
-                        onClick: (e2) => toggleCollapse(branch.id, e2),
-                        className: "p-1 rounded-lg hover:bg-white/10 text-neutral-400 group-hover:text-white transition-colors",
-                        children: isCollapsed ? /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(ChevronRight, { className: "w-4 h-4" }) : /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(ChevronDown, { className: "w-4 h-4" })
-                      }
-                    ),
-                    /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { className: "w-7 h-7 rounded-lg bg-purple-500/10 border border-purple-500/20 flex items-center justify-center", children: getEntityIcon(branch.type) }),
-                    /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { children: [
-                      /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { className: "flex items-center gap-2", children: [
-                        /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("span", { className: "font-semibold text-sm text-neutral-100 group-hover:text-purple-300 transition-colors", children: branch.name }),
-                        branch.status && /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("span", { className: "text-[10px] px-2 py-0.5 rounded-full bg-white/5 border border-white/10 text-neutral-400 capitalize", children: branch.status })
-                      ] }),
-                      /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { className: "text-[11px] text-neutral-500", children: [
-                        childCount,
-                        " zugeh\xF6rige Aufgaben & Dokumente"
-                      ] })
-                    ] })
-                  ] }),
-                  branch.path && /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(
-                    "button",
+  const curves = [];
+  layout.children.forEach((branch) => {
+    const isRight = branch.side === "right";
+    const fromX = isRight ? layout.width / 2 : -layout.width / 2;
+    const fromY = 0;
+    const toX = isRight ? branch.x : branch.x + branch.width;
+    const toY = branch.y + branch.height / 2;
+    curves.push(renderCurve(fromX, fromY, toX, toY, branch.color));
+    if (!branch.collapsed && branch.children.length > 0) {
+      const bFromX = isRight ? branch.x + branch.width : branch.x;
+      const bFromY = branch.y + branch.height / 2;
+      branch.children.forEach((child) => {
+        const cToX = isRight ? child.x : child.x + child.width;
+        const cToY = child.y + child.height / 2;
+        curves.push(renderCurve(bFromX, bFromY, cToX, cToY, child.color));
+      });
+    }
+  });
+  return /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)(
+    "div",
+    {
+      ref: containerRef,
+      onMouseDown: handleMouseDown,
+      onMouseMove: handleMouseMove,
+      onMouseUp: handleMouseUp,
+      onWheel: handleWheel,
+      className: `w-full h-full relative overflow-hidden bg-[#0a0a0e] select-none ${isDragging ? "cursor-grabbing" : "cursor-grab"}`,
+      style: { width: "100%", height: "100%" },
+      children: [
+        /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { className: "absolute bottom-6 right-6 z-30 flex items-center gap-1.5 workos-glass-pill p-1.5 rounded-full border border-white/10 shadow-2xl", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(
+            "button",
+            {
+              onClick: () => setZoom((z3) => Math.min(z3 * 1.15, 3)),
+              className: "p-1.5 rounded-full text-neutral-400 hover:text-white hover:bg-white/10",
+              title: "Vergr\xF6\xDFern",
+              children: /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(ZoomIn, { className: "w-3.5 h-3.5" })
+            }
+          ),
+          /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(
+            "button",
+            {
+              onClick: () => setZoom((z3) => Math.max(z3 * 0.85, 0.3)),
+              className: "p-1.5 rounded-full text-neutral-400 hover:text-white hover:bg-white/10",
+              title: "Verkleinern",
+              children: /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(ZoomOut, { className: "w-3.5 h-3.5" })
+            }
+          ),
+          /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { className: "w-[1px] h-3.5 bg-white/10 mx-0.5" }),
+          /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(
+            "button",
+            {
+              onClick: handleResetZoom,
+              className: "p-1.5 rounded-full text-neutral-400 hover:text-white hover:bg-white/10",
+              title: "Zentrieren & Zur\xFCcksetzen",
+              children: /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(RotateCcw, { className: "w-3.5 h-3.5" })
+            }
+          ),
+          /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("span", { className: "text-[10px] font-mono text-neutral-400 px-2", children: [
+            Math.round(zoom2 * 100),
+            "%"
+          ] })
+        ] }),
+        /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)(
+          "div",
+          {
+            className: "absolute origin-top-left transition-transform duration-75 ease-out",
+            style: {
+              transform: `translate(${pan.x}px, ${pan.y}px) scale(${zoom2})`,
+              width: "0px",
+              height: "0px"
+            },
+            children: [
+              /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(
+                "svg",
+                {
+                  className: "absolute overflow-visible pointer-events-none",
+                  style: { left: 0, top: 0, width: "1px", height: "1px" },
+                  children: curves
+                }
+              ),
+              /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)(
+                "div",
+                {
+                  style: {
+                    transform: `translate(-${layout.width / 2}px, -${layout.height / 2}px)`,
+                    width: `${layout.width}px`,
+                    height: `${layout.height}px`
+                  },
+                  className: "absolute z-20 flex items-center justify-center gap-2.5 px-4 py-2 rounded-2xl bg-gradient-to-r from-purple-900/90 to-cyan-900/90 border border-purple-500/50 shadow-2xl backdrop-blur-xl text-white font-semibold text-xs tracking-wide",
+                  children: [
+                    /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { className: "w-6 h-6 rounded-lg bg-white/20 flex items-center justify-center shadow-inner", children: /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(Layers, { className: "w-3.5 h-3.5 text-white" }) }),
+                    /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("span", { children: layout.name })
+                  ]
+                }
+              ),
+              layout.children.map((branch) => {
+                const isRight = branch.side === "right";
+                return /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)(import_react4.default.Fragment, { children: [
+                  /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)(
+                    "div",
                     {
-                      onClick: (e2) => handleOpenDoc(branch.path, e2),
-                      className: "opacity-0 group-hover:opacity-100 p-1.5 rounded-lg text-neutral-400 hover:text-white hover:bg-white/10 transition-all",
-                      title: "Workstream README \xF6ffnen",
-                      children: /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(ExternalLink, { className: "w-3.5 h-3.5" })
+                      style: {
+                        transform: `translate(${branch.x}px, ${branch.y}px)`,
+                        width: `${branch.width}px`,
+                        height: `${branch.height}px`
+                      },
+                      onClick: (e2) => handleNodeClick(branch, e2),
+                      className: "absolute z-10 flex items-center justify-between px-3 py-1.5 rounded-xl workos-glass-card border border-white/15 hover:border-purple-400/50 shadow-lg cursor-pointer group transition-all",
+                      children: [
+                        /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { className: "flex items-center gap-2 min-w-0 pr-1", children: [
+                          /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { className: "w-5 h-5 rounded-md bg-purple-500/15 border border-purple-500/30 flex items-center justify-center shrink-0", children: getEntityIcon(branch.type) }),
+                          /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("span", { className: "text-xs font-semibold text-neutral-100 group-hover:text-purple-300 truncate transition-colors", children: branch.name })
+                        ] }),
+                        /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { className: "flex items-center gap-1 shrink-0", children: [
+                          branch.path && /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(
+                            "button",
+                            {
+                              onClick: (e2) => handleOpenDoc(branch.path, e2),
+                              className: "opacity-0 group-hover:opacity-100 p-1 text-neutral-400 hover:text-white hover:bg-white/10 rounded transition-all",
+                              title: "In Obsidian \xF6ffnen",
+                              children: /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(ExternalLink, { className: "w-3 h-3" })
+                            }
+                          ),
+                          /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(
+                            "button",
+                            {
+                              onClick: (e2) => toggleCollapse(branch.id, e2),
+                              className: "p-1 text-neutral-400 hover:text-white hover:bg-white/10 rounded transition-colors",
+                              children: branch.collapsed ? /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(Plus, { className: "w-3 h-3 text-purple-400" }) : /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(Minus, { className: "w-3 h-3" })
+                            }
+                          )
+                        ] })
+                      ]
                     }
-                  )
-                ]
-              }
-            ),
-            !isCollapsed && branch.children && branch.children.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { className: "mt-3 pt-3 border-t border-white/5 pl-8 space-y-2", children: /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { className: "grid grid-cols-1 md:grid-cols-2 gap-2", children: branch.children.map((child) => /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)(
-              "div",
-              {
-                onClick: (e2) => handleNodeClick(child, e2),
-                className: "flex items-center justify-between p-2 rounded-xl bg-black/40 border border-white/5 hover:border-white/15 cursor-pointer group/item transition-all",
-                children: [
-                  /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { className: "flex items-center gap-2 min-w-0 pr-2", children: [
-                    getEntityIcon(child.type),
-                    /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("span", { className: "text-xs text-neutral-300 group-hover/item:text-white truncate font-medium", children: child.name })
-                  ] }),
-                  /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { className: "flex items-center gap-1.5 shrink-0", children: [
-                    child.status && /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("span", { className: "text-[9px] px-1.5 py-0.5 rounded-md bg-white/5 text-neutral-400 border border-white/5 capitalize", children: child.status.replace("_", " ") }),
-                    /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(
-                      "button",
-                      {
-                        onClick: (e2) => handleOpenDoc(child.path, e2),
-                        className: "p-1 rounded text-neutral-500 hover:text-white hover:bg-white/10 transition-colors",
-                        title: "In Obsidian \xF6ffnen",
-                        children: /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(ExternalLink, { className: "w-3 h-3" })
-                      }
-                    )
-                  ] })
-                ]
-              },
-              child.id
-            )) }) })
-          ]
-        },
-        branch.id
-      );
-    }) })
-  ] }) });
+                  ),
+                  !branch.collapsed && branch.children.map((child) => /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)(
+                    "div",
+                    {
+                      style: {
+                        transform: `translate(${child.x}px, ${child.y}px)`,
+                        width: `${child.width}px`,
+                        height: `${child.height}px`
+                      },
+                      onClick: (e2) => handleNodeClick(child, e2),
+                      className: "absolute z-10 flex items-center justify-between px-2.5 py-1 rounded-lg bg-black/60 border border-white/10 hover:border-white/25 shadow-md cursor-pointer group/child transition-all",
+                      children: [
+                        /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { className: "flex items-center gap-2 min-w-0 pr-1", children: [
+                          getEntityIcon(child.type),
+                          /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("span", { className: "text-[11px] font-medium text-neutral-300 group-hover/child:text-white truncate", children: child.name })
+                        ] }),
+                        /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { className: "flex items-center gap-1.5 shrink-0", children: [
+                          child.status && /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("span", { className: "text-[9px] px-1.5 py-0.5 rounded bg-white/5 border border-white/5 text-neutral-400 capitalize font-mono", children: child.status.replace("_", " ") }),
+                          child.subtasksCount !== void 0 && child.subtasksCount > 0 && /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("span", { className: "text-[9px] text-emerald-400 font-mono", children: [
+                            child.subtasksDone,
+                            "/",
+                            child.subtasksCount
+                          ] }),
+                          /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(
+                            "button",
+                            {
+                              onClick: (e2) => handleOpenDoc(child.path, e2),
+                              className: "opacity-0 group-hover/child:opacity-100 p-0.5 text-neutral-400 hover:text-white rounded",
+                              title: "In Obsidian \xF6ffnen",
+                              children: /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(ExternalLink, { className: "w-3 h-3" })
+                            }
+                          )
+                        ] })
+                      ]
+                    },
+                    child.id
+                  ))
+                ] }, branch.id);
+              })
+            ]
+          }
+        )
+      ]
+    }
+  );
 };
 
 // src/components/NodeContextMenu.tsx
@@ -137709,22 +137923,6 @@ lucide-react/dist/esm/icons/check.js:
    * See the LICENSE file in the root directory of this source tree.
    *)
 
-lucide-react/dist/esm/icons/chevron-down.js:
-  (**
-   * @license lucide-react v0.344.0 - ISC
-   *
-   * This source code is licensed under the ISC license.
-   * See the LICENSE file in the root directory of this source tree.
-   *)
-
-lucide-react/dist/esm/icons/chevron-right.js:
-  (**
-   * @license lucide-react v0.344.0 - ISC
-   *
-   * This source code is licensed under the ISC license.
-   * See the LICENSE file in the root directory of this source tree.
-   *)
-
 lucide-react/dist/esm/icons/external-link.js:
   (**
    * @license lucide-react v0.344.0 - ISC
@@ -137789,6 +137987,14 @@ lucide-react/dist/esm/icons/lock.js:
    * See the LICENSE file in the root directory of this source tree.
    *)
 
+lucide-react/dist/esm/icons/minus.js:
+  (**
+   * @license lucide-react v0.344.0 - ISC
+   *
+   * This source code is licensed under the ISC license.
+   * See the LICENSE file in the root directory of this source tree.
+   *)
+
 lucide-react/dist/esm/icons/network.js:
   (**
    * @license lucide-react v0.344.0 - ISC
@@ -137797,7 +138003,23 @@ lucide-react/dist/esm/icons/network.js:
    * See the LICENSE file in the root directory of this source tree.
    *)
 
+lucide-react/dist/esm/icons/plus.js:
+  (**
+   * @license lucide-react v0.344.0 - ISC
+   *
+   * This source code is licensed under the ISC license.
+   * See the LICENSE file in the root directory of this source tree.
+   *)
+
 lucide-react/dist/esm/icons/refresh-cw.js:
+  (**
+   * @license lucide-react v0.344.0 - ISC
+   *
+   * This source code is licensed under the ISC license.
+   * See the LICENSE file in the root directory of this source tree.
+   *)
+
+lucide-react/dist/esm/icons/rotate-ccw.js:
   (**
    * @license lucide-react v0.344.0 - ISC
    *
@@ -137862,6 +138084,22 @@ lucide-react/dist/esm/icons/x.js:
    *)
 
 lucide-react/dist/esm/icons/zap.js:
+  (**
+   * @license lucide-react v0.344.0 - ISC
+   *
+   * This source code is licensed under the ISC license.
+   * See the LICENSE file in the root directory of this source tree.
+   *)
+
+lucide-react/dist/esm/icons/zoom-in.js:
+  (**
+   * @license lucide-react v0.344.0 - ISC
+   *
+   * This source code is licensed under the ISC license.
+   * See the LICENSE file in the root directory of this source tree.
+   *)
+
+lucide-react/dist/esm/icons/zoom-out.js:
   (**
    * @license lucide-react v0.344.0 - ISC
    *
