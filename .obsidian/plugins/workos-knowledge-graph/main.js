@@ -37577,61 +37577,81 @@ var ForceGraph2DView = ({
   (0, import_react2.useEffect)(() => {
     if (!containerRef.current)
       return;
-    const fg = new forceGraph()(containerRef.current).graphData(data).backgroundColor("transparent").nodeId("id").nodeVal("val").nodeLabel((n2) => `${n2.name} (${n2.type})`).nodeCanvasObject((node, ctx, globalScale) => {
+    const ForceGraphFactory = typeof forceGraph === "function" ? forceGraph : forceGraph.default;
+    if (!ForceGraphFactory) {
+      console.error("ForceGraph2D factory not available");
+      return;
+    }
+    const initialWidth = containerRef.current.clientWidth || window.innerWidth || 800;
+    const initialHeight = containerRef.current.clientHeight || window.innerHeight || 600;
+    const fg = ForceGraphFactory()(containerRef.current).width(initialWidth).height(initialHeight).graphData(data).backgroundColor("#0a0a0e").nodeId("id").nodeVal("val").nodeLabel((n2) => `${n2.name} (${n2.type})`).nodeCanvasObject((node, ctx, globalScale) => {
       const isSelected = selectedNode?.id === node.id;
       const isWorkstream = node.type === "workstream";
       const radius = Math.max(3, Math.sqrt(node.val || 5) * 2.5);
       if (isWorkstream || isSelected) {
         ctx.beginPath();
-        ctx.arc(node.x, node.y, radius + (isSelected ? 6 : 4), 0, 2 * Math.PI, false);
+        ctx.arc(node.x || 0, node.y || 0, radius + (isSelected ? 6 : 4), 0, 2 * Math.PI, false);
         ctx.fillStyle = isSelected ? "rgba(236, 72, 153, 0.4)" : "rgba(168, 85, 247, 0.3)";
         ctx.fill();
       }
       ctx.beginPath();
-      ctx.arc(node.x, node.y, radius, 0, 2 * Math.PI, false);
+      ctx.arc(node.x || 0, node.y || 0, radius, 0, 2 * Math.PI, false);
       ctx.fillStyle = node.color || "#64748b";
       ctx.fill();
       ctx.lineWidth = isSelected ? 2 : 1;
       ctx.strokeStyle = isSelected ? "#ffffff" : "rgba(255, 255, 255, 0.4)";
       ctx.stroke();
-      const showLabel = globalScale > 1.2 || isWorkstream || isSelected;
+      const showLabel = globalScale > 0.8 || isWorkstream || isSelected;
       if (showLabel) {
-        const label2 = node.name;
-        const fontSize = Math.max(10 / globalScale, isWorkstream ? 12 / globalScale : 9 / globalScale);
-        ctx.font = `${isWorkstream || isSelected ? "600" : "400"} ${fontSize}px sans-serif`;
+        const label2 = node.name || "Dokument";
+        const fontSize = Math.max(10 / globalScale, isWorkstream ? 13 / globalScale : 10 / globalScale);
+        ctx.font = `${isWorkstream || isSelected ? "600" : "400"} ${fontSize}px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif`;
         const textWidth = ctx.measureText(label2).width;
-        const bckgDimensions = [textWidth + 6 / globalScale, fontSize + 4 / globalScale];
-        ctx.fillStyle = "rgba(10, 10, 12, 0.85)";
+        const bckgDimensions = [textWidth + 8 / globalScale, fontSize + 5 / globalScale];
+        ctx.fillStyle = "rgba(10, 10, 14, 0.88)";
         ctx.beginPath();
         ctx.roundRect(
-          node.x - bckgDimensions[0] / 2,
-          node.y + radius + 3 / globalScale,
+          (node.x || 0) - bckgDimensions[0] / 2,
+          (node.y || 0) + radius + 3 / globalScale,
           bckgDimensions[0],
           bckgDimensions[1],
-          3 / globalScale
+          4 / globalScale
         );
         ctx.fill();
+        ctx.lineWidth = 1 / globalScale;
+        ctx.strokeStyle = isWorkstream ? "rgba(168, 85, 247, 0.4)" : "rgba(255, 255, 255, 0.1)";
+        ctx.stroke();
         ctx.textAlign = "center";
         ctx.textBaseline = "middle";
         ctx.fillStyle = isSelected ? "#ffffff" : isWorkstream ? "#e9d5ff" : "#d4d4d8";
-        ctx.fillText(label2, node.x, node.y + radius + 3 / globalScale + bckgDimensions[1] / 2);
+        ctx.fillText(label2, node.x || 0, (node.y || 0) + radius + 3 / globalScale + bckgDimensions[1] / 2);
       }
-    }).nodeCanvasObjectMode(() => "after").linkColor((link) => link.color || "rgba(255, 255, 255, 0.15)").linkWidth((link) => link.type === "workstream_child" ? 1.5 : 1).linkDirectionalParticles(filterConfig.showParticles ? (link) => link.particles || 1 : 0).linkDirectionalParticleSpeed(5e-3).linkDirectionalParticleWidth(2).linkDirectionalParticleColor((link) => link.type === "workstream_child" ? "#c084fc" : "#38bdf8").onNodeClick((node, event) => {
+    }).nodeCanvasObjectMode(() => "after").linkColor((link) => link.color || "rgba(255, 255, 255, 0.18)").linkWidth((link) => link.type === "workstream_child" ? 1.8 : 1).linkDirectionalParticles(filterConfig.showParticles ? (link) => link.particles || 1 : 0).linkDirectionalParticleSpeed(5e-3).linkDirectionalParticleWidth(2).linkDirectionalParticleColor((link) => link.type === "workstream_child" ? "#c084fc" : "#38bdf8").onNodeClick((node, event) => {
       onSelectNode(node, { x: event.clientX, y: event.clientY });
     }).onBackgroundClick(() => {
       onClearSelection();
-    }).d3Force("charge").strength(filterConfig.repulsion || -250);
-    fg.d3Force("link").distance(filterConfig.linkDistance || 60);
+    });
+    const chargeForce = fg.d3Force("charge");
+    if (chargeForce && typeof chargeForce.strength === "function") {
+      chargeForce.strength(filterConfig.repulsion || -250);
+    }
+    const linkForce = fg.d3Force("link");
+    if (linkForce && typeof linkForce.distance === "function") {
+      linkForce.distance(filterConfig.linkDistance || 60);
+    }
     fgRef.current = fg;
-    const handleResize = () => {
-      if (containerRef.current && fgRef.current) {
-        fgRef.current.width(containerRef.current.clientWidth);
-        fgRef.current.height(containerRef.current.clientHeight);
+    const resizeObserver = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        const { width, height } = entry.contentRect;
+        if (width > 0 && height > 0 && fgRef.current) {
+          fgRef.current.width(width);
+          fgRef.current.height(height);
+        }
       }
-    };
-    window.addEventListener("resize", handleResize);
+    });
+    resizeObserver.observe(containerRef.current);
     return () => {
-      window.removeEventListener("resize", handleResize);
+      resizeObserver.disconnect();
       if (fgRef.current) {
         fgRef.current._destructor?.();
       }
@@ -37640,23 +37660,34 @@ var ForceGraph2DView = ({
   (0, import_react2.useEffect)(() => {
     if (fgRef.current) {
       fgRef.current.graphData(data);
+      if (data.nodes.length > 0) {
+        setTimeout(() => {
+          fgRef.current?.zoomToFit?.(400, 40);
+        }, 150);
+      }
     }
   }, [data]);
   (0, import_react2.useEffect)(() => {
     if (fgRef.current) {
-      fgRef.current.d3Force("charge")?.strength(filterConfig.repulsion || -250);
-      fgRef.current.d3Force("link")?.distance(filterConfig.linkDistance || 60);
+      const chargeForce = fgRef.current.d3Force("charge");
+      if (chargeForce && typeof chargeForce.strength === "function") {
+        chargeForce.strength(filterConfig.repulsion || -250);
+      }
+      const linkForce = fgRef.current.d3Force("link");
+      if (linkForce && typeof linkForce.distance === "function") {
+        linkForce.distance(filterConfig.linkDistance || 60);
+      }
       fgRef.current.linkDirectionalParticles(filterConfig.showParticles ? (link) => link.particles || 1 : 0);
-      fgRef.current.d3ReheatSimulation();
+      fgRef.current.d3ReheatSimulation?.();
     }
   }, [filterConfig]);
   (0, import_react2.useEffect)(() => {
     if (selectedNode && fgRef.current && selectedNode.x !== void 0 && selectedNode.y !== void 0) {
       fgRef.current.centerAt(selectedNode.x, selectedNode.y, 800);
-      fgRef.current.zoom(2.2, 800);
+      fgRef.current.zoom(2, 800);
     }
   }, [selectedNode]);
-  return /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { ref: containerRef, className: "w-full h-full relative cursor-grab active:cursor-grabbing" });
+  return /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { ref: containerRef, className: "w-full h-full relative cursor-grab active:cursor-grabbing", style: { width: "100%", height: "100%" } });
 };
 
 // src/components/ForceGraph3DView.tsx
@@ -136797,7 +136828,14 @@ var ForceGraph3DView = ({
   (0, import_react3.useEffect)(() => {
     if (!containerRef.current)
       return;
-    const fg = new _3dForceGraph()(containerRef.current).graphData(data).backgroundColor("#0a0a0e").nodeId("id").nodeVal("val").nodeLabel((n2) => `${n2.name} [${n2.type.toUpperCase()}]`).nodeColor((n2) => n2.color || "#64748b").nodeThreeObject((node) => {
+    const ForceGraph3DFactory = typeof _3dForceGraph === "function" ? _3dForceGraph : _3dForceGraph.default;
+    if (!ForceGraph3DFactory) {
+      console.error("ForceGraph3D factory not available");
+      return;
+    }
+    const initialWidth = containerRef.current.clientWidth || window.innerWidth || 800;
+    const initialHeight = containerRef.current.clientHeight || window.innerHeight || 600;
+    const fg = ForceGraph3DFactory()(containerRef.current).width(initialWidth).height(initialHeight).graphData(data).backgroundColor("#0a0a0e").nodeId("id").nodeVal("val").nodeLabel((n2) => `${n2.name} [${n2.type.toUpperCase()}]`).nodeColor((n2) => n2.color || "#64748b").nodeThreeObject((node) => {
       const isWorkstream = node.type === "workstream";
       const radius = Math.max(3, Math.sqrt(node.val || 5) * 2.2);
       const group = new Group3();
@@ -136832,18 +136870,27 @@ var ForceGraph3DView = ({
     }).onBackgroundClick(() => {
       onClearSelection();
     });
-    fg.d3Force("charge")?.strength(filterConfig.repulsion || -250);
-    fg.d3Force("link")?.distance(filterConfig.linkDistance || 70);
+    const chargeForce = fg.d3Force("charge");
+    if (chargeForce && typeof chargeForce.strength === "function") {
+      chargeForce.strength(filterConfig.repulsion || -250);
+    }
+    const linkForce = fg.d3Force("link");
+    if (linkForce && typeof linkForce.distance === "function") {
+      linkForce.distance(filterConfig.linkDistance || 70);
+    }
     fgRef.current = fg;
-    const handleResize = () => {
-      if (containerRef.current && fgRef.current) {
-        fgRef.current.width(containerRef.current.clientWidth);
-        fgRef.current.height(containerRef.current.clientHeight);
+    const resizeObserver = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        const { width, height } = entry.contentRect;
+        if (width > 0 && height > 0 && fgRef.current) {
+          fgRef.current.width(width);
+          fgRef.current.height(height);
+        }
       }
-    };
-    window.addEventListener("resize", handleResize);
+    });
+    resizeObserver.observe(containerRef.current);
     return () => {
-      window.removeEventListener("resize", handleResize);
+      resizeObserver.disconnect();
       if (fgRef.current) {
         fgRef.current._destructor?.();
       }
@@ -136852,17 +136899,28 @@ var ForceGraph3DView = ({
   (0, import_react3.useEffect)(() => {
     if (fgRef.current) {
       fgRef.current.graphData(data);
+      if (data.nodes.length > 0) {
+        setTimeout(() => {
+          fgRef.current?.zoomToFit?.(400, 40);
+        }, 150);
+      }
     }
   }, [data]);
   (0, import_react3.useEffect)(() => {
     if (fgRef.current) {
-      fgRef.current.d3Force("charge")?.strength(filterConfig.repulsion || -250);
-      fgRef.current.d3Force("link")?.distance(filterConfig.linkDistance || 70);
+      const chargeForce = fgRef.current.d3Force("charge");
+      if (chargeForce && typeof chargeForce.strength === "function") {
+        chargeForce.strength(filterConfig.repulsion || -250);
+      }
+      const linkForce = fgRef.current.d3Force("link");
+      if (linkForce && typeof linkForce.distance === "function") {
+        linkForce.distance(filterConfig.linkDistance || 70);
+      }
       fgRef.current.linkDirectionalParticles(filterConfig.showParticles ? (link) => link.particles || 1 : 0);
-      fgRef.current.d3ReheatSimulation();
+      fgRef.current.d3ReheatSimulation?.();
     }
   }, [filterConfig]);
-  return /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("div", { ref: containerRef, className: "w-full h-full relative cursor-grab active:cursor-grabbing" });
+  return /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("div", { ref: containerRef, className: "w-full h-full relative cursor-grab active:cursor-grabbing", style: { width: "100%", height: "100%" } });
 };
 
 // src/components/MindmapView.tsx
@@ -137494,6 +137552,13 @@ var WorkOSKnowledgeGraphView = class extends import_obsidian.ItemView {
   async onOpen() {
     const container = this.containerEl.children[1];
     container.empty();
+    container.classList.add("workos-graph-view-content");
+    container.style.height = "100%";
+    container.style.width = "100%";
+    container.style.overflow = "hidden";
+    container.style.position = "relative";
+    container.style.display = "flex";
+    container.style.flexDirection = "column";
     this.root = (0, import_client.createRoot)(container);
     this.root.render(import_react6.default.createElement(GraphApp, { app: this.app }));
   }
