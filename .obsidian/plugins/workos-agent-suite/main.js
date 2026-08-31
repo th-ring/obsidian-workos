@@ -4096,14 +4096,12 @@ function executeTriageAction(vaultPath, sourceFilePath, decision) {
   const archiveDir = import_path2.default.join(vaultPath, "40_Archive");
   if (!import_fs2.default.existsSync(archiveDir))
     import_fs2.default.mkdirSync(archiveDir, { recursive: true });
+  const cleanStream = decision.workstream ? decision.workstream.replace(/[\[\]]/g, "").trim() : null;
+  const formattedStream = cleanStream ? `[[${cleanStream}]]` : null;
   if (decision.type === "task") {
     let targetDir = import_path2.default.join(vaultPath, "10_Tasks");
-    if (decision.workstream) {
-      const cleanStream = decision.workstream.replace(/[\[\]]/g, "").trim();
-      const streamTaskDir = import_path2.default.join(vaultPath, "20_Workstreams", cleanStream, "Tasks");
-      if (import_fs2.default.existsSync(streamTaskDir)) {
-        targetDir = streamTaskDir;
-      }
+    if (cleanStream) {
+      targetDir = import_path2.default.join(vaultPath, "20_Workstreams", cleanStream, "Tasks");
     }
     if (!import_fs2.default.existsSync(targetDir))
       import_fs2.default.mkdirSync(targetDir, { recursive: true });
@@ -4113,7 +4111,7 @@ function executeTriageAction(vaultPath, sourceFilePath, decision) {
       title: decision.title || sanitizedTitle,
       status: "todo",
       priority: decision.priority || "medium",
-      workstream: decision.workstream ? decision.workstream.startsWith("[[") ? decision.workstream : `[[${decision.workstream}]]` : null,
+      workstream: formattedStream,
       due: decision.due || null,
       created: today,
       tags: decision.tags || data.tags || [],
@@ -4140,18 +4138,14 @@ ${subtaskBoxes}`;
       action: "task_created",
       targetPath,
       title: sanitizedTitle,
-      workstream: decision.workstream,
+      workstream: formattedStream || void 0,
       priority: decision.priority,
-      summary: `In Aufgabe "${sanitizedTitle}" umgewandelt und archiviert.`
+      summary: `In Aufgabe "${sanitizedTitle}" unter ${import_path2.default.relative(vaultPath, targetDir)} umgewandelt und archiviert.`
     };
   } else if (decision.type === "note") {
     let targetDir = import_path2.default.join(vaultPath, "30_Notes");
-    if (decision.workstream) {
-      const cleanStream = decision.workstream.replace(/[\[\]]/g, "").trim();
-      const streamNoteDir = import_path2.default.join(vaultPath, "20_Workstreams", cleanStream, "Notes");
-      if (import_fs2.default.existsSync(streamNoteDir)) {
-        targetDir = streamNoteDir;
-      }
+    if (cleanStream) {
+      targetDir = import_path2.default.join(vaultPath, "20_Workstreams", cleanStream, "Notes");
     }
     if (!import_fs2.default.existsSync(targetDir))
       import_fs2.default.mkdirSync(targetDir, { recursive: true });
@@ -4160,7 +4154,7 @@ ${subtaskBoxes}`;
       type: "note",
       title: decision.title || sanitizedTitle,
       category: decision.category || "concept",
-      workstream: decision.workstream ? decision.workstream.startsWith("[[") ? decision.workstream : `[[${decision.workstream}]]` : null,
+      workstream: formattedStream,
       created: today,
       updated: today,
       tags: decision.tags || data.tags || [],
@@ -4177,8 +4171,8 @@ ${subtaskBoxes}`;
       action: "note_created",
       targetPath,
       title: sanitizedTitle,
-      workstream: decision.workstream,
-      summary: `In Wissensnotiz "${sanitizedTitle}" umgewandelt und archiviert.`
+      workstream: formattedStream || void 0,
+      summary: `In Wissensnotiz "${sanitizedTitle}" unter ${import_path2.default.relative(vaultPath, targetDir)} umgewandelt und archiviert.`
     };
   } else if (decision.type === "workstream") {
     const result = createWorkstream(vaultPath, sanitizedTitle, {

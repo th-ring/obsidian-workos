@@ -24664,6 +24664,18 @@ async function openFileInObsidian(app, file, newLeaf = false) {
   const leaf = app.workspace.getLeaf(newLeaf);
   await leaf.openFile(file);
 }
+async function ensureDirectoryExists(app, dirPath) {
+  const parts = (0, import_obsidian.normalizePath)(dirPath).split("/");
+  let current = "";
+  for (const part of parts) {
+    if (!part)
+      continue;
+    current = current ? `${current}/${part}` : part;
+    if (!await app.vault.adapter.exists(current)) {
+      await app.vault.createFolder(current);
+    }
+  }
+}
 async function updateTaskStatus(app, file, newStatus) {
   await app.fileManager.processFrontMatter(file, (fm) => {
     fm.status = newStatus;
@@ -24684,21 +24696,9 @@ async function createWorkstreamScaffold(app, title, options = {}) {
   const cleanTitle = title.trim();
   const safeName = sanitizeFileName(cleanTitle) || "Untitled-Workstream";
   const today = (/* @__PURE__ */ new Date()).toISOString().split("T")[0];
-  const workstreamDir = (0, import_obsidian.normalizePath)(`20_Workstreams/${safeName}`);
-  if (!await app.vault.adapter.exists("20_Workstreams")) {
-    await app.vault.createFolder("20_Workstreams");
-  }
-  if (!await app.vault.adapter.exists(workstreamDir)) {
-    await app.vault.createFolder(workstreamDir);
-  }
-  const tasksDir = (0, import_obsidian.normalizePath)(`${workstreamDir}/Tasks`);
-  if (!await app.vault.adapter.exists(tasksDir)) {
-    await app.vault.createFolder(tasksDir);
-  }
-  const notesDir = (0, import_obsidian.normalizePath)(`${workstreamDir}/Notes`);
-  if (!await app.vault.adapter.exists(notesDir)) {
-    await app.vault.createFolder(notesDir);
-  }
+  const workstreamDir = `20_Workstreams/${safeName}`;
+  await ensureDirectoryExists(app, `${workstreamDir}/Tasks`);
+  await ensureDirectoryExists(app, `${workstreamDir}/Notes`);
   const agentsPath = (0, import_obsidian.normalizePath)(`${workstreamDir}/AGENTS.md`);
   if (!await app.vault.adapter.exists(agentsPath)) {
     const agentsContent = `# \u{1F916} Agent Directives: ${cleanTitle}
@@ -24783,19 +24783,22 @@ async function createItem(app, type, data) {
   let folder = "00_Inbox";
   let frontmatterObj = {};
   let body = data.content || "";
+  const cleanWs = data.workstream ? data.workstream.replace(/[\[\]]/g, "").trim() : null;
+  const formattedWs = cleanWs ? `[[${cleanWs}]]` : null;
   if (type === "task") {
-    folder = "10_Tasks";
+    folder = cleanWs ? `20_Workstreams/${cleanWs}/Tasks` : "10_Tasks";
     frontmatterObj = {
       type: "task",
       title: cleanTitle,
       status: "todo",
       priority: data.priority || "medium",
-      workstream: data.workstream || null,
+      workstream: formattedWs,
       due: data.due || null,
       created: today,
       tags: data.tags || [],
       assigned_to: data.assigned_to || "user",
-      review_status: null
+      review_status: null,
+      agent_state: "idle"
     };
     if (!body) {
       body = `
@@ -24811,7 +24814,8 @@ async function createItem(app, type, data) {
       status: "unprocessed",
       source: "quick-capture",
       created: today,
-      tags: data.tags || []
+      tags: data.tags || [],
+      agent_state: "idle"
     };
     if (!body) {
       body = `
@@ -24819,17 +24823,19 @@ async function createItem(app, type, data) {
 `;
     }
   } else if (type === "note") {
-    folder = "30_Notes";
+    folder = cleanWs ? `20_Workstreams/${cleanWs}/Notes` : "30_Notes";
     frontmatterObj = {
       type: "note",
       title: cleanTitle,
       category: data.category || "general",
-      workstream: data.workstream || null,
+      workstream: formattedWs,
       created: today,
       updated: today,
-      tags: data.tags || []
+      tags: data.tags || [],
+      agent_state: "idle"
     };
   }
+  await ensureDirectoryExists(app, folder);
   let targetPath = (0, import_obsidian.normalizePath)(`${folder}/${safeName}.md`);
   let counter = 1;
   while (await app.vault.adapter.exists(targetPath)) {
@@ -24856,31 +24862,30 @@ ${value.map((v) => `  - ${v}`).join("\n")}
     }
   }
   yamlStr += "---\n\n" + body.trim() + "\n";
-  if (!await app.vault.adapter.exists(folder)) {
-    await app.vault.createFolder(folder);
-  }
   return await app.vault.create(targetPath, yamlStr);
 }
 async function convertBraindumpToTask(app, file, options = {}) {
   const today = (/* @__PURE__ */ new Date()).toISOString().split("T")[0];
+  const cleanWs = options.workstream ? options.workstream.replace(/[\[\]]/g, "").trim() : null;
+  const formattedWs = cleanWs ? `[[${cleanWs}]]` : null;
   await app.fileManager.processFrontMatter(file, (fm) => {
     fm.type = "task";
     fm.status = "todo";
     fm.priority = options.priority || "medium";
-    fm.workstream = options.workstream || null;
+    fm.workstream = formattedWs;
     delete fm.project;
     fm.due = options.due || null;
     fm.assigned_to = "user";
     fm.review_status = null;
+    fm.agent_state = "idle";
     if (options.title)
       fm.title = options.title;
     if (!fm.created)
       fm.created = today;
   });
-  if (!await app.vault.adapter.exists("10_Tasks")) {
-    await app.vault.createFolder("10_Tasks");
-  }
-  const targetPath = (0, import_obsidian.normalizePath)(`10_Tasks/${file.name}`);
+  let targetFolder = cleanWs ? `20_Workstreams/${cleanWs}/Tasks` : "10_Tasks";
+  await ensureDirectoryExists(app, targetFolder);
+  const targetPath = (0, import_obsidian.normalizePath)(`${targetFolder}/${file.name}`);
   if (file.path !== targetPath && !await app.vault.adapter.exists(targetPath)) {
     await app.fileManager.renameFile(file, targetPath);
   }
@@ -24888,21 +24893,23 @@ async function convertBraindumpToTask(app, file, options = {}) {
 }
 async function convertBraindumpToNote(app, file, options = {}) {
   const today = (/* @__PURE__ */ new Date()).toISOString().split("T")[0];
+  const cleanWs = options.workstream ? options.workstream.replace(/[\[\]]/g, "").trim() : null;
+  const formattedWs = cleanWs ? `[[${cleanWs}]]` : null;
   await app.fileManager.processFrontMatter(file, (fm) => {
     fm.type = "note";
     fm.category = options.category || "general";
-    fm.workstream = options.workstream || null;
+    fm.workstream = formattedWs;
     delete fm.project;
     fm.updated = today;
+    fm.agent_state = "idle";
     if (options.title)
       fm.title = options.title;
     if (!fm.created)
       fm.created = today;
   });
-  if (!await app.vault.adapter.exists("30_Notes")) {
-    await app.vault.createFolder("30_Notes");
-  }
-  const targetPath = (0, import_obsidian.normalizePath)(`30_Notes/${file.name}`);
+  let targetFolder = cleanWs ? `20_Workstreams/${cleanWs}/Notes` : "30_Notes";
+  await ensureDirectoryExists(app, targetFolder);
+  const targetPath = (0, import_obsidian.normalizePath)(`${targetFolder}/${file.name}`);
   if (file.path !== targetPath && !await app.vault.adapter.exists(targetPath)) {
     await app.fileManager.renameFile(file, targetPath);
   }
@@ -24912,9 +24919,7 @@ async function archiveItem(app, file) {
   await app.fileManager.processFrontMatter(file, (fm) => {
     fm.status = "archived";
   });
-  if (!await app.vault.adapter.exists("40_Archive")) {
-    await app.vault.createFolder("40_Archive");
-  }
+  await ensureDirectoryExists(app, "40_Archive");
   const targetPath = (0, import_obsidian.normalizePath)(`40_Archive/${file.name}`);
   if (file.path !== targetPath && !await app.vault.adapter.exists(targetPath)) {
     await app.fileManager.renameFile(file, targetPath);
