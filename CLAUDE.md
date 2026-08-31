@@ -1,14 +1,11 @@
 # 🤖 Claude Code Guidelines: Obsidian WorkOS
 
-All guidelines, schemas, and concurrency rules for this workspace are defined in `AGENTS.md`.
+Universal guidelines, schemas, and concurrency rules are defined in `AGENTS.md`.
 
-## 📌 Core Rules
-1. **Schema Compliance**: Every created or modified markdown file must strictly follow the JSON schemas in `.schemas/`.
-2. **Locking Guard**: When making extensive edits to a file, set `agent_state: processing` and `locked_by: "agent:claude"` in frontmatter. Upon completion, set `agent_state: idle` and `review_status: pending`.
-3. **Atomic Turn Commits**: Group all multi-file modifications into a single clean commit on `main`:
+## 📌 Fast Reference
+1. **MCP Tools**: If connected to `obsidian-workos-agent-suite`, use `workos_triage_inbox`, `workos_decompose_task`, `workos_create_workstream`, and `workos_vault_stats`.
+2. **Schema Compliance**: Follow JSON schemas in `.schemas/` for all YAML frontmatter.
+3. **Concurrency Locking**: When modifying existing notes, set `agent_state: processing` with `locked_by: "agent:claude"`. Set `agent_state: idle` and `review_status: pending` when done.
+4. **Atomic Commits**: Create descriptive atomic commits on `main`:
    `git commit -m "feat(agent): ..."`
-4. **Workstream Context**: When operating inside `20_Workstreams/<Name>/`, follow the local `AGENTS.md`.
-
-## 🛠️ Headless Tools & CLI
-- Scan Vault Metrics: `npm run agent:stats`
-- Triage Inbox: `npm run agent:triage`
+5. **Workstreams**: In `20_Workstreams/<Name>/`, also follow the local `AGENTS.md`.

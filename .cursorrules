@@ -3,6 +3,7 @@
 Always follow the universal directives in `AGENTS.md`.
 
 ## 📌 Golden Directives
-- **YAML Frontmatter**: Keep all frontmatter compliant with `.schemas/*.schema.json`.
-- **Concurrency**: Set `agent_state: processing` with `locked_by: "agent:codex"` while modifying existing files.
+- **MCP Tools**: Use the standard `workos_*` tools from `obsidian-workos-agent-suite`.
+- **YAML Frontmatter**: Keep all frontmatter strictly compliant with `.schemas/*.schema.json`.
+- **Concurrency**: Set `agent_state: processing` with `locked_by: "agent:codex"` while modifying existing files. Set `review_status: pending` when done.
 - **Atomic Commits**: Bundle completed turns into descriptive commits on `main`.
