@@ -3701,153 +3701,160 @@ var AgentProgressModal = class extends import_obsidian.Modal {
 // src/plugin/settings.ts
 var import_obsidian2 = require("obsidian");
 
-// src/engines/runner.ts
+// src/engines/ollamaEngine.ts
+var OllamaEngine = class {
+  name = "ollama";
+  url;
+  model;
+  constructor(url = "http://localhost:11434", model = "llama3") {
+    this.url = url;
+    this.model = model;
+  }
+  async runPrompt(prompt, systemPrompt) {
+    try {
+      const endpoint = `${this.url}/api/generate`;
+      const body = {
+        model: this.model,
+        prompt,
+        system: systemPrompt || "",
+        stream: false,
+        format: "json"
+      };
+      const res = await fetch(endpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body)
+      });
+      if (!res.ok) {
+        throw new Error(`Ollama Fehler (${res.status}): ${await res.text()}`);
+      }
+      const data = await res.json();
+      return { success: true, content: data.response || "" };
+    } catch (err) {
+      return { success: false, content: "", error: err.message };
+    }
+  }
+};
+
+// src/engines/cliEngine.ts
 var import_child_process = require("child_process");
 var import_util = require("util");
 var execAsync = (0, import_util.promisify)(import_child_process.exec);
-var EngineRunner = class {
-  settings;
-  constructor(settings) {
-    this.settings = settings;
+var CliEngine = class {
+  name;
+  command;
+  constructor(name, command) {
+    this.name = name;
+    this.command = command;
   }
   async runPrompt(prompt, systemPrompt) {
-    const engine = this.settings.engine;
     try {
-      switch (engine) {
-        case "ollama":
-          return await this.runOllama(prompt, systemPrompt);
-        case "gemini":
-          return await this.runGemini(prompt, systemPrompt);
-        case "anthropic":
-          return await this.runAnthropic(prompt, systemPrompt);
-        case "openai":
-          return await this.runOpenAI(prompt, systemPrompt);
-        case "codex":
-          return await this.runCli(this.settings.codexCliCommand || "codex", prompt);
-        case "claude":
-          return await this.runCli(this.settings.claudeCliCommand || "claude", prompt);
-        case "antigravity":
-          return await this.runCli(this.settings.antigravityCliCommand || "agy", prompt);
-        default:
-          return { success: false, content: "", error: `Unbekannte Engine: ${engine}` };
-      }
-    } catch (err) {
-      return { success: false, content: "", error: err.message || String(err) };
-    }
-  }
-  // 1. Local Ollama Runner
-  async runOllama(prompt, systemPrompt) {
-    const url = `${this.settings.ollamaUrl || "http://localhost:11434"}/api/generate`;
-    const body = {
-      model: this.settings.ollamaModel || "llama3",
-      prompt,
-      system: systemPrompt || "",
-      stream: false,
-      format: "json"
-    };
-    const res = await fetch(url, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body)
-    });
-    if (!res.ok) {
-      throw new Error(`Ollama Server Fehler (${res.status}): ${await res.text()}`);
-    }
-    const data = await res.json();
-    return { success: true, content: data.response || "" };
-  }
-  // 2. Google Gemini API Runner
-  async runGemini(prompt, systemPrompt) {
-    if (!this.settings.geminiApiKey) {
-      throw new Error("Gemini API Key fehlt in den Einstellungen.");
-    }
-    const model = this.settings.geminiModel || "gemini-1.5-flash";
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${this.settings.geminiApiKey}`;
-    const body = {
-      contents: [{ role: "user", parts: [{ text: prompt }] }]
-    };
-    if (systemPrompt) {
-      body.systemInstruction = { parts: [{ text: systemPrompt }] };
-    }
-    const res = await fetch(url, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body)
-    });
-    if (!res.ok) {
-      throw new Error(`Gemini API Fehler (${res.status}): ${await res.text()}`);
-    }
-    const data = await res.json();
-    const content = data.candidates?.[0]?.content?.parts?.[0]?.text || "";
-    return { success: true, content };
-  }
-  // 3. Anthropic Claude API Runner
-  async runAnthropic(prompt, systemPrompt) {
-    if (!this.settings.anthropicApiKey) {
-      throw new Error("Anthropic API Key fehlt in den Einstellungen.");
-    }
-    const model = this.settings.anthropicModel || "claude-3-5-sonnet-20241022";
-    const url = "https://api.anthropic.com/v1/messages";
-    const body = {
-      model,
-      max_tokens: 4096,
-      messages: [{ role: "user", content: prompt }]
-    };
-    if (systemPrompt) {
-      body.system = systemPrompt;
-    }
-    const res = await fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "x-api-key": this.settings.anthropicApiKey,
-        "anthropic-version": "2023-06-01"
-      },
-      body: JSON.stringify(body)
-    });
-    if (!res.ok) {
-      throw new Error(`Anthropic API Fehler (${res.status}): ${await res.text()}`);
-    }
-    const data = await res.json();
-    const content = data.content?.[0]?.text || "";
-    return { success: true, content };
-  }
-  // 4. OpenAI API Runner
-  async runOpenAI(prompt, systemPrompt) {
-    if (!this.settings.openaiApiKey) {
-      throw new Error("OpenAI API Key fehlt in den Einstellungen.");
-    }
-    const model = this.settings.openaiModel || "gpt-4o";
-    const url = "https://api.openai.com/v1/chat/completions";
-    const messages = [];
-    if (systemPrompt)
-      messages.push({ role: "system", content: systemPrompt });
-    messages.push({ role: "user", content: prompt });
-    const res = await fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${this.settings.openaiApiKey}`
-      },
-      body: JSON.stringify({ model, messages })
-    });
-    if (!res.ok) {
-      throw new Error(`OpenAI API Fehler (${res.status}): ${await res.text()}`);
-    }
-    const data = await res.json();
-    const content = data.choices?.[0]?.message?.content || "";
-    return { success: true, content };
-  }
-  // 5. Headless CLI Runner (Codex, Claude, Antigravity)
-  async runCli(command, prompt) {
-    try {
-      const sanitized = prompt.replace(/"/g, '"');
-      const fullCmd = `${command} "${sanitized}"`;
+      const fullPrompt = systemPrompt ? `${systemPrompt}
+
+${prompt}` : prompt;
+      const sanitized = fullPrompt.replace(/"/g, '"');
+      const fullCmd = `${this.command} "${sanitized}"`;
       const { stdout, stderr } = await execAsync(fullCmd, { maxBuffer: 1024 * 1024 * 10 });
       return { success: true, content: stdout.trim() || stderr.trim() };
     } catch (err) {
-      throw new Error(`CLI Fehler beim Ausf\xFChren von '${command}': ${err.message}`);
+      return { success: false, content: "", error: `CLI Fehler bei '${this.command}': ${err.message}` };
     }
+  }
+};
+
+// src/engines/cloudEngine.ts
+var CloudApiEngine = class {
+  name;
+  apiKey;
+  model;
+  provider;
+  constructor(provider, apiKey, model) {
+    this.provider = provider;
+    this.name = provider;
+    this.apiKey = apiKey;
+    this.model = model;
+  }
+  async runPrompt(prompt, systemPrompt) {
+    if (!this.apiKey) {
+      return { success: false, content: "", error: `${this.provider.toUpperCase()} API-Key fehlt in den Einstellungen.` };
+    }
+    try {
+      if (this.provider === "gemini") {
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/${this.model}:generateContent?key=${this.apiKey}`;
+        const body = { contents: [{ role: "user", parts: [{ text: prompt }] }] };
+        if (systemPrompt)
+          body.systemInstruction = { parts: [{ text: systemPrompt }] };
+        const res = await fetch(url, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+        if (!res.ok)
+          throw new Error(`Gemini API Fehler (${res.status}): ${await res.text()}`);
+        const data = await res.json();
+        return { success: true, content: data.candidates?.[0]?.content?.parts?.[0]?.text || "" };
+      } else if (this.provider === "anthropic") {
+        const url = "https://api.anthropic.com/v1/messages";
+        const body = { model: this.model, max_tokens: 4096, messages: [{ role: "user", content: prompt }] };
+        if (systemPrompt)
+          body.system = systemPrompt;
+        const res = await fetch(url, {
+          method: "POST",
+          headers: { "Content-Type": "application/json", "x-api-key": this.apiKey, "anthropic-version": "2023-06-01" },
+          body: JSON.stringify(body)
+        });
+        if (!res.ok)
+          throw new Error(`Anthropic API Fehler (${res.status}): ${await res.text()}`);
+        const data = await res.json();
+        return { success: true, content: data.content?.[0]?.text || "" };
+      } else {
+        const url = "https://api.openai.com/v1/chat/completions";
+        const messages = [];
+        if (systemPrompt)
+          messages.push({ role: "system", content: systemPrompt });
+        messages.push({ role: "user", content: prompt });
+        const res = await fetch(url, {
+          method: "POST",
+          headers: { "Content-Type": "application/json", Authorization: `Bearer ${this.apiKey}` },
+          body: JSON.stringify({ model: this.model, messages })
+        });
+        if (!res.ok)
+          throw new Error(`OpenAI API Fehler (${res.status}): ${await res.text()}`);
+        const data = await res.json();
+        return { success: true, content: data.choices?.[0]?.message?.content || "" };
+      }
+    } catch (err) {
+      return { success: false, content: "", error: err.message };
+    }
+  }
+};
+
+// src/engines/runner.ts
+var EngineRunner = class {
+  settings;
+  engines = /* @__PURE__ */ new Map();
+  constructor(settings) {
+    this.settings = settings;
+    this.initEngines();
+  }
+  initEngines() {
+    this.engines.set("ollama", new OllamaEngine(this.settings.ollamaUrl, this.settings.ollamaModel));
+    this.engines.set("codex", new CliEngine("codex", this.settings.codexCliCommand || "codex"));
+    this.engines.set("claude", new CliEngine("claude", this.settings.claudeCliCommand || "claude"));
+    this.engines.set("antigravity", new CliEngine("antigravity", this.settings.antigravityCliCommand || "agy"));
+    this.engines.set("gemini", new CloudApiEngine("gemini", this.settings.geminiApiKey, this.settings.geminiModel || "gemini-1.5-flash"));
+    this.engines.set("anthropic", new CloudApiEngine("anthropic", this.settings.anthropicApiKey, this.settings.anthropicModel || "claude-3-5-sonnet-20241022"));
+    this.engines.set("openai", new CloudApiEngine("openai", this.settings.openaiApiKey, this.settings.openaiModel || "gpt-4o"));
+  }
+  registerEngine(engine) {
+    this.engines.set(engine.name, engine);
+  }
+  async runPrompt(prompt, systemPrompt) {
+    const engine = this.engines.get(this.settings.engine);
+    if (!engine) {
+      return {
+        success: false,
+        content: "",
+        error: `Engine '${this.settings.engine}' ist nicht registriert.`
+      };
+    }
+    return await engine.runPrompt(prompt, systemPrompt);
   }
 };
 
