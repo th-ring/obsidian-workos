@@ -12,6 +12,9 @@ tags:
   - dnd
 assigned_to: hybrid
 review_status: null
+agent_state: processing
+locked_by: "agent:antigravity"
+locked_at: "2026-08-30T22:58:30"
 ---
 
 ## Kontext

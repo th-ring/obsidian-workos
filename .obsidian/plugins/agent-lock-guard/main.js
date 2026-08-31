@@ -32,12 +32,36 @@ var import_obsidian6 = require("obsidian");
 
 // src/bannerView.ts
 var import_obsidian = require("obsidian");
+
+// src/types.ts
+var DEFAULT_SETTINGS = {
+  forceReadingModeOnLock: true,
+  enableHardBlock: true,
+  autoUnlockTimeoutMinutes: 0,
+  showBanner: true,
+  showTimer: true,
+  stickyBanner: true,
+  bannerStyle: "glassmorphism",
+  enableStatusBar: true,
+  hideStatusBarWhenZero: false,
+  enableRibbonIcon: true,
+  enableCompletionToasts: true,
+  enableBlockedEditToasts: true
+};
+
+// src/bannerView.ts
 var BannerViewManager = class {
-  constructor(lockManager) {
+  constructor(lockManager, settings) {
+    this.settings = DEFAULT_SETTINGS;
     this.timerInterval = null;
     this.currentBannerEl = null;
     this.currentLockedFile = null;
     this.lockManager = lockManager;
+    if (settings)
+      this.settings = settings;
+  }
+  updateSettings(settings) {
+    this.settings = settings;
   }
   init() {
     this.startTimerLoop();
@@ -47,7 +71,7 @@ var BannerViewManager = class {
     this.removeBanner();
   }
   updateBannerForView(view) {
-    if (!view || !view.file) {
+    if (!view || !view.file || !this.settings.showBanner) {
       this.removeBanner();
       return;
     }
@@ -62,33 +86,48 @@ var BannerViewManager = class {
   renderBanner(view, lockInfo) {
     this.currentLockedFile = lockInfo.file;
     const container = view.contentEl;
-    let bannerEl = container.querySelector(".agent-lock-banner");
+    let wrapperEl = container.querySelector(".agent-lock-banner-wrapper");
+    if (!wrapperEl) {
+      wrapperEl = createDiv({ cls: "agent-lock-banner-wrapper" });
+      container.prepend(wrapperEl);
+    }
+    if (!this.settings.stickyBanner) {
+      wrapperEl.addClass("not-sticky");
+    } else {
+      wrapperEl.removeClass("not-sticky");
+    }
+    let bannerEl = wrapperEl.querySelector(".agent-lock-banner");
     if (!bannerEl) {
-      bannerEl = createDiv({ cls: "agent-lock-banner" });
-      container.prepend(bannerEl);
+      bannerEl = wrapperEl.createDiv({ cls: "agent-lock-banner" });
       this.currentBannerEl = bannerEl;
     }
+    bannerEl.removeClass("style-glassmorphism", "style-solid", "style-minimal");
+    bannerEl.addClass(`style-${this.settings.bannerStyle || "glassmorphism"}`);
     bannerEl.empty();
     const leftEl = bannerEl.createDiv({ cls: "agent-lock-banner-left" });
-    const pulseEl = leftEl.createDiv({ cls: "agent-lock-pulse" });
+    const pulseWrapper = leftEl.createDiv({ cls: "agent-lock-pulse-wrapper" });
+    pulseWrapper.createDiv({ cls: "agent-lock-pulse-core" });
+    pulseWrapper.createDiv({ cls: "agent-lock-pulse-ring" });
     const iconEl = leftEl.createSpan({ cls: "agent-lock-icon" });
     (0, import_obsidian.setIcon)(iconEl, "bot");
-    const textEl = leftEl.createDiv({ cls: "agent-lock-text-container" });
-    const titleEl = textEl.createDiv({ cls: "agent-lock-title" });
-    titleEl.createSpan({ text: "AGENT ARBEITET " });
-    titleEl.createSpan({ cls: "agent-lock-agent-name", text: `(${lockInfo.lockedBy})` });
-    const descEl = textEl.createDiv({ cls: "agent-lock-desc" });
-    descEl.setText("Schreibgesch\xFCtzt, um Kollisionen zu verhindern.");
+    const badgeEl = leftEl.createSpan({ cls: "agent-lock-badge", text: "AGENT AKTIV" });
+    const nameEl = leftEl.createSpan({ cls: "agent-lock-agent-name", text: lockInfo.lockedBy });
+    const dividerEl = leftEl.createSpan({ cls: "agent-lock-divider", text: "\u2022" });
+    const descEl = leftEl.createSpan({ cls: "agent-lock-status-desc", text: "Schreibgesch\xFCtzt" });
     const rightEl = bannerEl.createDiv({ cls: "agent-lock-banner-right" });
-    const timerBadge = rightEl.createDiv({ cls: "agent-lock-timer-badge" });
-    const timerIcon = timerBadge.createSpan({ cls: "agent-lock-timer-icon" });
-    (0, import_obsidian.setIcon)(timerIcon, "clock");
-    const timerText = timerBadge.createSpan({ cls: "agent-lock-timer-text" });
-    timerText.setText(this.calculateDurationText(lockInfo.lockedAtDate));
+    if (this.settings.showTimer) {
+      const timerBadge = rightEl.createDiv({ cls: "agent-lock-timer-badge" });
+      const timerIcon = timerBadge.createSpan({ cls: "agent-lock-timer-icon" });
+      (0, import_obsidian.setIcon)(timerIcon, "clock");
+      const timerText = timerBadge.createSpan({ cls: "agent-lock-timer-text" });
+      timerText.setText(this.calculateDurationText(lockInfo.lockedAtDate));
+    }
     const unlockBtn = rightEl.createEl("button", {
-      cls: "agent-lock-unlock-btn",
-      text: "\u{1F513} Jetzt freigeben"
+      cls: "agent-lock-unlock-btn"
     });
+    const unlockIcon = unlockBtn.createSpan({ cls: "agent-lock-unlock-btn-icon" });
+    (0, import_obsidian.setIcon)(unlockIcon, "unlock");
+    unlockBtn.createSpan({ text: "Freigeben" });
     unlockBtn.addEventListener("click", async (e) => {
       e.stopPropagation();
       unlockBtn.disabled = true;
@@ -98,7 +137,12 @@ var BannerViewManager = class {
   }
   removeBanner() {
     if (this.currentBannerEl) {
-      this.currentBannerEl.remove();
+      const wrapper = this.currentBannerEl.closest(".agent-lock-banner-wrapper");
+      if (wrapper) {
+        wrapper.remove();
+      } else {
+        this.currentBannerEl.remove();
+      }
       this.currentBannerEl = null;
     }
     this.currentLockedFile = null;
@@ -106,7 +150,7 @@ var BannerViewManager = class {
   startTimerLoop() {
     this.stopTimerLoop();
     this.timerInterval = window.setInterval(() => {
-      if (!this.currentBannerEl || !this.currentLockedFile)
+      if (!this.currentBannerEl || !this.currentLockedFile || !this.settings.showTimer)
         return;
       const lock = this.lockManager.getLockInfo(this.currentLockedFile);
       if (!lock)
@@ -129,44 +173,66 @@ var BannerViewManager = class {
     const now = /* @__PURE__ */ new Date();
     const diffSec = Math.max(0, Math.floor((now.getTime() - lockedAtDate.getTime()) / 1e3));
     if (diffSec < 60) {
-      return `seit ${diffSec}s`;
+      return `vor ${diffSec}s`;
     }
     const mins = Math.floor(diffSec / 60);
     const remainingSec = diffSec % 60;
-    return `seit ${mins}m ${remainingSec}s`;
+    return `vor ${mins}m ${remainingSec}s`;
   }
 };
 
 // src/editorExtension.ts
+var import_state = require("@codemirror/state");
 var import_view = require("@codemirror/view");
 var import_obsidian2 = require("obsidian");
 var activeLockManager = null;
+var activeSettings = DEFAULT_SETTINGS;
 var lastNoticeTime = 0;
-function setEditorLockManager(manager) {
+function setEditorLockManager(manager, settings) {
   activeLockManager = manager;
+  if (settings)
+    activeSettings = settings;
+}
+function updateEditorLockSettings(settings) {
+  activeSettings = settings;
+}
+function showLockNotice() {
+  if (!activeSettings.enableBlockedEditToasts)
+    return;
+  const now = Date.now();
+  if (now - lastNoticeTime > 2e3) {
+    lastNoticeTime = now;
+    new import_obsidian2.Notice("\u{1F512} Notiz ist durch KI-Agent gesperrt (Schreibschutz aktiv). Klicke oben auf 'Freigeben' zum Bearbeiten.", 3e3);
+  }
 }
 function createEditorLockExtension() {
-  return import_view.EditorView.domEventHandlers({
+  const transactionBlocker = import_state.EditorState.transactionFilter.of((tr) => {
+    if (!activeLockManager || !tr.docChanged || !activeSettings.enableHardBlock)
+      return tr;
+    const isLocked = activeLockManager.getAllActiveLocks().length > 0;
+    if (!isLocked)
+      return tr;
+    const activeLeaf = document.querySelector(".workspace-leaf.mod-active");
+    const hasLockBanner = activeLeaf?.querySelector(".agent-lock-banner") !== null;
+    if (hasLockBanner) {
+      showLockNotice();
+      return [];
+    }
+    return tr;
+  });
+  const domHandlers = import_view.EditorView.domEventHandlers({
     keydown(event, view) {
       if (!activeLockManager)
         return false;
       if (event.key === "ArrowUp" || event.key === "ArrowDown" || event.key === "ArrowLeft" || event.key === "ArrowRight" || event.key === "PageUp" || event.key === "PageDown" || event.key === "Home" || event.key === "End" || event.key === "Escape" || event.key === "Control" || event.key === "Alt" || event.key === "Shift" || event.key === "Meta") {
         return false;
       }
-      const file = view.editor?.file || null;
-      const isLocked = activeLockManager.getAllActiveLocks().some(
-        (lock) => lock.agentState === "processing"
-      );
       const dom = view.dom.closest(".workspace-leaf");
       const hasLockBanner = dom?.querySelector(".agent-lock-banner") !== null;
       if (hasLockBanner) {
         event.preventDefault();
         event.stopPropagation();
-        const now = Date.now();
-        if (now - lastNoticeTime > 2500) {
-          lastNoticeTime = now;
-          new import_obsidian2.Notice("\u{1F512} Notiz ist durch Agent gesperrt. Klicke oben auf 'Freigeben' zum Bearbeiten.", 3e3);
-        }
+        showLockNotice();
         return true;
       }
       return false;
@@ -177,7 +243,7 @@ function createEditorLockExtension() {
       if (hasLockBanner) {
         event.preventDefault();
         event.stopPropagation();
-        new import_obsidian2.Notice("\u{1F512} Notiz ist durch Agent gesperrt. Einf\xFCgen blockiert.", 3e3);
+        showLockNotice();
         return true;
       }
       return false;
@@ -188,12 +254,24 @@ function createEditorLockExtension() {
       if (hasLockBanner) {
         event.preventDefault();
         event.stopPropagation();
-        new import_obsidian2.Notice("\u{1F512} Notiz ist durch Agent gesperrt. Ausschneiden blockiert.", 3e3);
+        showLockNotice();
+        return true;
+      }
+      return false;
+    },
+    drop(event, view) {
+      const dom = view.dom.closest(".workspace-leaf");
+      const hasLockBanner = dom?.querySelector(".agent-lock-banner") !== null;
+      if (hasLockBanner) {
+        event.preventDefault();
+        event.stopPropagation();
+        showLockNotice();
         return true;
       }
       return false;
     }
   });
+  return [transactionBlocker, domHandlers];
 }
 
 // src/lockManager.ts
@@ -203,10 +281,18 @@ var LockManager = class {
     this.locks = /* @__PURE__ */ new Map();
     this.listeners = /* @__PURE__ */ new Set();
     this.eventRefs = [];
+    this.autoUnlockTimer = null;
+    this.settings = DEFAULT_SETTINGS;
     this.app = app;
     this.onFileCompletedCallback = onFileCompleted;
   }
-  init() {
+  updateSettings(settings) {
+    this.settings = settings;
+    this.restartAutoUnlockLoop();
+  }
+  init(settings) {
+    if (settings)
+      this.settings = settings;
     this.scanVault();
     const cacheRef = this.app.metadataCache.on("changed", (file) => {
       if (file instanceof import_obsidian3.TFile && file.extension === "md") {
@@ -234,8 +320,10 @@ var LockManager = class {
       }
     });
     this.eventRefs.push(deleteRef);
+    this.restartAutoUnlockLoop();
   }
   destroy() {
+    this.stopAutoUnlockLoop();
     for (const ref of this.eventRefs) {
       this.app.metadataCache.offref(ref);
       this.app.vault.offref(ref);
@@ -243,6 +331,38 @@ var LockManager = class {
     this.eventRefs = [];
     this.locks.clear();
     this.listeners.clear();
+  }
+  restartAutoUnlockLoop() {
+    this.stopAutoUnlockLoop();
+    if (this.settings.autoUnlockTimeoutMinutes > 0) {
+      this.autoUnlockTimer = window.setInterval(() => {
+        this.checkStaleLocks();
+      }, 1e4);
+    }
+  }
+  stopAutoUnlockLoop() {
+    if (this.autoUnlockTimer !== null) {
+      window.clearInterval(this.autoUnlockTimer);
+      this.autoUnlockTimer = null;
+    }
+  }
+  async checkStaleLocks() {
+    if (this.settings.autoUnlockTimeoutMinutes <= 0)
+      return;
+    const maxSec = this.settings.autoUnlockTimeoutMinutes * 60;
+    const now = Date.now();
+    for (const lock of this.getAllActiveLocks()) {
+      if (lock.lockedAtDate) {
+        const diffSec = Math.floor((now - lock.lockedAtDate.getTime()) / 1e3);
+        if (diffSec >= maxSec) {
+          await this.unlockFile(lock.file);
+          new import_obsidian3.Notice(
+            `\u23F1\uFE0F Sperre f\xFCr "${lock.title}" nach ${this.settings.autoUnlockTimeoutMinutes} Min. automatisch freigegeben.`,
+            5e3
+          );
+        }
+      }
+    }
   }
   scanVault() {
     const files = this.app.vault.getMarkdownFiles();
@@ -513,31 +633,103 @@ var AgentLockSettingTab = class extends import_obsidian5.PluginSettingTab {
   display() {
     const { containerEl } = this;
     containerEl.empty();
-    containerEl.createEl("h2", { text: "Agent Lock Guard Einstellungen" });
-    new import_obsidian5.Setting(containerEl).setName("Statusleiste anzeigen").setDesc("Zeigt ein Icon mit der Anzahl aktiver Agenten-Locks in der unteren Statusleiste an.").addToggle(
+    containerEl.createEl("h2", { text: "\u{1F6E1}\uFE0F Agent Lock Guard Einstellungen" });
+    containerEl.createEl("p", {
+      cls: "setting-item-description",
+      text: "Multi-Agent Concurrency Control, Live In-Note Locking Banners und Kollisionsschutz f\xFCr Obsidian WorkOS."
+    });
+    containerEl.createEl("h3", { text: "\u{1F512} Sperr- & Sicherheitsverhalten" });
+    new import_obsidian5.Setting(containerEl).setName("Automatischer Lesemodus bei Sperre").setDesc("Schaltet gesperrte Notizen beim \xD6ffnen automatisch in den Lesemodus (Preview), sodass die Bearbeitung physisch gesperrt ist.").addToggle(
+      (toggle) => toggle.setValue(this.plugin.settings.forceReadingModeOnLock).onChange(async (value) => {
+        this.plugin.settings.forceReadingModeOnLock = value;
+        await this.plugin.saveSettings();
+        this.plugin.refreshBanner();
+      })
+    );
+    new import_obsidian5.Setting(containerEl).setName("CodeMirror Engine Hard-Block").setDesc("Blockiert Text\xE4nderungen auf CodeMirror-Engine-Ebene (Transaktions-Filter), selbst wenn sich die Notiz im Quelltext-Modus befindet.").addToggle(
+      (toggle) => toggle.setValue(this.plugin.settings.enableHardBlock).onChange(async (value) => {
+        this.plugin.settings.enableHardBlock = value;
+        await this.plugin.saveSettings();
+      })
+    );
+    new import_obsidian5.Setting(containerEl).setName("Automatischer Timeout (Deadlock-Schutz)").setDesc("Gibt gesperrte Dateien automatisch frei, wenn seit dem Sperr-Zeitpunkt keine Aktivit\xE4t mehr stattgefunden hat (z. B. nach Agenten-Absturz).").addDropdown(
+      (dropdown) => dropdown.addOption("0", "Aus (Streng manuell - Empfohlen)").addOption("1", "Nach 1 Minute").addOption("2", "Nach 2 Minuten").addOption("3", "Nach 3 Minuten").addOption("5", "Nach 5 Minuten").addOption("10", "Nach 10 Minuten").setValue(String(this.plugin.settings.autoUnlockTimeoutMinutes)).onChange(async (value) => {
+        this.plugin.settings.autoUnlockTimeoutMinutes = parseInt(value, 10);
+        await this.plugin.saveSettings();
+        this.plugin.lockManager.updateSettings(this.plugin.settings);
+      })
+    );
+    containerEl.createEl("h3", { text: "\u{1F3F7}\uFE0F Visueller Notiz-Banner (Header-UI)" });
+    new import_obsidian5.Setting(containerEl).setName("Schwebenden Header-Banner anzeigen").setDesc("Blendet den eleganten Status-Banner oben in jeder durch einen Agenten gesperrten Notiz ein.").addToggle(
+      (toggle) => toggle.setValue(this.plugin.settings.showBanner).onChange(async (value) => {
+        this.plugin.settings.showBanner = value;
+        await this.plugin.saveSettings();
+        this.plugin.refreshBanner();
+      })
+    );
+    new import_obsidian5.Setting(containerEl).setName("Live-Timer im Banner").setDesc("Zeigt sekundengenau an, wie lange die Notiz durch den Agenten bereits in Bearbeitung ist.").addToggle(
+      (toggle) => toggle.setValue(this.plugin.settings.showTimer).onChange(async (value) => {
+        this.plugin.settings.showTimer = value;
+        await this.plugin.saveSettings();
+        this.plugin.refreshBanner();
+      })
+    );
+    new import_obsidian5.Setting(containerEl).setName("Sticky Banner beim Scrollen").setDesc("H\xE4lt den Banner beim Scrollen durch lange Notizen dezent am oberen Bildschirmrand fixiert.").addToggle(
+      (toggle) => toggle.setValue(this.plugin.settings.stickyBanner).onChange(async (value) => {
+        this.plugin.settings.stickyBanner = value;
+        await this.plugin.saveSettings();
+        this.plugin.refreshBanner();
+      })
+    );
+    new import_obsidian5.Setting(containerEl).setName("Banner-Designstil").setDesc("W\xE4hle das visuelle Erscheinungsbild des In-Note Banners.").addDropdown(
+      (dropdown) => dropdown.addOption("glassmorphism", "Modern Glassmorphism (Gradient + Blur)").addOption("solid", "Kompakter Solid Card").addOption("minimal", "Minimalistischer Text-Header").setValue(this.plugin.settings.bannerStyle).onChange(async (value) => {
+        this.plugin.settings.bannerStyle = value;
+        await this.plugin.saveSettings();
+        this.plugin.refreshBanner();
+      })
+    );
+    containerEl.createEl("h3", { text: "\u{1F4CA} Statusleiste & Navigation" });
+    new import_obsidian5.Setting(containerEl).setName("Statusleisten-Element").setDesc("Zeigt ein Icon mit der Anzahl aktiver Agenten-Locks in der unteren Obsidian-Statusleiste an.").addToggle(
       (toggle) => toggle.setValue(this.plugin.settings.enableStatusBar).onChange(async (value) => {
         this.plugin.settings.enableStatusBar = value;
         await this.plugin.saveSettings();
         this.plugin.updateStatusBar();
       })
     );
-    new import_obsidian5.Setting(containerEl).setName("Ribbon-Icon anzeigen").setDesc("F\xFCgt ein Icon zur linken Seitenleiste hinzu, um gesperrte Dateien mit einem Klick anzuzeigen.").addToggle(
+    new import_obsidian5.Setting(containerEl).setName("Statusleiste bei 0 Locks ausblenden").setDesc("Versteckt das Statusleisten-Icon komplett, solange keine Dateien gesperrt sind.").addToggle(
+      (toggle) => toggle.setValue(this.plugin.settings.hideStatusBarWhenZero).onChange(async (value) => {
+        this.plugin.settings.hideStatusBarWhenZero = value;
+        await this.plugin.saveSettings();
+        this.plugin.updateStatusBar();
+      })
+    );
+    new import_obsidian5.Setting(containerEl).setName("Ribbon-Icon (Linke Leiste)").setDesc("Zeigt ein Roboter-Icon in der linken Men\xFCleiste an, um das Lock-Modal mit 1 Klick zu \xF6ffnen.").addToggle(
       (toggle) => toggle.setValue(this.plugin.settings.enableRibbonIcon).onChange(async (value) => {
         this.plugin.settings.enableRibbonIcon = value;
         await this.plugin.saveSettings();
       })
     );
-    new import_obsidian5.Setting(containerEl).setName("Abschluss-Benachrichtigungen").setDesc("Zeigt einen kurzen Hinweis an, wenn ein Agent die Bearbeitung einer Notiz beendet hat.").addToggle(
+    containerEl.createEl("h3", { text: "\u{1F514} Benachrichtigungen & Feedback" });
+    new import_obsidian5.Setting(containerEl).setName("Abschluss-Benachrichtigungen").setDesc("Zeigt einen Hinweis an ('\u2705 [Agent] hat [Notiz] fertiggestellt'), sobald eine Sperre aufgehoben wird.").addToggle(
       (toggle) => toggle.setValue(this.plugin.settings.enableCompletionToasts).onChange(async (value) => {
         this.plugin.settings.enableCompletionToasts = value;
         await this.plugin.saveSettings();
       })
     );
-    new import_obsidian5.Setting(containerEl).setName("Live-Timer im Banner").setDesc("Zeigt sekundengenau an, seit wann die Notiz durch den Agenten gesperrt ist.").addToggle(
-      (toggle) => toggle.setValue(this.plugin.settings.showTimer).onChange(async (value) => {
-        this.plugin.settings.showTimer = value;
+    new import_obsidian5.Setting(containerEl).setName("Tippversuch-Hinweise").setDesc("Zeigt eine Toast-Meldung an, wenn versucht wird, in eine gesperrte Notiz zu tippen.").addToggle(
+      (toggle) => toggle.setValue(this.plugin.settings.enableBlockedEditToasts).onChange(async (value) => {
+        this.plugin.settings.enableBlockedEditToasts = value;
         await this.plugin.saveSettings();
-        this.plugin.refreshBanner();
+      })
+    );
+    containerEl.createEl("h3", { text: "\u{1F6A8} Notfall-Werkzeuge (Emergency Utilities)" });
+    const activeLocks = this.plugin.lockManager.getAllActiveLocks();
+    const emergencySetting = new import_obsidian5.Setting(containerEl).setName("Alle Sperren im Vault aufheben").setDesc(`Aktuell gesperrte Dateien im Vault: ${activeLocks.length}`).addButton(
+      (btn) => btn.setButtonText("\u{1F513} Alle sofort freigeben").setWarning().onClick(async () => {
+        btn.setDisabled(true);
+        btn.setButtonText("Wird freigegeben...");
+        const count = await this.plugin.lockManager.unlockAll();
+        this.display();
       })
     );
   }
@@ -545,11 +737,19 @@ var AgentLockSettingTab = class extends import_obsidian5.PluginSettingTab {
 
 // src/statusBar.ts
 var StatusBarManager = class {
-  constructor(app, lockManager) {
+  constructor(app, lockManager, settings) {
     this.statusBarEl = null;
     this.unsubscribe = null;
+    this.settings = DEFAULT_SETTINGS;
     this.app = app;
     this.lockManager = lockManager;
+    if (settings)
+      this.settings = settings;
+  }
+  updateSettings(settings) {
+    this.settings = settings;
+    const active = this.lockManager.getAllActiveLocks();
+    this.update(active.length);
   }
   init(statusBarEl) {
     this.statusBarEl = statusBarEl;
@@ -572,6 +772,15 @@ var StatusBarManager = class {
     if (!this.statusBarEl)
       return;
     this.statusBarEl.empty();
+    if (!this.settings.enableStatusBar) {
+      this.statusBarEl.style.display = "none";
+      return;
+    }
+    if (this.settings.hideStatusBarWhenZero && count === 0) {
+      this.statusBarEl.style.display = "none";
+      return;
+    }
+    this.statusBarEl.style.display = "inline-flex";
     const iconSpan = this.statusBarEl.createSpan({ cls: "agent-lock-status-icon" });
     iconSpan.setText("\u{1F916}");
     const textSpan = this.statusBarEl.createSpan({ cls: "agent-lock-status-text" });
@@ -583,14 +792,6 @@ var StatusBarManager = class {
       textSpan.setText(`${count} Lock${count > 1 ? "s" : ""} aktiv`);
     }
   }
-};
-
-// src/types.ts
-var DEFAULT_SETTINGS = {
-  enableStatusBar: true,
-  enableRibbonIcon: true,
-  enableCompletionToasts: true,
-  showTimer: true
 };
 
 // src/main.ts
@@ -607,10 +808,11 @@ var AgentLockGuardPlugin = class extends import_obsidian6.Plugin {
       if (this.settings.enableCompletionToasts) {
         new import_obsidian6.Notice(`\u2705 ${lockedBy} hat Bearbeitung von "${file.basename}" beendet.`);
       }
+      this.refreshBanner();
     });
-    this.bannerViewManager = new BannerViewManager(this.lockManager);
+    this.bannerViewManager = new BannerViewManager(this.lockManager, this.settings);
     this.bannerViewManager.init();
-    setEditorLockManager(this.lockManager);
+    setEditorLockManager(this.lockManager, this.settings);
     this.registerEditorExtension(createEditorLockExtension());
     if (this.settings.enableRibbonIcon) {
       this.ribbonIconEl = this.addRibbonIcon("bot", "Agent Lock Guard: Gesperrte Dateien", () => {
@@ -619,7 +821,7 @@ var AgentLockGuardPlugin = class extends import_obsidian6.Plugin {
     }
     if (this.settings.enableStatusBar) {
       const statusBarItem = this.addStatusBarItem();
-      this.statusBarManager = new StatusBarManager(this.app, this.lockManager);
+      this.statusBarManager = new StatusBarManager(this.app, this.lockManager, this.settings);
       this.statusBarManager.init(statusBarItem);
     }
     this.registerEvent(
@@ -673,7 +875,7 @@ var AgentLockGuardPlugin = class extends import_obsidian6.Plugin {
     });
     this.addSettingTab(new AgentLockSettingTab(this.app, this));
     this.app.workspace.onLayoutReady(() => {
-      this.lockManager.init();
+      this.lockManager.init(this.settings);
       this.refreshBanner();
     });
   }
@@ -687,14 +889,33 @@ var AgentLockGuardPlugin = class extends import_obsidian6.Plugin {
   }
   refreshBanner() {
     const activeView = this.app.workspace.getActiveViewOfType(import_obsidian6.MarkdownView);
+    if (!activeView)
+      return;
+    const file = activeView.file;
+    const isLocked = file ? this.lockManager.isFileLocked(file) : false;
+    if (isLocked) {
+      activeView.containerEl.addClass("is-agent-locked");
+      if (this.settings.forceReadingModeOnLock && activeView.getMode() !== "preview") {
+        activeView.setState({ ...activeView.getState(), mode: "preview" }, { history: false });
+      }
+    } else {
+      activeView.containerEl.removeClass("is-agent-locked");
+    }
     this.bannerViewManager.updateBannerForView(activeView);
   }
   updateStatusBar() {
+    if (this.statusBarManager) {
+      this.statusBarManager.updateSettings(this.settings);
+    }
   }
   async loadSettings() {
     this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
   }
   async saveSettings() {
     await this.saveData(this.settings);
+    this.lockManager.updateSettings(this.settings);
+    this.bannerViewManager.updateSettings(this.settings);
+    updateEditorLockSettings(this.settings);
+    this.updateStatusBar();
   }
 };

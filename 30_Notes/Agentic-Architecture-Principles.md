@@ -1,6 +1,6 @@
 ---
 type: note
-title: "Agentic First Design Principles für Obsidian"
+title: Agentic First Design Principles für Obsidian
 category: architecture
 workstream: "[[Obsidian-WorkOS-Launch]]"
 created: 2026-08-25
@@ -9,6 +9,7 @@ tags:
   - ai
   - architecture
   - best-practices
+agent_state: idle
 ---
 
 ## Kernprinzipien für Agentic-First Obsidian Systeme

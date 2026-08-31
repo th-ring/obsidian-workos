@@ -1,4 +1,5 @@
 [
   "workos-dashboard",
-  "agent-lock-guard"
+  "agent-lock-guard",
+  "workos-agent-suite"
 ]

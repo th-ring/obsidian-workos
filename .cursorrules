@@ -1,0 +1,8 @@
+# 🤖 Cursor & Codex Directives: Obsidian WorkOS
+
+Always follow the universal directives in `AGENTS.md`.
+
+## 📌 Golden Directives
+- **YAML Frontmatter**: Keep all frontmatter compliant with `.schemas/*.schema.json`.
+- **Concurrency**: Set `agent_state: processing` with `locked_by: "agent:codex"` while modifying existing files.
+- **Atomic Commits**: Bundle completed turns into descriptive commits on `main`.
