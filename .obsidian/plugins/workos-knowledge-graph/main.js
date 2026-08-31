@@ -37497,6 +37497,32 @@ var forceGraph = index({
 
 // src/components/ForceGraph2DView.tsx
 var import_jsx_runtime2 = __toESM(require_jsx_runtime());
+function cloneDataFor2D(data) {
+  return {
+    nodes: data.nodes.map((n2) => ({
+      id: n2.id,
+      name: n2.name,
+      path: n2.path,
+      type: n2.type,
+      workstream: n2.workstream,
+      status: n2.status,
+      priority: n2.priority,
+      tags: Array.isArray(n2.tags) ? [...n2.tags] : [],
+      val: n2.val || 5,
+      color: n2.color || "#64748b",
+      linksCount: n2.linksCount,
+      subtasksCount: n2.subtasksCount,
+      subtasksDone: n2.subtasksDone
+    })),
+    links: data.links.map((l2) => ({
+      source: typeof l2.source === "object" && l2.source !== null ? l2.source.id : l2.source,
+      target: typeof l2.target === "object" && l2.target !== null ? l2.target.id : l2.target,
+      type: l2.type,
+      color: l2.color,
+      particles: l2.particles
+    }))
+  };
+}
 var ForceGraph2DView = ({
   data,
   filterConfig,
@@ -37514,9 +37540,11 @@ var ForceGraph2DView = ({
       console.error("ForceGraph2D factory not available");
       return;
     }
+    containerRef.current.innerHTML = "";
     const initialWidth = containerRef.current.clientWidth || window.innerWidth || 800;
     const initialHeight = containerRef.current.clientHeight || window.innerHeight || 600;
-    const fg = ForceGraphFactory()(containerRef.current).width(initialWidth).height(initialHeight).graphData(data).backgroundColor("#0a0a0e").nodeId("id").nodeVal("val").nodeLabel((n2) => `${n2.name} (${n2.type})`).nodeCanvasObject((node, ctx, globalScale) => {
+    const cleanData = cloneDataFor2D(data);
+    const fg = ForceGraphFactory()(containerRef.current).width(initialWidth).height(initialHeight).graphData(cleanData).backgroundColor("#0a0a0e").nodeId("id").nodeVal("val").nodeLabel((n2) => `${n2.name} (${n2.type})`).nodeCanvasObject((node, ctx, globalScale) => {
       const isSelected = selectedNode?.id === node.id;
       const isWorkstream = node.type === "workstream";
       const radius = Math.max(3, Math.sqrt(node.val || 5) * 2.5);
@@ -37559,7 +37587,8 @@ var ForceGraph2DView = ({
         ctx.fillText(label2, node.x || 0, (node.y || 0) + radius + 3 / globalScale + bckgDimensions[1] / 2);
       }
     }).nodeCanvasObjectMode(() => "after").linkColor((link) => link.color || "rgba(255, 255, 255, 0.18)").linkWidth((link) => link.type === "workstream_child" ? 1.8 : 1).linkDirectionalParticles(filterConfig.showParticles ? (link) => link.particles || 1 : 0).linkDirectionalParticleSpeed(5e-3).linkDirectionalParticleWidth(2).linkDirectionalParticleColor((link) => link.type === "workstream_child" ? "#c084fc" : "#38bdf8").onNodeClick((node, event) => {
-      onSelectNode(node, { x: event.clientX, y: event.clientY });
+      const originalNode = data.nodes.find((n2) => n2.id === node.id) || node;
+      onSelectNode(originalNode, { x: event.clientX, y: event.clientY });
     }).onBackgroundClick(() => {
       onClearSelection();
     });
@@ -37585,18 +37614,24 @@ var ForceGraph2DView = ({
     return () => {
       resizeObserver.disconnect();
       if (fgRef.current) {
-        fgRef.current._destructor?.();
+        try {
+          fgRef.current.pauseAnimation?.();
+          fgRef.current._destructor?.();
+        } catch (e2) {
+        }
+      }
+      if (containerRef.current) {
+        containerRef.current.innerHTML = "";
       }
     };
   }, []);
   (0, import_react2.useEffect)(() => {
-    if (fgRef.current) {
-      fgRef.current.graphData(data);
-      if (data.nodes.length > 0) {
-        setTimeout(() => {
-          fgRef.current?.zoomToFit?.(400, 40);
-        }, 150);
-      }
+    if (fgRef.current && data.nodes.length > 0) {
+      const cleanData = cloneDataFor2D(data);
+      fgRef.current.graphData(cleanData);
+      setTimeout(() => {
+        fgRef.current?.zoomToFit?.(400, 40);
+      }, 150);
     }
   }, [data]);
   (0, import_react2.useEffect)(() => {
@@ -37619,7 +37654,14 @@ var ForceGraph2DView = ({
       fgRef.current.zoom(2, 800);
     }
   }, [selectedNode]);
-  return /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { ref: containerRef, className: "w-full h-full relative cursor-grab active:cursor-grabbing", style: { width: "100%", height: "100%" } });
+  return /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
+    "div",
+    {
+      ref: containerRef,
+      className: "w-full h-full relative cursor-grab active:cursor-grabbing bg-[#0a0a0e]",
+      style: { width: "100%", height: "100%", position: "absolute", inset: 0 }
+    }
+  );
 };
 
 // src/components/ForceGraph3DView.tsx
@@ -136748,6 +136790,32 @@ function getGraphObj(object) {
 
 // src/components/ForceGraph3DView.tsx
 var import_jsx_runtime3 = __toESM(require_jsx_runtime());
+function cloneDataFor3D(data) {
+  return {
+    nodes: data.nodes.map((n2) => ({
+      id: n2.id,
+      name: n2.name,
+      path: n2.path,
+      type: n2.type,
+      workstream: n2.workstream,
+      status: n2.status,
+      priority: n2.priority,
+      tags: Array.isArray(n2.tags) ? [...n2.tags] : [],
+      val: n2.val || 5,
+      color: n2.color || "#a855f7",
+      linksCount: n2.linksCount,
+      subtasksCount: n2.subtasksCount,
+      subtasksDone: n2.subtasksDone
+    })),
+    links: data.links.map((l2) => ({
+      source: typeof l2.source === "object" && l2.source !== null ? l2.source.id : l2.source,
+      target: typeof l2.target === "object" && l2.target !== null ? l2.target.id : l2.target,
+      type: l2.type,
+      color: l2.color || "rgba(168, 85, 247, 0.4)",
+      particles: l2.particles || 1
+    }))
+  };
+}
 var ForceGraph3DView = ({
   data,
   filterConfig,
@@ -136765,9 +136833,11 @@ var ForceGraph3DView = ({
       console.error("ForceGraph3D factory not available");
       return;
     }
+    containerRef.current.innerHTML = "";
     const initialWidth = containerRef.current.clientWidth || window.innerWidth || 800;
     const initialHeight = containerRef.current.clientHeight || window.innerHeight || 600;
-    const fg = ForceGraph3DFactory()(containerRef.current).width(initialWidth).height(initialHeight).graphData(data).backgroundColor("#0a0a0e").nodeId("id").nodeVal("val").nodeRelSize(4).nodeResolution(16).nodeLabel((n2) => `<div style="background:rgba(10,10,14,0.9);padding:4px 8px;border-radius:6px;border:1px solid rgba(255,255,255,0.1);font-family:sans-serif;font-size:11px;color:#fff;"><b>${n2.name}</b> <span style="opacity:0.6">(${n2.type})</span></div>`).nodeColor((n2) => n2.color || "#64748b").nodeOpacity(0.95).linkOpacity(0.35).linkColor((link) => link.color || "#475569").linkWidth((link) => link.type === "workstream_child" ? 2 : 1).linkDirectionalParticles(filterConfig.showParticles ? (link) => link.particles || 1 : 0).linkDirectionalParticleSpeed(6e-3).linkDirectionalParticleWidth(2.5).linkDirectionalParticleColor((link) => link.type === "workstream_child" ? "#c084fc" : "#38bdf8").onNodeClick((node, event) => {
+    const cleanData = cloneDataFor3D(data);
+    const fg = ForceGraph3DFactory()(containerRef.current).width(initialWidth).height(initialHeight).graphData(cleanData).backgroundColor("#0a0a0e").showNavInfo(false).nodeId("id").nodeVal("val").nodeRelSize(5).nodeResolution(24).nodeColor((n2) => n2.color || "#a855f7").nodeOpacity(0.95).nodeLabel((n2) => `<div style="background:rgba(10,10,14,0.92);padding:5px 10px;border-radius:8px;border:1px solid rgba(255,255,255,0.15);font-family:sans-serif;font-size:12px;color:#fff;box-shadow:0 4px 12px rgba(0,0,0,0.5);"><b>${n2.name}</b> <span style="opacity:0.6;font-size:10px;">[${n2.type.toUpperCase()}]</span></div>`).linkOpacity(0.4).linkColor((link) => link.color || "rgba(255, 255, 255, 0.25)").linkWidth((link) => link.type === "workstream_child" ? 2.5 : 1.2).linkDirectionalParticles(filterConfig.showParticles ? (link) => link.particles || 1 : 0).linkDirectionalParticleSpeed(6e-3).linkDirectionalParticleWidth(3).linkDirectionalParticleColor((link) => link.type === "workstream_child" ? "#c084fc" : "#38bdf8").onNodeClick((node, event) => {
       const distance3 = 120;
       const distRatio = 1 + distance3 / Math.hypot(node.x || 1, node.y || 1, node.z || 1);
       if (typeof fg.cameraPosition === "function") {
@@ -136777,7 +136847,8 @@ var ForceGraph3DView = ({
           1e3
         );
       }
-      onSelectNode(node, {
+      const originalNode = data.nodes.find((n2) => n2.id === node.id) || node;
+      onSelectNode(originalNode, {
         x: event.clientX || window.innerWidth / 2,
         y: event.clientY || window.innerHeight / 2
       });
@@ -136818,13 +136889,10 @@ var ForceGraph3DView = ({
     };
   }, []);
   (0, import_react3.useEffect)(() => {
-    if (fgRef.current) {
-      fgRef.current.graphData(data);
-      if (data.nodes.length > 0) {
-        setTimeout(() => {
-          fgRef.current?.zoomToFit?.(400, 40);
-        }, 150);
-      }
+    if (fgRef.current && data.nodes.length > 0) {
+      const cleanData = cloneDataFor3D(data);
+      fgRef.current.graphData(cleanData);
+      fgRef.current.d3ReheatSimulation?.();
     }
   }, [data]);
   (0, import_react3.useEffect)(() => {
@@ -136841,7 +136909,14 @@ var ForceGraph3DView = ({
       fgRef.current.d3ReheatSimulation?.();
     }
   }, [filterConfig]);
-  return /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("div", { ref: containerRef, className: "w-full h-full relative cursor-grab active:cursor-grabbing", style: { width: "100%", height: "100%" } });
+  return /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
+    "div",
+    {
+      ref: containerRef,
+      className: "w-full h-full relative cursor-grab active:cursor-grabbing bg-[#0a0a0e]",
+      style: { width: "100%", height: "100%", position: "absolute", inset: 0 }
+    }
+  );
 };
 
 // src/components/MindmapView.tsx
@@ -137660,76 +137735,86 @@ var GraphApp = ({ app }) => {
   const handleFocusNode = (node) => {
     setSelectedNode(node);
   };
-  return /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { className: "relative w-full h-full bg-[#0a0a0e] text-neutral-100 overflow-hidden select-none font-sans", children: [
-    /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(
-      GraphHeader,
-      {
-        viewMode,
-        onViewModeChange: setViewMode,
-        searchQuery,
-        onSearchChange: handleSearchChange,
-        isSettingsOpen,
-        onToggleSettings: () => setIsSettingsOpen(!isSettingsOpen),
-        onRefresh: loadData,
-        nodeCount: data.nodes.length,
-        linkCount: data.links.length
-      }
-    ),
-    /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(
-      SettingsPill,
-      {
-        isOpen: isSettingsOpen,
-        onClose: () => setIsSettingsOpen(false),
-        config: filterConfig,
-        onChange: setFilterConfig,
-        availableWorkstreams
-      }
-    ),
-    /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(
-      NodeContextMenu,
-      {
-        node: selectedNode,
-        position: menuPosition,
-        onClose: handleClearSelection,
-        onFocusNode: handleFocusNode,
-        app
-      }
-    ),
-    isLoading && /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("div", { className: "absolute inset-0 z-20 flex items-center justify-center bg-[#0a0a0e]/80 backdrop-blur-sm", children: /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { className: "flex flex-col items-center gap-3", children: [
-      /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(Loader2, { className: "w-6 h-6 text-purple-400 animate-spin" }),
-      /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("span", { className: "text-xs text-neutral-400 tracking-wide", children: "Lade WorkOS Knowledge Graph..." })
-    ] }) }),
-    /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { className: "w-full h-full", children: [
-      viewMode === "2d" && /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(
-        ForceGraph2DView,
-        {
-          data,
-          filterConfig,
-          selectedNode,
-          onSelectNode: handleSelectNode,
-          onClearSelection: handleClearSelection
-        }
-      ),
-      viewMode === "3d" && /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(
-        ForceGraph3DView,
-        {
-          data,
-          filterConfig,
-          selectedNode,
-          onSelectNode: handleSelectNode,
-          onClearSelection: handleClearSelection
-        }
-      ),
-      viewMode === "mindmap" && /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(
-        MindmapView,
-        {
-          data,
-          app,
-          onSelectNode: handleSelectNode
-        }
-      )
-    ] })
-  ] });
+  return /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)(
+    "div",
+    {
+      className: "relative w-full h-full bg-[#0a0a0e] text-neutral-100 overflow-hidden select-none font-sans",
+      style: { width: "100%", height: "100%", position: "relative" },
+      children: [
+        /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(
+          GraphHeader,
+          {
+            viewMode,
+            onViewModeChange: (mode) => {
+              setViewMode(mode);
+              handleClearSelection();
+            },
+            searchQuery,
+            onSearchChange: handleSearchChange,
+            isSettingsOpen,
+            onToggleSettings: () => setIsSettingsOpen(!isSettingsOpen),
+            onRefresh: loadData,
+            nodeCount: data.nodes.length,
+            linkCount: data.links.length
+          }
+        ),
+        /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(
+          SettingsPill,
+          {
+            isOpen: isSettingsOpen,
+            onClose: () => setIsSettingsOpen(false),
+            config: filterConfig,
+            onChange: setFilterConfig,
+            availableWorkstreams
+          }
+        ),
+        /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(
+          NodeContextMenu,
+          {
+            node: selectedNode,
+            position: menuPosition,
+            onClose: handleClearSelection,
+            onFocusNode: handleFocusNode,
+            app
+          }
+        ),
+        isLoading && /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("div", { className: "absolute inset-0 z-20 flex items-center justify-center bg-[#0a0a0e]/80 backdrop-blur-sm pointer-events-none", children: /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { className: "flex flex-col items-center gap-3", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(Loader2, { className: "w-6 h-6 text-purple-400 animate-spin" }),
+          /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("span", { className: "text-xs text-neutral-400 tracking-wide", children: "Lade WorkOS Knowledge Graph..." })
+        ] }) }),
+        /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { className: "w-full h-full absolute inset-0", style: { width: "100%", height: "100%" }, children: [
+          viewMode === "2d" && /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(
+            ForceGraph2DView,
+            {
+              data,
+              filterConfig,
+              selectedNode,
+              onSelectNode: handleSelectNode,
+              onClearSelection: handleClearSelection
+            }
+          ),
+          viewMode === "3d" && /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(
+            ForceGraph3DView,
+            {
+              data,
+              filterConfig,
+              selectedNode,
+              onSelectNode: handleSelectNode,
+              onClearSelection: handleClearSelection
+            }
+          ),
+          viewMode === "mindmap" && /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(
+            MindmapView,
+            {
+              data,
+              app,
+              onSelectNode: handleSelectNode
+            }
+          )
+        ] })
+      ]
+    }
+  );
 };
 
 // src/main.ts
