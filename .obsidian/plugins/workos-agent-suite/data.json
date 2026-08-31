@@ -1,0 +1,22 @@
+{
+  "engine": "ollama",
+  "ollamaUrl": "http://localhost:11434",
+  "ollamaModel": "llama3",
+  "codexCliCommand": "codex",
+  "claudeCliCommand": "claude",
+  "antigravityCliCommand": "agy",
+  "geminiApiKey": "",
+  "geminiModel": "gemini-1.5-flash",
+  "anthropicApiKey": "",
+  "anthropicModel": "claude-3-5-sonnet-20241022",
+  "openaiApiKey": "",
+  "openaiModel": "gpt-4o",
+  "enableTriageTool": true,
+  "enableDecomposeTool": true,
+  "enableWorkstreamTool": true,
+  "enableStatsTool": true,
+  "enableLockTool": true,
+  "defaultReviewStatus": "pending",
+  "autoGitCommit": true,
+  "lockNotesDuringProcessing": true
+}
