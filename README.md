@@ -10,7 +10,7 @@ WorkOS verbindet ein **strukturiertes atomares Datenmodell** mit einer **gekapse
 
 - 🏛️ **Gekapselte Workstreams (`20_Workstreams/`)**: Jedes große Projekt besitzt einen isolierten Bereich mit eigener `README.md` (Strategie & Meilensteine), lokaler `AGENTS.md` (KI-Persona & Richtlinien), `Tasks/` und `Notes/`.
 - 📋 **Interaktives React Kanban Dashboard**: Drag & Drop Aufgaben-Board mit Umschaltung auf **Workstream-Swimlanes**, Omnibar-Schnellerfassung und Metriken-Widget.
-- 🤖 **WorkOS Agent Suite (KI & MCP)**: 1-Klick-Triage, Task-Zerlegung in Checkboxen und standardisierter **MCP-Server** für Antigravity, Claude Code und Codex.
+- 🤖 **WorkOS Agent Suite (KI & MCP)**: 1-Klick-Triage im **Agent Hub**, Task-Zerlegung in Checkboxen und standardisierter **MCP-Server** für Antigravity, Claude Code und Codex.
 - 🛡️ **Agent Lock Guard**: Schützt deine Notizen während der KI-Bearbeitung durch automatischen Lesemodus, Live-Banner mit Stoppuhr und 1-Klick-Entsperrung.
 - 🗂️ **Atomare Datenverträge (`.schemas/`)**: Jede Notiz und Aufgabe folgt validierten JSON-Schemas – 100% sauber versionierbar und zukunftssicher.
 
@@ -23,9 +23,9 @@ WorkOS verbindet ein **strukturiertes atomares Datenmodell** mit einer **gekapse
 2. Wähle **"Open folder as vault"** (*Ordner als Vault öffnen*) und wähle dieses Verzeichnis (`Obsidian WorkOS`).
 3. Alle vorinstallierten Plugins (**WorkOS Dashboard**, **Agent Lock Guard**, **WorkOS Agent Suite**) sind sofort einsatzbereit!
 
-### 2. Das Dashboard öffnen
+### 2. Das Dashboard & den Agent Hub öffnen
 * Klicke in der linken Navigationsleiste auf das **Dashboard-Icon** (oder drücke `Strg + P` und tippe `WorkOS Dashboard öffnen`).
-* Hier findest du dein interaktives Kanban-Board, deine Workstreams und die Schnell-Eingabe (*Omnibar*).
+* Wechsle in den Tab **Agent Hub**, um KI-Aktionen mit 1 Klick auszulösen und Ergebnisse freizugeben.
 
 ### 3. Rohgedanken per KI triagieren
 1. Schreibe Gedanken oder Mitschriften einfach als Notiz in `00_Inbox/`.
@@ -57,45 +57,11 @@ Obsidian WorkOS/
 
 ---
 
-## 🤖 KI-Agenten anbinden (Antigravity, Claude Code, Codex, Ollama)
+## 🏛️ Das modulare WorkOS Ökosystem (GitHub Repositories)
 
-### 1. In Obsidian (1-Klick Aktionen)
-Öffne die **Einstellungen ➔ WorkOS Agent Suite** und wähle deine bevorzugte Engine:
-* **Ollama (Lokal & Offline)**: Keine Cloud, 100% lokal (`llama3`, `mistral`, `qwen2.5`).
-* **CLI-Engines**: Codex CLI (`codex`), Claude Code CLI (`claude`), Antigravity CLI (`agy`).
-* **Direct Cloud APIs**: Gemini, Anthropic Claude, OpenAI.
+Das Gesamtsystem ist modular in 4 spezialisierte Repositories unterteilt:
 
-### 2. In Claude Code CLI (Terminal)
-Einmalig im Terminal registrieren:
-```bash
-claude mcp add workos -- node "C:\Pfad\zu\obsidian-workos-agent-suite\dist\mcp-server.js" --vault "C:\Pfad\zu\Obsidian WorkOS"
-```
-Danach im Terminal einfach sagen:
-> *"Triage meine Inbox gemäß WorkOS"*
-
-### 3. In Antigravity & Codex / Cursor
-Trage den Server in deine `mcp.json` ein:
-```json
-{
-  "mcpServers": {
-    "workos": {
-      "command": "node",
-      "args": [
-        "C:\\Pfad\\zu\\obsidian-workos-agent-suite\\dist\\mcp-server.js",
-        "--vault",
-        "C:\\Pfad\\zu\\Obsidian WorkOS"
-      ]
-    }
-  }
-}
-```
-
----
-
-## 🏛️ Das WorkOS 3-Säulen Ökosystem (Repositories)
-
-Das Gesamtsystem ist modular in 3 Repositories unterteilt:
-
-1. **🏛️ [Obsidian-WorkOS](https://github.com/th-ring/Obsidian-WorkOS)** (Dieser Vault): Reines Wissen, Notizen, Workstreams & Schemas.
-2. **🤖 [obsidian-workos-agent-suite](https://github.com/th-ring/obsidian-workos-agent-suite)**: Headless MCP-Server, CLI-Runner & Obsidian Plugin Bridge.
-3. **🛡️ [obsidian-agent-lock-guard](https://github.com/th-ring/obsidian-agent-lock-guard)**: Concurrency Control, Live-Banner & Read-Only Guard.
+1. 🏛️ **[Obsidian-WorkOS](https://github.com/th-ring/Obsidian-WorkOS)** (Dieser Vault): Reines Wissen, Notizen, Workstreams & Schemas.
+2. 📊 **[obsidian-workos-dashboard](https://github.com/th-ring/obsidian-workos-dashboard)**: React 18 + Tailwind Kanban Dashboard, Swimlanes & Agent Hub.
+3. 🤖 **[obsidian-workos-agent-suite](https://github.com/th-ring/obsidian-workos-agent-suite)**: Headless MCP-Server, CLI-Runner & Plugin Bridge.
+4. 🛡️ **[obsidian-agent-lock-guard](https://github.com/th-ring/obsidian-agent-lock-guard)**: Concurrency Control, Live-Banner & Read-Only Guard.
