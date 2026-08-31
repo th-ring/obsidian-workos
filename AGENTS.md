@@ -14,6 +14,8 @@ Das WorkOS-Ökosystem ist strikt in drei Säulen modularisiert:
    Das zentrale MCP-Server- und Plugin-Paket. Stellt alle standardisierten Werkzeuge (`workos_*`) für externe Agenten und 1-Klick Aktionen in Obsidian bereit.
 3. **🛡️ Agent Lock Guard (`obsidian-agent-lock-guard`):**  
    Das Concurrency-Plugin. Verhindert Schreibkollisionen in Obsidian durch automatischen Lesemodus und Live-Banner.
+4. **🌐 WorkOS Knowledge Graph (`obsidian-workos-knowledge-graph`):**  
+   2D/3D Force Graph & Workstream-Mindmap mit OpenAI-Minimalist-UI zur visuellen Vault-Exploration.
 
 ---
 

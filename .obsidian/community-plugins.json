@@ -1,5 +1,6 @@
 [
   "workos-dashboard",
   "agent-lock-guard",
-  "workos-agent-suite"
+  "workos-agent-suite",
+  "workos-knowledge-graph"
 ]
