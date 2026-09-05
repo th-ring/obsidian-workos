@@ -1,0 +1,19 @@
+{
+  "types": {
+    "type": "text",
+    "title": "text",
+    "category": "text",
+    "workstream": "text",
+    "created": "text",
+    "updated": "text",
+    "due_date": "text",
+    "tags": "tags",
+    "agent_state": "text",
+    "locked_by": "text",
+    "locked_at": "text",
+    "status": "text",
+    "priority": "text",
+    "assigned_to": "text",
+    "review_status": "text"
+  }
+}

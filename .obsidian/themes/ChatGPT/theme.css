@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
 /* @settings
 name: ChatGPT
 id: chatgpt-theme
@@ -73,10 +75,10 @@ settings:
 
 :root {
   /* Typography Stacks */
-  --default-font: "Söhne", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --default-font: "Inter", "Söhne", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   --font-family-editor: var(--default-font);
   --font-family-preview: var(--default-font);
-  --font-monospace: "Söhne Mono", "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+  --font-monospace: "JetBrains Mono", "Söhne Mono", "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
 
   /* Typographic Scale */
   --h1-size: 1.875rem;
@@ -373,16 +375,20 @@ body.chatgpt-width-full { --file-line-width: 100%; }
   border-color: var(--background-modifier-border-hover) !important;
 }
 
-/* Category & Section Headers ("Aktuelle", "Workstreams" like ChatGPT Sidebar) */
+/* Category & Section Headers ("00_INBOX", "10_TASKS" like ChatGPT Sidebar) */
 .nav-folder.mod-root > .nav-folder-children > .nav-folder > .nav-folder-title {
   font-size: 11px !important;
   font-weight: 600 !important;
-  letter-spacing: 0.05em !important;
+  letter-spacing: 0.08em !important;
   text-transform: uppercase !important;
   color: var(--text-faint) !important;
-  padding: 14px 10px 4px 10px !important;
-  margin-top: 6px !important;
+  padding: 12px 12px 4px 12px !important;
+  margin-top: 8px !important;
   cursor: pointer !important;
+}
+
+.nav-folder.mod-root > .nav-folder-children > .nav-folder > .nav-folder-title .nav-folder-collapse-indicator {
+  display: none !important;
 }
 
 .nav-folder.mod-root > .nav-folder-children > .nav-folder > .nav-folder-title:hover {
@@ -645,8 +651,8 @@ body.chatgpt-width-full { --file-line-width: 100%; }
   font-weight: 600 !important;
   letter-spacing: 0.04em !important;
   text-transform: uppercase !important;
-  color: var(--text-faint) !important;
-  margin-bottom: 8px !important;
+  color: var(--interactive-accent) !important;
+  margin-bottom: 10px !important;
 }
 
 .metadata-property {
