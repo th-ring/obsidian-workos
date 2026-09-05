@@ -35534,9 +35534,9 @@ var DashboardApp = ({ app }) => {
 // src/components/WorkOSLogo.tsx
 var import_jsx_runtime12 = __toESM(require_jsx_runtime());
 var WORKOS_LOGO_SVG_STRING = `
-<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <polyline points="14,24 38,82 50,48 62,82 86,24" stroke="currentColor" stroke-width="10" stroke-linecap="square" stroke-linejoin="miter" stroke-miterlimit="10"/>
-  <line x1="50" y1="48" x2="50" y2="18" stroke="currentColor" stroke-width="10" stroke-linecap="square"/>
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M3.5 6L8.5 19L12 11.5L15.5 19L20.5 6"/>
+  <path d="M12 11.5V4"/>
 </svg>
 `.trim();
 

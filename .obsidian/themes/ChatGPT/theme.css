@@ -530,14 +530,25 @@ body.chatgpt-width-full { --file-line-width: 100%; }
   border-bottom: 1px solid var(--background-modifier-border) !important;
 }
 
-.view-actions button {
-  border-radius: var(--radius-s) !important;
-  border: none !important;
+.view-actions {
+  display: flex !important;
+  align-items: center !important;
+  gap: 3px !important;
+}
+
+.view-actions button,
+.view-actions .clickable-icon {
   background: transparent !important;
+  background-color: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: var(--radius-s) !important;
+  padding: 4px !important;
   color: var(--text-muted) !important;
 }
 
-.view-actions button:hover {
+.view-actions button:hover,
+.view-actions .clickable-icon:hover {
   background-color: var(--background-modifier-hover) !important;
   color: var(--text-normal) !important;
 }
@@ -978,15 +989,21 @@ pre[class*="language-"] {
   padding: 24px 36px !important;
 }
 
-/* Inverted High-Contrast Action Pill Button (like "Upgrade") */
+/* ==========================================================================
+   INTERACTIVE BUTTONS & DIALOG CONTROLS (ChatGPT Aesthetic)
+   ========================================================================== */
+
+/* Primary Inverted Pill Action (like "Upgrade" / Confirm) */
 button.mod-cta {
   background-color: var(--chatgpt-btn-pill-bg) !important;
   color: var(--chatgpt-btn-pill-text) !important;
   border-radius: var(--radius-full) !important;
   border: none !important;
-  padding: 8px 20px !important;
+  padding: 7px 18px !important;
   font-weight: 600 !important;
   font-size: 13px !important;
+  line-height: 1.4 !important;
+  cursor: pointer !important;
   transition: all 0.15s ease !important;
 }
 
@@ -995,19 +1012,186 @@ button.mod-cta:hover {
   transform: translateY(-0.5px);
 }
 
-button:not(.mod-cta) {
+/* Secondary Action Buttons in Modals, Settings & Prompts */
+.modal button:not(.mod-cta):not(.clickable-icon):not(.modal-close-button),
+.prompt button:not(.mod-cta):not(.clickable-icon),
+.setting-item-control button:not(.mod-cta):not(.clickable-icon),
+.view-content button:not(.mod-cta):not(.clickable-icon):not(.copy-code-button) {
   border-radius: var(--radius-full) !important;
   border: 1px solid var(--background-modifier-border) !important;
   background-color: var(--background-secondary-alt) !important;
   color: var(--text-normal) !important;
   font-size: 13px !important;
+  font-weight: 500 !important;
   padding: 6px 14px !important;
+  line-height: 1.4 !important;
+  cursor: pointer !important;
   transition: all 0.15s ease !important;
 }
 
-button:not(.mod-cta):hover {
+.modal button:not(.mod-cta):not(.clickable-icon):not(.modal-close-button):hover,
+.prompt button:not(.mod-cta):not(.clickable-icon):hover,
+.setting-item-control button:not(.mod-cta):not(.clickable-icon):hover,
+.view-content button:not(.mod-cta):not(.clickable-icon):not(.copy-code-button):hover {
   background-color: var(--background-modifier-hover) !important;
   border-color: var(--background-modifier-border-hover) !important;
+}
+
+/* ==========================================================================
+   OBSIDIAN WINDOW CHROME & ICON CONTROLS PROTECTION
+   ========================================================================== */
+
+/* Native Titlebar Window Controls (Windows / Electron frameless: _ [ ] X) */
+.titlebar {
+  background-color: var(--titlebar-background) !important;
+  height: 32px !important;
+  padding: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+}
+
+.titlebar-button-container {
+  display: flex !important;
+  align-items: center !important;
+  height: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.titlebar-button {
+  width: 46px !important;
+  height: 100% !important;
+  max-height: 32px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border-radius: 0 !important;
+  border: none !important;
+  background: transparent !important;
+  background-color: transparent !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  color: var(--text-muted) !important;
+  box-shadow: none !important;
+  cursor: pointer !important;
+  transition: background-color 0.1s ease, color 0.1s ease !important;
+}
+
+.titlebar-button:hover {
+  background-color: var(--background-modifier-hover) !important;
+  color: var(--text-normal) !important;
+  border: none !important;
+}
+
+.titlebar-button.mod-close:hover {
+  background-color: #E81123 !important;
+  color: #FFFFFF !important;
+}
+
+/* Generic Clickable Icons (Sidebar, View Header, Toolbars, Ribbons) */
+.clickable-icon {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border-radius: var(--radius-m) !important;
+  border: none !important;
+  background: transparent !important;
+  background-color: transparent !important;
+  box-shadow: none !important;
+  padding: 4px !important;
+  margin: 0 !important;
+  color: var(--text-muted) !important;
+  cursor: pointer !important;
+  transition: all 0.15s ease !important;
+}
+
+.clickable-icon:hover {
+  background-color: var(--background-modifier-hover) !important;
+  color: var(--text-normal) !important;
+  border: none !important;
+}
+
+.clickable-icon .svg-icon,
+.svg-icon {
+  display: inline-block !important;
+  vertical-align: middle !important;
+}
+
+/* Sidebar Navigation Buttons */
+.nav-buttons-container {
+  padding: 8px 10px !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 4px !important;
+  border-bottom: 1px solid var(--background-modifier-border) !important;
+}
+
+.nav-buttons-container .clickable-icon,
+.nav-action-button {
+  width: 28px !important;
+  height: 28px !important;
+  padding: 0 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border-radius: var(--radius-s) !important;
+  border: none !important;
+  background: transparent !important;
+  background-color: transparent !important;
+  box-shadow: none !important;
+  color: var(--text-muted) !important;
+}
+
+.nav-buttons-container .clickable-icon:hover,
+.nav-action-button:hover {
+  background-color: var(--background-modifier-hover) !important;
+  color: var(--text-normal) !important;
+}
+
+/* Tab Bar Chrome */
+.workspace-tab-header-inner-close-button,
+.workspace-tab-header-new-tab,
+.workspace-tab-header-tab-list {
+  background: transparent !important;
+  background-color: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: var(--radius-s) !important;
+  padding: 3px !important;
+  margin: 0 !important;
+  color: var(--text-muted) !important;
+  cursor: pointer !important;
+}
+
+.workspace-tab-header-inner-close-button:hover,
+.workspace-tab-header-new-tab:hover,
+.workspace-tab-header-tab-list:hover {
+  background-color: var(--background-modifier-hover) !important;
+  color: var(--text-normal) !important;
+}
+
+/* Right Sidebar Refinements */
+.workspace-split.mod-right-split {
+  background-color: var(--background-secondary) !important;
+  border-left: 1px solid var(--background-modifier-border) !important;
+}
+
+.workspace-split.mod-right-split .tree-item-self {
+  border-radius: var(--radius-m) !important;
+  padding: 5px 8px !important;
+  margin: 1px 0 !important;
+  transition: all 0.12s ease !important;
+}
+
+.workspace-split.mod-right-split .tree-item-self:hover {
+  background-color: var(--background-modifier-hover) !important;
+  color: var(--text-normal) !important;
+}
+
+.workspace-split.mod-right-split .search-result-file-title {
+  font-weight: 550 !important;
+  font-size: 13px !important;
+  color: var(--text-normal) !important;
 }
 
 /* ChatGPT Pill Toggle Switches */

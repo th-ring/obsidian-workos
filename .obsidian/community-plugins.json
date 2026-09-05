@@ -2,5 +2,6 @@
   "workos-dashboard",
   "agent-lock-guard",
   "workos-agent-suite",
-  "workos-knowledge-graph"
+  "workos-knowledge-graph",
+  "obsidian-style-settings"
 ]

@@ -26535,7 +26535,7 @@ var GraphHeader = ({
 }) => {
   return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "absolute top-4 left-1/2 transform -translate-x-1/2 z-30 flex items-center gap-2 max-w-[95vw]", children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "workos-glass-pill flex items-center gap-1.5 p-1.5 rounded-full text-xs text-neutral-200", children: [
     /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "flex items-center gap-2 pl-3 pr-2 py-1 text-neutral-300 font-medium", children: [
-      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "w-5 h-5 rounded-full bg-gradient-to-tr from-purple-600 to-cyan-500 flex items-center justify-center text-white shadow-sm", children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Network, { className: "w-3 h-3" }) }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "w-5 h-5 rounded-full bg-[#10a37f] flex items-center justify-center text-white shadow-xs", children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Network, { className: "w-3 h-3" }) }),
       /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "hidden sm:inline tracking-tight font-semibold text-neutral-100", children: "WorkOS Graph" }),
       /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { className: "text-[10px] text-neutral-400 bg-white/5 px-2 py-0.5 rounded-full border border-white/5", children: [
         nodeCount,
@@ -26565,7 +26565,7 @@ var GraphHeader = ({
           className: `flex items-center gap-1.5 px-3 py-1 rounded-full text-xs transition-all duration-200 ${viewMode === "3d" ? "bg-neutral-800 text-white shadow-sm font-medium border border-white/10" : "text-neutral-400 hover:text-neutral-200 hover:bg-white/5"}`,
           title: "3D WebGL Force Space",
           children: [
-            /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Box, { className: "w-3.5 h-3.5 text-cyan-400" }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Box, { className: "w-3.5 h-3.5 text-neutral-300" }),
             /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "3D WebGL" })
           ]
         }
@@ -26577,7 +26577,7 @@ var GraphHeader = ({
           className: `flex items-center gap-1.5 px-3 py-1 rounded-full text-xs transition-all duration-200 ${viewMode === "mindmap" ? "bg-neutral-800 text-white shadow-sm font-medium border border-white/10" : "text-neutral-400 hover:text-neutral-200 hover:bg-white/5"}`,
           title: "Hierarchical Workstream Mindmap",
           children: [
-            /* @__PURE__ */ (0, import_jsx_runtime.jsx)(GitFork, { className: "w-3.5 h-3.5 text-purple-400" }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)(GitFork, { className: "w-3.5 h-3.5 text-emerald-400" }),
             /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Mindmap" })
           ]
         }
@@ -26593,7 +26593,7 @@ var GraphHeader = ({
           value: searchQuery,
           onChange: (e2) => onSearchChange(e2.target.value),
           placeholder: "Knoten suchen...",
-          className: "w-32 sm:w-44 bg-black/40 border border-white/5 rounded-full pl-8 pr-7 py-1 text-xs text-neutral-100 placeholder-neutral-500 focus:outline-none focus:border-purple-500/50 focus:ring-1 focus:ring-purple-500/30 transition-all"
+          className: "w-32 sm:w-44 bg-black/40 border border-white/5 rounded-full pl-8 pr-7 py-1 text-xs text-neutral-100 placeholder-neutral-500 focus:outline-none focus:border-[#10a37f]/60 focus:ring-1 focus:ring-[#10a37f]/40 transition-all"
         }
       ),
       searchQuery && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
@@ -137831,19 +137831,14 @@ var GraphApp = ({ app }) => {
 // src/main.ts
 var VIEW_TYPE_WORKOS_GRAPH = "workos-knowledge-graph-view";
 var WORKOS_GRAPH_ICON_SVG = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-  <circle cx="12" cy="12" r="3" fill="currentColor" fill-opacity="0.2"/>
-  <circle cx="19" cy="5" r="2"/>
-  <circle cx="5" cy="19" r="2"/>
-  <circle cx="5" cy="5" r="2"/>
-  <circle cx="19" cy="19" r="2"/>
-  <path d="M12 9V5"/>
-  <path d="M12 15v4"/>
-  <path d="M9 12H5"/>
-  <path d="M15 12h4"/>
-  <path d="M14.1 9.9l3.5-3.5"/>
-  <path d="M9.9 14.1l-3.5 3.5"/>
-  <path d="M9.9 9.9L6.4 6.4"/>
-  <path d="M14.1 14.1l3.5 3.5"/>
+  <circle cx="12" cy="12" r="2.5" fill="currentColor" fill-opacity="0.2"/>
+  <circle cx="18" cy="6" r="2"/>
+  <circle cx="5" cy="8" r="2"/>
+  <circle cx="15" cy="19" r="2"/>
+  <line x1="12" y1="12" x2="18" y2="6"/>
+  <line x1="12" y1="12" x2="5" y2="8"/>
+  <line x1="12" y1="12" x2="15" y2="19"/>
+  <line x1="5" y1="8" x2="15" y2="19" stroke-dasharray="2 2" stroke-opacity="0.6"/>
 </svg>`;
 var WorkOSKnowledgeGraphView = class extends import_obsidian.ItemView {
   root = null;
