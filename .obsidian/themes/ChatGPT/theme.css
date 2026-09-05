@@ -506,10 +506,24 @@ body.chatgpt-width-full { --file-line-width: 100%; }
   overflow-y: hidden !important;
 }
 
-.workspace-tab-header {
+/* Center workspace tabs (main editor & dashboard tabs) */
+.mod-root .workspace-tab-header {
   flex: 0 1 auto !important;
-  min-width: 140px !important;
-  max-width: 240px !important;
+  min-width: 120px !important;
+  max-width: 320px !important;
+}
+
+/* Sidebar tab headers (left and right split) remain compact and don't squeeze the center bar */
+.mod-left-split .workspace-tab-header,
+.mod-right-split .workspace-tab-header {
+  min-width: unset !important;
+  max-width: unset !important;
+  width: auto !important;
+  flex: 0 0 auto !important;
+  padding: 0 4px !important;
+}
+
+.workspace-tab-header {
   height: 32px !important;
   display: flex !important;
   align-items: center !important;
@@ -1206,7 +1220,7 @@ button.mod-cta:hover {
 
 /* Generic Clickable Icons (Sidebar, View Header, Toolbars, Ribbons) */
 .clickable-icon {
-  display: inline-flex !important;
+  display: inline-flex;
   align-items: center !important;
   justify-content: center !important;
   border-radius: var(--radius-m) !important;
@@ -1219,6 +1233,16 @@ button.mod-cta:hover {
   color: var(--text-muted) !important;
   cursor: pointer !important;
   transition: all 0.15s ease !important;
+}
+
+/* Ensure inline display: none is never overridden by external styling */
+.clickable-icon[style*="display: none"],
+.clickable-icon[style*="display:none"],
+[style*="display: none"],
+[style*="display:none"],
+.metadata-property-warning-icon[style*="display: none"],
+.metadata-property-warning-icon[style*="display:none"] {
+  display: none !important;
 }
 
 .clickable-icon:hover {
