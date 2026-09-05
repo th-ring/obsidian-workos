@@ -4,66 +4,66 @@ id: chatgpt-theme
 settings:
     - 
         id: chatgpt-accent
-        title: Akzentfarbe
-        description: Wähle die gewünschte ChatGPT-Akzentfarbe (Standard: ChatGPT-Grün).
+        title: "Akzentfarbe"
+        description: "Wähle die gewünschte ChatGPT-Akzentfarbe (Standard ChatGPT-Grün)."
         type: class-select
         allowEmpty: false
         default: chatgpt-accent-green
         options:
             - 
-                label: Grün (Original #10A37F)
+                label: "Grün (Original #10A37F)"
                 value: chatgpt-accent-green
             - 
-                label: Blau (#3B82F6)
+                label: "Blau (#3B82F6)"
                 value: chatgpt-accent-blue
             - 
-                label: Gelb (#EAB308)
+                label: "Gelb (#EAB308)"
                 value: chatgpt-accent-yellow
             - 
-                label: Rosa (#EC4899)
+                label: "Rosa (#EC4899)"
                 value: chatgpt-accent-pink
             - 
-                label: Orange (#F97316)
+                label: "Orange (#F97316)"
                 value: chatgpt-accent-orange
             - 
-                label: Violett (#8B5CF6)
+                label: "Violett (#8B5CF6)"
                 value: chatgpt-accent-purple
             - 
-                label: Weiß / Monochrome
+                label: "Weiß / Monochrome"
                 value: chatgpt-accent-white
             - 
-                label: Standard (Schiefergrau #6E6E80)
+                label: "Standard (Schiefergrau #6E6E80)"
                 value: chatgpt-accent-standard
     - 
         id: chatgpt-editor-width
-        title: Editor-Lesebreite
-        description: Maximale Breite des Notizenbereichs für optimalen Lesekomfort.
+        title: "Editor-Lesebreite"
+        description: "Maximale Breite des Notizenbereichs für optimalen Lesekomfort."
         type: class-select
         allowEmpty: false
         default: chatgpt-width-normal
         options:
             - 
-                label: ChatGPT Standard (48rem / 768px)
+                label: "ChatGPT Standard (48rem / 768px)"
                 value: chatgpt-width-normal
             - 
-                label: Weit (56rem / 896px)
+                label: "Weit (56rem / 896px)"
                 value: chatgpt-width-wide
             - 
-                label: Volle Breite (100%)
+                label: "Volle Breite (100%)"
                 value: chatgpt-width-full
     - 
         id: chatgpt-font-style
-        title: Schriftart
-        description: Typografie-Familie für Notizen und Menüs.
+        title: "Schriftart"
+        description: "Typografie-Familie für Notizen und Menüs."
         type: class-select
         allowEmpty: false
         default: chatgpt-font-sans
         options:
             - 
-                label: OpenAI Sans (Söhne / Inter / System)
+                label: "OpenAI Sans (Söhne / Inter / System)"
                 value: chatgpt-font-sans
             - 
-                label: System Native
+                label: "System Native"
                 value: chatgpt-font-system
 */
 
