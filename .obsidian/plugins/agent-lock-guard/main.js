@@ -826,7 +826,7 @@ var AgentLockGuardPlugin = class extends import_obsidian6.Plugin {
     setEditorLockManager(this.app, this.lockManager, this.settings);
     this.registerEditorExtension(createEditorLockExtension());
     if (this.settings.enableRibbonIcon) {
-      this.ribbonIconEl = this.addRibbonIcon("bot", "Agent Lock Guard: Gesperrte Dateien", () => {
+      this.ribbonIconEl = this.addRibbonIcon("shield-check", "Agent Lock Guard: Gesperrte Dateien", () => {
         new AgentLockOverviewModal(this.app, this.lockManager).open();
       });
     }

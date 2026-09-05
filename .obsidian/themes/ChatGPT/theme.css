@@ -488,33 +488,38 @@ body.chatgpt-width-full { --file-line-width: 100%; }
 .workspace-tab-header-container {
   background-color: var(--background-secondary) !important;
   border-bottom: 1px solid var(--background-modifier-border) !important;
-  padding: 2px 8px 0 8px !important;
-  gap: 2px !important;
   display: flex !important;
+  align-items: center !important;
   visibility: visible !important;
   height: var(--header-height, 40px) !important;
   min-height: 38px !important;
+  padding-top: 4px !important;
+  padding-bottom: 4px !important;
 }
 
 .workspace-tab-header-container-inner {
   display: flex !important;
   align-items: center !important;
-  gap: 2px !important;
-  flex: 1 !important;
+  gap: 4px !important;
+  flex: 1 1 auto !important;
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
 }
 
 .workspace-tab-header {
-  border-radius: var(--radius-m) var(--radius-m) 0 0 !important;
+  flex: 0 1 auto !important;
+  min-width: 140px !important;
+  max-width: 240px !important;
+  height: 32px !important;
+  display: flex !important;
+  align-items: center !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border-radius: var(--radius-m) !important;
   border: 1px solid transparent !important;
-  border-bottom: none !important;
   background-color: transparent !important;
   color: var(--text-muted) !important;
-  font-size: 13px !important;
-  font-weight: 450 !important;
-  padding: 6px 14px !important;
-  display: inline-flex !important;
-  align-items: center !important;
-  gap: 6px !important;
+  cursor: pointer !important;
   transition: all 0.15s ease !important;
 }
 
@@ -525,26 +530,71 @@ body.chatgpt-width-full { --file-line-width: 100%; }
 
 /* Active Tab: seamlessly blends with the workspace canvas */
 .workspace-tab-header.is-active {
-  background-color: var(--tab-background-active) !important;
+  background-color: var(--background-primary) !important;
   border-color: var(--background-modifier-border) !important;
-  color: var(--text-normal) !important;
-  font-weight: 550 !important;
-  box-shadow: 0 -1px 3px rgba(0, 0, 0, 0.02) !important;
+  color: #FFFFFF !important;
+  font-weight: 500 !important;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.18) !important;
+}
+
+.workspace-tab-header-inner {
+  display: flex !important;
+  align-items: center !important;
+  width: 100% !important;
+  height: 100% !important;
+  gap: 8px !important;
+  padding: 0 10px !important;
+  overflow: hidden !important;
+}
+
+.workspace-tab-header-inner-icon {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex-shrink: 0 !important;
+  width: 16px !important;
+  height: 16px !important;
+  color: inherit !important;
+}
+
+.workspace-tab-header-inner-title {
+  display: block !important;
+  flex: 1 1 auto !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  letter-spacing: -0.015em !important;
+  line-height: 1 !important;
+  text-align: left !important;
 }
 
 .workspace-tab-header-inner-close-button {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex-shrink: 0 !important;
+  width: 18px !important;
+  height: 18px !important;
   border-radius: var(--radius-s) !important;
-  opacity: 0.4 !important;
+  opacity: 0.3 !important;
+  margin-left: auto !important;
   transition: all 0.15s ease !important;
 }
 
 .workspace-tab-header:hover .workspace-tab-header-inner-close-button {
-  opacity: 0.8 !important;
+  opacity: 0.7 !important;
+}
+
+.workspace-tab-header.is-active .workspace-tab-header-inner-close-button {
+  opacity: 0.6 !important;
 }
 
 .workspace-tab-header-inner-close-button:hover {
   opacity: 1 !important;
   background-color: var(--background-modifier-hover) !important;
+  color: #FFFFFF !important;
 }
 
 /* Segmented View Controls (Top Right Bar) */
@@ -1058,6 +1108,55 @@ button.mod-cta:hover {
 .view-content button:not(.mod-cta):not(.clickable-icon):not(.copy-code-button):hover {
   background-color: var(--background-modifier-hover) !important;
   border-color: var(--background-modifier-border-hover) !important;
+}
+
+/* OpenAI Elegant Empty State */
+.empty-state {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  height: 100% !important;
+  text-align: center !important;
+  padding: 40px !important;
+  gap: 20px !important;
+}
+
+.empty-state-title {
+  font-size: 16px !important;
+  font-weight: 600 !important;
+  color: var(--text-normal) !important;
+  letter-spacing: -0.015em !important;
+}
+
+.empty-state-action-list {
+  display: flex !important;
+  flex-direction: row !important;
+  gap: 12px !important;
+  flex-wrap: wrap !important;
+  justify-content: center !important;
+  align-items: center !important;
+}
+
+.empty-state-action-list button,
+.view-content .empty-state button {
+  background-color: var(--background-secondary-alt) !important;
+  border: 1px solid var(--background-modifier-border) !important;
+  border-radius: var(--radius-full) !important;
+  color: var(--text-muted) !important;
+  padding: 8px 18px !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  cursor: pointer !important;
+  transition: all 0.15s ease !important;
+}
+
+.empty-state-action-list button:hover,
+.view-content .empty-state button:hover {
+  background-color: var(--background-modifier-hover) !important;
+  border-color: var(--background-modifier-border-hover) !important;
+  color: #FFFFFF !important;
+  transform: translateY(-1px) !important;
 }
 
 /* ==========================================================================
