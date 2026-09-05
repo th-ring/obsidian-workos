@@ -68,112 +68,57 @@ settings:
 */
 
 /* ==========================================================================
-   1. GLOBAL VARIABLES & BASE DESIGN TOKENS
+   1. GLOBAL DESIGN TOKENS & BASE CONFIGURATION
    ========================================================================== */
 
 :root {
-  /* Typography Stack */
+  /* Typography Stacks */
   --default-font: "Söhne", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   --font-family-editor: var(--default-font);
   --font-family-preview: var(--default-font);
   --font-monospace: "Söhne Mono", "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
 
-  /* Typography Ramp */
+  /* Typographic Scale */
   --h1-size: 1.875rem;
-  --h2-size: 1.5rem;
+  --h2-size: 1.45rem;
   --h3-size: 1.25rem;
-  --h4-size: 1.125rem;
+  --h4-size: 1.1rem;
   --h5-size: 1rem;
   --h6-size: 0.875rem;
-  --h1-weight: 600;
+  --h1-weight: 650;
   --h2-weight: 600;
   --h3-weight: 600;
   --h4-weight: 600;
   --h5-weight: 600;
   --h6-weight: 600;
 
-  /* Radii & Geometry */
+  /* Global Geometry & Radii */
   --radius-xs: 4px;
   --radius-s: 6px;
   --radius-m: 8px;
   --radius-l: 12px;
   --radius-xl: 16px;
+  --radius-2xl: 20px;
   --radius-full: 9999px;
   --modal-radius: 16px;
   --button-radius: 9999px;
   --input-radius: 9999px;
 
-  /* Line Height & Spacing */
-  --line-height-normal: 1.65;
+  /* Spacing & Widths */
+  --line-height-normal: 1.68;
   --file-line-width: 48rem;
+  --header-height: 44px;
 
-  /* Default Accent: ChatGPT Green */
-  --interactive-accent: #10A37F;
-  --interactive-accent-hover: #0E8C6D;
-  --text-accent: #10A37F;
-  --text-accent-hover: #0E8C6D;
-  --text-on-accent: #FFFFFF;
-  --accent-rgb: 16, 163, 127;
-  --interactive-accent-subtle: rgba(16, 163, 127, 0.12);
-
-  /* Elevation Shadows */
-  --shadow-chatgpt-subtle: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  --shadow-chatgpt-popover: 0 10px 25px -5px rgba(0, 0, 0, 0.25), 0 8px 10px -6px rgba(0, 0, 0, 0.25);
-  --shadow-chatgpt-modal: 0 25px 50px -12px rgba(0, 0, 0, 0.45);
+  /* Shadows (ChatGPT Multi-Stop Ambient Shadows) */
+  --shadow-chatgpt-subtle: 0 1px 2px 0 rgba(0, 0, 0, 0.04);
+  --shadow-chatgpt-card: 0 2px 8px -2px rgba(0, 0, 0, 0.06), 0 1px 4px -1px rgba(0, 0, 0, 0.04);
+  --shadow-chatgpt-popover: 0 12px 32px -4px rgba(0, 0, 0, 0.12), 0 4px 12px -2px rgba(0, 0, 0, 0.08);
+  --shadow-chatgpt-modal: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  --shadow-chatgpt-prompt: 0 4px 20px 0 rgba(0, 0, 0, 0.07);
 }
 
 /* ==========================================================================
-   2. DARK THEME (Extracted from ChatGPT Dark Mode Screenshot)
-   ========================================================================== */
-
-.theme-dark {
-  /* Surfaces */
-  --background-primary: #212121;
-  --background-primary-alt: #171717;
-  --background-secondary: #171717;
-  --background-secondary-alt: #282828;
-
-  /* Borders & Hairlines */
-  --background-modifier-border: rgba(255, 255, 255, 0.08);
-  --background-modifier-border-hover: rgba(255, 255, 255, 0.15);
-  --background-modifier-border-focus: rgba(255, 255, 255, 0.25);
-
-  /* Hover & Active States */
-  --background-modifier-hover: rgba(255, 255, 255, 0.06);
-  --background-modifier-active-hover: rgba(255, 255, 255, 0.10);
-  --background-modifier-form-field: #212121;
-
-  /* Text Colors */
-  --text-normal: #ECECEC;
-  --text-muted: #999999;
-  --text-faint: #737373;
-
-  /* Chrome & Navigation */
-  --titlebar-background: #171717;
-  --titlebar-background-focused: #171717;
-  --status-bar-background: #171717;
-  --status-bar-border-color: rgba(255, 255, 255, 0.08);
-  --ribbon-background: #171717;
-  --tab-background-active: #212121;
-  --tab-outline-color: transparent;
-
-  /* Interactive Elements */
-  --interactive-normal: #282828;
-  --interactive-hover: #333333;
-
-  /* Inverted Action Pill (like ChatGPT "Upgrade" button) */
-  --chatgpt-btn-pill-bg: #FFFFFF;
-  --chatgpt-btn-pill-text: #000000;
-  --chatgpt-btn-pill-hover: #E5E5E5;
-
-  /* Modal Surface */
-  --modal-background: #212121;
-  --modal-border-color: rgba(255, 255, 255, 0.08);
-  --prompt-background: #212121;
-}
-
-/* ==========================================================================
-   3. LIGHT THEME (Extracted from ChatGPT Light Mode Screenshot)
+   2. LIGHT THEME (Exact Counterpart to ChatGPT Web/Desktop Screenshots)
    ========================================================================== */
 
 .theme-light {
@@ -183,10 +128,10 @@ settings:
   --background-secondary: #F9F9F9;
   --background-secondary-alt: #F4F4F4;
 
-  /* Borders & Hairlines */
+  /* Hairlines & Borders */
   --background-modifier-border: rgba(0, 0, 0, 0.08);
-  --background-modifier-border-hover: rgba(0, 0, 0, 0.15);
-  --background-modifier-border-focus: rgba(0, 0, 0, 0.25);
+  --background-modifier-border-hover: rgba(0, 0, 0, 0.16);
+  --background-modifier-border-focus: rgba(0, 0, 0, 0.28);
 
   /* Hover & Active States */
   --background-modifier-hover: #F0F0F0;
@@ -198,11 +143,11 @@ settings:
   --text-muted: #595959;
   --text-faint: #8E8E8E;
 
-  /* Chrome & Navigation */
+  /* Navigation & Chrome */
   --titlebar-background: #F9F9F9;
   --titlebar-background-focused: #F9F9F9;
   --status-bar-background: #F9F9F9;
-  --status-bar-border-color: rgba(0, 0, 0, 0.08);
+  --status-bar-border-color: rgba(0, 0, 0, 0.06);
   --ribbon-background: #F9F9F9;
   --tab-background-active: #FFFFFF;
   --tab-outline-color: transparent;
@@ -211,15 +156,81 @@ settings:
   --interactive-normal: #FFFFFF;
   --interactive-hover: #F4F4F4;
 
-  /* Inverted Action Pill (like ChatGPT "Upgrade" button) */
+  /* Inverted Action Pill Buttons (like "Upgrade" / "+ Neuer Chat") */
   --chatgpt-btn-pill-bg: #000000;
   --chatgpt-btn-pill-text: #FFFFFF;
   --chatgpt-btn-pill-hover: #262626;
 
-  /* Modal Surface */
+  /* Sidebar Active File Highlight */
+  --chatgpt-sidebar-active: #ECECEC;
+  --chatgpt-sidebar-hover: #F0F0F0;
+
+  /* User Message Bubble */
+  --chatgpt-user-bubble-bg: #F4F4F4;
+  --chatgpt-user-bubble-border: transparent;
+
+  /* Modals & Omnibar */
   --modal-background: #FFFFFF;
   --modal-border-color: rgba(0, 0, 0, 0.08);
   --prompt-background: #FFFFFF;
+}
+
+/* ==========================================================================
+   3. DARK THEME (Graphite & Samt-Anthrazit from ChatGPT Dark Mode)
+   ========================================================================== */
+
+.theme-dark {
+  /* Surfaces */
+  --background-primary: #212121;
+  --background-primary-alt: #171717;
+  --background-secondary: #171717;
+  --background-secondary-alt: #282828;
+
+  /* Hairlines & Borders */
+  --background-modifier-border: rgba(255, 255, 255, 0.08);
+  --background-modifier-border-hover: rgba(255, 255, 255, 0.16);
+  --background-modifier-border-focus: rgba(255, 255, 255, 0.28);
+
+  /* Hover & Active States */
+  --background-modifier-hover: rgba(255, 255, 255, 0.06);
+  --background-modifier-active-hover: rgba(255, 255, 255, 0.10);
+  --background-modifier-form-field: #212121;
+
+  /* Text Colors */
+  --text-normal: #ECECEC;
+  --text-muted: #999999;
+  --text-faint: #737373;
+
+  /* Navigation & Chrome */
+  --titlebar-background: #171717;
+  --titlebar-background-focused: #171717;
+  --status-bar-background: #171717;
+  --status-bar-border-color: rgba(255, 255, 255, 0.06);
+  --ribbon-background: #171717;
+  --tab-background-active: #212121;
+  --tab-outline-color: transparent;
+
+  /* Interactive Elements */
+  --interactive-normal: #282828;
+  --interactive-hover: #333333;
+
+  /* Inverted Action Pill Buttons (like "Upgrade" / "+ Neuer Chat") */
+  --chatgpt-btn-pill-bg: #FFFFFF;
+  --chatgpt-btn-pill-text: #000000;
+  --chatgpt-btn-pill-hover: #E5E5E5;
+
+  /* Sidebar Active File Highlight */
+  --chatgpt-sidebar-active: rgba(255, 255, 255, 0.10);
+  --chatgpt-sidebar-hover: rgba(255, 255, 255, 0.06);
+
+  /* User Message Bubble */
+  --chatgpt-user-bubble-bg: #2F2F2F;
+  --chatgpt-user-bubble-border: rgba(255, 255, 255, 0.06);
+
+  /* Modals & Omnibar */
+  --modal-background: #212121;
+  --modal-border-color: rgba(255, 255, 255, 0.08);
+  --prompt-background: #212121;
 }
 
 /* ==========================================================================
@@ -307,191 +318,681 @@ body.chatgpt-accent-standard {
   --interactive-accent-subtle: rgba(110, 110, 128, 0.12);
 }
 
-/* Width Settings Classes */
+/* Width Settings */
 body.chatgpt-width-normal { --file-line-width: 48rem; }
 body.chatgpt-width-wide { --file-line-width: 56rem; }
 body.chatgpt-width-full { --file-line-width: 100%; }
 
 /* ==========================================================================
-   5. SETTINGS MODAL (Screenshot-Accurate Styling)
+   5. CHATGPT SIDEBAR & NAVIGATION (Conversation History Style)
    ========================================================================== */
 
+/* Left Sidebar Base */
+.workspace-split.mod-left-split,
+.workspace-drawer.mod-left {
+  background-color: var(--background-secondary) !important;
+  border-right: 1px solid var(--background-modifier-border) !important;
+}
+
+/* Sidebar Header Action Bar */
+.nav-buttons-container {
+  padding: 10px 12px 6px 12px !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  border-bottom: 1px solid var(--background-modifier-border) !important;
+}
+
+/* "+ Neue Notiz" Button styled like ChatGPT "+ Neuer Chat" */
+.nav-action-button {
+  border-radius: var(--radius-m) !important;
+  padding: 6px !important;
+  color: var(--text-muted) !important;
+  transition: all 0.15s ease !important;
+}
+
+.nav-action-button:hover {
+  background-color: var(--background-modifier-hover) !important;
+  color: var(--text-normal) !important;
+}
+
+/* Primary Action Button ("Neuer Chat" style) */
+.nav-action-button[aria-label*="Neue Notiz"],
+.nav-action-button[aria-label*="New note"] {
+  background-color: var(--background-primary) !important;
+  border: 1px solid var(--background-modifier-border) !important;
+  border-radius: var(--radius-m) !important;
+  color: var(--text-normal) !important;
+  box-shadow: var(--shadow-chatgpt-subtle) !important;
+  font-weight: 500 !important;
+}
+
+.nav-action-button[aria-label*="Neue Notiz"]:hover,
+.nav-action-button[aria-label*="New note"]:hover {
+  background-color: var(--background-modifier-hover) !important;
+  border-color: var(--background-modifier-border-hover) !important;
+}
+
+/* Category & Section Headers ("Aktuelle", "Workstreams" like ChatGPT Sidebar) */
+.nav-folder.mod-root > .nav-folder-children > .nav-folder > .nav-folder-title {
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.05em !important;
+  text-transform: uppercase !important;
+  color: var(--text-faint) !important;
+  padding: 14px 10px 4px 10px !important;
+  margin-top: 6px !important;
+  cursor: pointer !important;
+}
+
+.nav-folder.mod-root > .nav-folder-children > .nav-folder > .nav-folder-title:hover {
+  background-color: transparent !important;
+  color: var(--text-muted) !important;
+}
+
+/* File Explorer List Items (Like ChatGPT History Rows) */
+.nav-files-container {
+  padding: 4px 8px 16px 8px !important;
+}
+
+.nav-file-title,
+.nav-folder-title {
+  border-radius: var(--radius-m) !important;
+  padding: 6px 10px !important;
+  margin: 1.5px 0 !important;
+  font-size: 13.5px !important;
+  color: var(--text-muted) !important;
+  line-height: 1.35 !important;
+  transition: all 0.12s ease !important;
+  position: relative !important;
+}
+
+.nav-file-title:hover,
+.nav-folder-title:hover {
+  background-color: var(--chatgpt-sidebar-hover) !important;
+  color: var(--text-normal) !important;
+}
+
+/* Active Selected File */
+.nav-file-title.is-active {
+  background-color: var(--chatgpt-sidebar-active) !important;
+  color: var(--text-normal) !important;
+  font-weight: 500 !important;
+}
+
+.nav-file-title.is-active:after {
+  content: "" !important;
+  position: absolute !important;
+  left: 2px !important;
+  top: 8px !important;
+  bottom: 8px !important;
+  width: 3px !important;
+  background-color: var(--interactive-accent) !important;
+  border-radius: 2px !important;
+}
+
+/* Folder collapse indicators */
+.nav-folder-collapse-indicator {
+  color: var(--text-faint) !important;
+  opacity: 0.7 !important;
+  transition: transform 0.15s ease !important;
+}
+
+.nav-folder-collapse-indicator:hover {
+  opacity: 1 !important;
+  color: var(--text-normal) !important;
+}
+
+/* Ribbon (Leftmost Icon Bar) */
+.workspace-ribbon.mod-left {
+  background-color: var(--ribbon-background) !important;
+  border-right: 1px solid var(--background-modifier-border) !important;
+  padding: 8px 4px !important;
+}
+
+.side-dock-ribbon-action {
+  border-radius: var(--radius-m) !important;
+  color: var(--text-muted) !important;
+  margin-bottom: 4px !important;
+  transition: all 0.15s ease !important;
+}
+
+.side-dock-ribbon-action:hover {
+  background-color: var(--background-modifier-hover) !important;
+  color: var(--text-normal) !important;
+}
+
+/* Bottom Profile / Vault Section (ChatGPT User Profile Look) */
+.sidebar-profile-card,
+.workspace-drawer-header {
+  padding: 10px 12px !important;
+  border-top: 1px solid var(--background-modifier-border) !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+}
+
+/* ==========================================================================
+   6. TAB BAR & WORKSPACE HEADER (ChatGPT Clean Tab Navigation)
+   ========================================================================== */
+
+.workspace-tab-header-container {
+  background-color: var(--background-secondary) !important;
+  border-bottom: 1px solid var(--background-modifier-border) !important;
+  padding: 4px 8px 0 8px !important;
+  gap: 2px !important;
+}
+
+.workspace-tab-header {
+  border-radius: var(--radius-m) var(--radius-m) 0 0 !important;
+  border: 1px solid transparent !important;
+  border-bottom: none !important;
+  background-color: transparent !important;
+  color: var(--text-muted) !important;
+  font-size: 13px !important;
+  font-weight: 450 !important;
+  padding: 6px 14px !important;
+  transition: all 0.15s ease !important;
+}
+
+.workspace-tab-header:hover {
+  background-color: var(--background-modifier-hover) !important;
+  color: var(--text-normal) !important;
+}
+
+/* Active Tab: seamlessly blends with the workspace canvas */
+.workspace-tab-header.is-active {
+  background-color: var(--tab-background-active) !important;
+  border-color: var(--background-modifier-border) !important;
+  color: var(--text-normal) !important;
+  font-weight: 550 !important;
+  box-shadow: 0 -1px 3px rgba(0, 0, 0, 0.02) !important;
+}
+
+.workspace-tab-header-inner-close-button {
+  border-radius: var(--radius-s) !important;
+  opacity: 0.4 !important;
+  transition: all 0.15s ease !important;
+}
+
+.workspace-tab-header:hover .workspace-tab-header-inner-close-button {
+  opacity: 0.8 !important;
+}
+
+.workspace-tab-header-inner-close-button:hover {
+  opacity: 1 !important;
+  background-color: var(--background-modifier-hover) !important;
+}
+
+/* Segmented View Controls (Top Right Bar) */
+.view-header {
+  background-color: var(--background-primary) !important;
+  border-bottom: 1px solid var(--background-modifier-border) !important;
+}
+
+.view-actions button {
+  border-radius: var(--radius-s) !important;
+  border: none !important;
+  background: transparent !important;
+  color: var(--text-muted) !important;
+}
+
+.view-actions button:hover {
+  background-color: var(--background-modifier-hover) !important;
+  color: var(--text-normal) !important;
+}
+
+/* ==========================================================================
+   7. EMPTY TAB & HOME STATE ("Wie kann ich dir helfen?" Aesthetic)
+   ========================================================================== */
+
+.empty-state {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 60px 20px !important;
+  text-align: center !important;
+}
+
+.empty-state-title {
+  font-size: 1.75rem !important;
+  font-weight: 600 !important;
+  color: var(--text-normal) !important;
+  letter-spacing: -0.02em !important;
+  margin-bottom: 24px !important;
+}
+
+/* Quick Action Suggestion Pills on Empty Tab */
+.empty-state-action-list {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 10px !important;
+  justify-content: center !important;
+  max-width: 38rem !important;
+}
+
+.empty-state-action {
+  border: 1px solid var(--background-modifier-border) !important;
+  border-radius: var(--radius-xl) !important;
+  background-color: var(--background-secondary-alt) !important;
+  color: var(--text-normal) !important;
+  padding: 10px 18px !important;
+  font-size: 13.5px !important;
+  font-weight: 450 !important;
+  transition: all 0.15s ease !important;
+  cursor: pointer !important;
+}
+
+.empty-state-action:hover {
+  background-color: var(--background-modifier-hover) !important;
+  border-color: var(--background-modifier-border-hover) !important;
+  transform: translateY(-1px);
+}
+
+/* ==========================================================================
+   8. NOTIZEN-CANVAS, TYPOGRAFIE & PROPERTIES (Obsidian-First Note Taking)
+   ========================================================================== */
+
+/* Main Canvas Background */
+.workspace-leaf-content[data-type="markdown"] {
+  background-color: var(--background-primary) !important;
+}
+
+/* Centered Comfortable Reading Column */
+.markdown-source-view.mod-cm6 .cm-content,
+.markdown-rendered {
+  max-width: var(--file-line-width) !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  line-height: var(--line-height-normal) !important;
+  font-size: 1rem !important;
+  color: var(--text-normal) !important;
+}
+
+/* Document Title (Large, Bold, Clean) */
+.inline-title {
+  font-size: 2rem !important;
+  font-weight: 650 !important;
+  letter-spacing: -0.025em !important;
+  color: var(--text-normal) !important;
+  margin-bottom: 20px !important;
+}
+
+/* Properties / Frontmatter Box (ChatGPT Settings/Info Card Treatment) */
+.metadata-container {
+  background-color: var(--background-secondary) !important;
+  border: 1px solid var(--background-modifier-border) !important;
+  border-radius: var(--radius-l) !important;
+  padding: 12px 16px !important;
+  margin: 16px 0 28px 0 !important;
+  box-shadow: var(--shadow-chatgpt-subtle) !important;
+}
+
+.metadata-properties-heading {
+  font-size: 11.5px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.04em !important;
+  text-transform: uppercase !important;
+  color: var(--text-faint) !important;
+  margin-bottom: 8px !important;
+}
+
+.metadata-property {
+  border-radius: var(--radius-s) !important;
+  padding: 3px 6px !important;
+  transition: background-color 0.12s ease !important;
+}
+
+.metadata-property:hover {
+  background-color: var(--background-modifier-hover) !important;
+}
+
+.metadata-property-key {
+  font-size: 12.5px !important;
+  color: var(--text-muted) !important;
+}
+
+.metadata-property-value {
+  font-size: 13px !important;
+  color: var(--text-normal) !important;
+}
+
+/* Pill Tags in Frontmatter & Body */
+.tag,
+.cm-hashtag {
+  background-color: var(--interactive-accent-subtle) !important;
+  color: var(--interactive-accent) !important;
+  border-radius: var(--radius-full) !important;
+  border: 1px solid transparent !important;
+  padding: 2px 10px !important;
+  font-size: 0.8rem !important;
+  font-weight: 500 !important;
+  text-decoration: none !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 4px !important;
+  transition: all 0.15s ease !important;
+}
+
+.tag:hover,
+.cm-hashtag:hover {
+  background-color: var(--interactive-accent) !important;
+  color: #FFFFFF !important;
+  border-color: var(--interactive-accent) !important;
+}
+
+/* Headings H1 - H6 */
+.markdown-rendered h1,
+.cm-header-1 {
+  font-size: var(--h1-size) !important;
+  font-weight: var(--h1-weight) !important;
+  letter-spacing: -0.02em !important;
+  color: var(--text-normal) !important;
+  margin-top: 1.6em !important;
+  margin-bottom: 0.5em !important;
+}
+
+.markdown-rendered h2,
+.cm-header-2 {
+  font-size: var(--h2-size) !important;
+  font-weight: var(--h2-weight) !important;
+  letter-spacing: -0.015em !important;
+  color: var(--text-normal) !important;
+  margin-top: 1.4em !important;
+  margin-bottom: 0.4em !important;
+}
+
+.markdown-rendered h3,
+.cm-header-3 {
+  font-size: var(--h3-size) !important;
+  font-weight: var(--h3-weight) !important;
+  letter-spacing: -0.01em !important;
+  color: var(--text-normal) !important;
+  margin-top: 1.2em !important;
+  margin-bottom: 0.3em !important;
+}
+
+/* Bullet Lists with Refined Alignment */
+.markdown-rendered ul,
+.markdown-rendered ol {
+  padding-left: 1.4em !important;
+  margin: 0.8em 0 !important;
+}
+
+.markdown-rendered li {
+  margin: 0.35em 0 !important;
+  color: var(--text-normal) !important;
+}
+
+.markdown-rendered li::marker {
+  color: var(--interactive-accent) !important;
+}
+
+/* Inline Code Snippets */
+code:not(pre code) {
+  background-color: var(--background-secondary-alt) !important;
+  border: 1px solid var(--background-modifier-border) !important;
+  border-radius: var(--radius-s) !important;
+  padding: 2px 6px !important;
+  font-family: var(--font-monospace) !important;
+  font-size: 0.86em !important;
+  color: var(--text-normal) !important;
+}
+
+/* Modern ChatGPT Code Blocks */
+.markdown-rendered pre,
+.cm-line.cm-math-line,
+pre[class*="language-"] {
+  background-color: var(--background-secondary-alt) !important;
+  border: 1px solid var(--background-modifier-border) !important;
+  border-radius: var(--radius-l) !important;
+  padding: 16px !important;
+  font-family: var(--font-monospace) !important;
+  font-size: 0.875rem !important;
+  line-height: 1.55 !important;
+  box-shadow: var(--shadow-chatgpt-subtle) !important;
+  position: relative !important;
+  overflow-x: auto !important;
+}
+
+/* Copy Button inside Code Blocks */
+.copy-code-button {
+  border-radius: var(--radius-s) !important;
+  background-color: var(--background-primary) !important;
+  border: 1px solid var(--background-modifier-border) !important;
+  color: var(--text-muted) !important;
+  font-size: 11.5px !important;
+  padding: 4px 8px !important;
+  transition: all 0.15s ease !important;
+}
+
+.copy-code-button:hover {
+  background-color: var(--background-modifier-hover) !important;
+  color: var(--text-normal) !important;
+}
+
+/* Tables */
+.markdown-rendered table {
+  width: 100% !important;
+  border-collapse: separate !important;
+  border-spacing: 0 !important;
+  border-radius: var(--radius-m) !important;
+  border: 1px solid var(--background-modifier-border) !important;
+  overflow: hidden !important;
+  margin: 18px 0 !important;
+}
+
+.markdown-rendered th {
+  background-color: var(--background-secondary) !important;
+  font-weight: 600 !important;
+  font-size: 13px !important;
+  color: var(--text-normal) !important;
+  padding: 10px 14px !important;
+  border-bottom: 1px solid var(--background-modifier-border) !important;
+  text-align: left !important;
+}
+
+.markdown-rendered td {
+  padding: 10px 14px !important;
+  font-size: 13.5px !important;
+  border-bottom: 1px solid var(--background-modifier-border) !important;
+  color: var(--text-normal) !important;
+}
+
+.markdown-rendered tr:last-child td {
+  border-bottom: none !important;
+}
+
+.markdown-rendered tr:hover td {
+  background-color: var(--background-modifier-hover) !important;
+}
+
+/* Task Checkboxes */
+.task-list-item-checkbox {
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  width: 16px !important;
+  height: 16px !important;
+  border: 1.5px solid var(--text-muted) !important;
+  border-radius: 4px !important;
+  background-color: transparent !important;
+  cursor: pointer !important;
+  vertical-align: middle !important;
+  position: relative !important;
+  transition: all 0.15s ease !important;
+  margin-right: 8px !important;
+}
+
+.task-list-item-checkbox:hover {
+  border-color: var(--interactive-accent) !important;
+}
+
+.task-list-item-checkbox:checked {
+  background-color: var(--interactive-accent) !important;
+  border-color: var(--interactive-accent) !important;
+}
+
+.task-list-item-checkbox:checked:after {
+  content: "" !important;
+  position: absolute !important;
+  top: 2px !important;
+  left: 5px !important;
+  width: 4px !important;
+  height: 8px !important;
+  border: solid #FFFFFF !important;
+  border-width: 0 2px 2px 0 !important;
+  transform: rotate(45deg) !important;
+}
+
+/* ==========================================================================
+   9. CHATGPT CALLOUTS (User Bubble & Assistant Response from Screenshot 2)
+   ========================================================================== */
+
+/* Standard Callout Frame */
+.callout {
+  border-radius: var(--radius-l) !important;
+  border: 1px solid var(--background-modifier-border) !important;
+  background-color: var(--background-secondary-alt) !important;
+  padding: 14px 18px !important;
+  margin: 18px 0 !important;
+}
+
+/* User Prompt Callout (> [!user]): EXACT Replica of User Bubble in Screenshot 2 */
+.callout[data-callout="user"] {
+  background-color: var(--chatgpt-user-bubble-bg) !important;
+  border: 1px solid var(--chatgpt-user-bubble-border) !important;
+  border-radius: 20px 20px 4px 20px !important;
+  max-width: 75% !important;
+  margin-left: auto !important;
+  margin-right: 0 !important;
+  padding: 12px 18px !important;
+  box-shadow: var(--shadow-chatgpt-subtle) !important;
+}
+
+.callout[data-callout="user"] .callout-title {
+  color: var(--text-normal) !important;
+  font-weight: 550 !important;
+  font-size: 14px !important;
+}
+
+.callout[data-callout="user"] .callout-icon {
+  display: none !important;
+}
+
+/* Assistant Response Callout (> [!assistant]): Clean flowing response */
+.callout[data-callout="assistant"] {
+  border: none !important;
+  border-left: 3px solid var(--interactive-accent) !important;
+  background-color: transparent !important;
+  padding: 8px 16px 8px 20px !important;
+  margin: 20px 0 !important;
+}
+
+.callout[data-callout="assistant"] .callout-title {
+  color: var(--interactive-accent) !important;
+  font-weight: 600 !important;
+  font-size: 14.5px !important;
+}
+
+/* ==========================================================================
+   10. MODALS, OMNIBAR & COMMAND PALETTE (ChatGPT Floating Central Pill)
+   ========================================================================== */
+
+/* Floating Central Omnibar (.prompt) */
+.prompt {
+  background-color: var(--prompt-background) !important;
+  border: 1px solid var(--background-modifier-border) !important;
+  border-radius: var(--radius-2xl) !important;
+  box-shadow: var(--shadow-chatgpt-popover) !important;
+  backdrop-filter: blur(16px) !important;
+  padding: 14px !important;
+}
+
+/* ChatGPT Input Pill Bar */
+.prompt-input {
+  background-color: var(--background-secondary-alt) !important;
+  border: 1px solid var(--background-modifier-border) !important;
+  border-radius: var(--radius-full) !important;
+  padding: 10px 18px !important;
+  font-size: 14px !important;
+  color: var(--text-normal) !important;
+  transition: all 0.2s ease !important;
+}
+
+.prompt-input:focus {
+  border-color: var(--background-modifier-border-focus) !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+.suggestion-item {
+  border-radius: var(--radius-m) !important;
+  padding: 8px 12px !important;
+  font-size: 13.5px !important;
+  color: var(--text-normal) !important;
+  transition: background-color 0.1s ease !important;
+}
+
+.suggestion-item.is-selected {
+  background-color: var(--background-modifier-active-hover) !important;
+  color: var(--text-normal) !important;
+}
+
+/* Settings Modal (1:1 from Settings Screenshot) */
 .modal.mod-settings {
   border-radius: var(--modal-radius) !important;
   border: 1px solid var(--background-modifier-border) !important;
   background-color: var(--modal-background) !important;
   box-shadow: var(--shadow-chatgpt-modal) !important;
-  overflow: hidden;
 }
 
-/* Close Button [X] */
-.modal-close-button {
-  top: 14px;
-  right: 14px;
-  border-radius: var(--radius-s);
-  transition: background-color 0.15s ease;
-}
-
-.modal-close-button:hover {
-  background-color: var(--background-modifier-hover);
-}
-
-/* Left Sidebar Navigation */
 .modal.mod-settings .vertical-tabs-container {
   background-color: var(--background-secondary) !important;
   border-right: 1px solid var(--background-modifier-border) !important;
-  padding: 12px 8px;
+  padding: 14px 10px !important;
 }
 
-/* Pill Search Bar in Settings ("Einstellungen suchen") */
-.modal.mod-settings .vertical-tabs-header input,
-.modal.mod-settings .search-input-container input {
-  background-color: var(--background-secondary-alt) !important;
-  border: 1px solid var(--background-modifier-border) !important;
-  border-radius: var(--radius-full) !important;
-  padding: 8px 14px 8px 34px !important;
-  font-size: 13px !important;
-  color: var(--text-normal) !important;
-  transition: all 0.2s ease !important;
-}
-
-.modal.mod-settings .vertical-tabs-header input:focus,
-.modal.mod-settings .search-input-container input:focus {
-  border-color: var(--background-modifier-border-focus) !important;
-  box-shadow: none !important;
-}
-
-/* Navigation Items (Allgemein, Benachrichtigungen etc.) */
-.vertical-tab-nav-item {
+.modal.mod-settings .vertical-tab-nav-item {
   border-radius: var(--radius-m) !important;
   padding: 7px 12px !important;
   margin-bottom: 2px !important;
   font-size: 13.5px !important;
   color: var(--text-muted) !important;
-  font-weight: 450 !important;
   transition: all 0.15s ease !important;
 }
 
-.vertical-tab-nav-item:hover {
+.modal.mod-settings .vertical-tab-nav-item:hover {
   background-color: var(--background-modifier-hover) !important;
   color: var(--text-normal) !important;
 }
 
-.vertical-tab-nav-item.is-active {
+.modal.mod-settings .vertical-tab-nav-item.is-active {
   background-color: var(--background-modifier-active-hover) !important;
   color: var(--text-normal) !important;
-  font-weight: 500 !important;
+  font-weight: 550 !important;
 }
 
-/* Right Content Area */
 .modal.mod-settings .vertical-tab-content-container {
   background-color: var(--background-primary) !important;
-  padding: 24px 32px !important;
+  padding: 24px 36px !important;
 }
 
-/* Setting Item Rows */
-.setting-item {
-  border-top: 1px solid var(--background-modifier-border) !important;
-  padding: 16px 0 !important;
-  margin: 0 !important;
-}
-
-.setting-item:first-of-type {
-  border-top: none !important;
-}
-
-.setting-item-heading {
-  font-size: 1.25rem !important;
-  font-weight: 600 !important;
-  color: var(--text-normal) !important;
-  padding-bottom: 12px !important;
-}
-
-.setting-item-name {
-  font-size: 14px !important;
-  font-weight: 500 !important;
-  color: var(--text-normal) !important;
-}
-
-.setting-item-description {
-  font-size: 12.5px !important;
-  color: var(--text-muted) !important;
-  line-height: 1.45 !important;
-}
-
-/* Toggle Switches (ChatGPT Pill Toggles) */
-.checkbox-container {
-  background-color: var(--background-secondary-alt) !important;
-  border-radius: var(--radius-full) !important;
-  border: 1px solid var(--background-modifier-border) !important;
-  width: 40px !important;
-  height: 22px !important;
-  transition: background-color 0.2s ease, border-color 0.2s ease !important;
-  cursor: pointer !important;
-}
-
-.checkbox-container.is-enabled {
-  background-color: var(--interactive-accent) !important;
-  border-color: var(--interactive-accent) !important;
-}
-
-.checkbox-container:after {
-  background-color: #FFFFFF !important;
-  border-radius: var(--radius-full) !important;
-  width: 16px !important;
-  height: 16px !important;
-  top: 2px !important;
-  left: 2px !important;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2) !important;
-  transition: transform 0.2s ease !important;
-}
-
-.checkbox-container.is-enabled:after {
-  transform: translateX(18px) !important;
-}
-
-/* Dropdown Menus */
-select.dropdown,
-.dropdown {
-  background-color: var(--background-secondary-alt) !important;
-  border: 1px solid var(--background-modifier-border) !important;
-  border-radius: var(--radius-m) !important;
-  padding: 6px 28px 6px 12px !important;
-  font-size: 13px !important;
-  color: var(--text-normal) !important;
-  cursor: pointer !important;
-  transition: all 0.15s ease !important;
-}
-
-select.dropdown:hover,
-.dropdown:hover {
-  border-color: var(--background-modifier-border-hover) !important;
-}
-
-select.dropdown:focus,
-.dropdown:focus {
-  border-color: var(--interactive-accent) !important;
-  outline: none !important;
-}
-
-/* High-Contrast Inverted Action Pill Buttons (like "Upgrade") */
+/* Inverted High-Contrast Action Pill Button (like "Upgrade") */
 button.mod-cta {
   background-color: var(--chatgpt-btn-pill-bg) !important;
   color: var(--chatgpt-btn-pill-text) !important;
   border-radius: var(--radius-full) !important;
   border: none !important;
-  padding: 8px 18px !important;
+  padding: 8px 20px !important;
   font-weight: 600 !important;
   font-size: 13px !important;
-  transition: background-color 0.15s ease, transform 0.05s ease !important;
+  transition: all 0.15s ease !important;
 }
 
 button.mod-cta:hover {
   background-color: var(--chatgpt-btn-pill-hover) !important;
-}
-
-button.mod-cta:active {
-  transform: scale(0.98);
+  transform: translateY(-0.5px);
 }
 
 button:not(.mod-cta) {
@@ -509,329 +1010,54 @@ button:not(.mod-cta):hover {
   border-color: var(--background-modifier-border-hover) !important;
 }
 
-/* ==========================================================================
-   6. FILE EXPLORER & SIDEBAR (ChatGPT Conversation-List Style)
-   ========================================================================== */
-
-.nav-files-container {
-  padding: 6px 8px !important;
-}
-
-.nav-file-title,
-.nav-folder-title {
-  border-radius: var(--radius-m) !important;
-  padding: 6px 10px !important;
-  margin: 1px 0 !important;
-  font-size: 13.5px !important;
-  color: var(--text-muted) !important;
-  transition: all 0.15s ease !important;
-}
-
-.nav-file-title:hover,
-.nav-folder-title:hover {
-  background-color: var(--background-modifier-hover) !important;
-  color: var(--text-normal) !important;
-}
-
-.nav-file-title.is-active {
-  background-color: var(--background-modifier-active-hover) !important;
-  color: var(--text-normal) !important;
-  font-weight: 500 !important;
-}
-
-.nav-folder-collapse-indicator {
-  opacity: 0.6;
-  transition: transform 0.15s ease;
-}
-
-.nav-folder-collapse-indicator:hover {
-  opacity: 1;
-}
-
-/* Side dock ribbon */
-.workspace-ribbon.mod-left {
-  background-color: var(--ribbon-background) !important;
-  border-right: 1px solid var(--background-modifier-border) !important;
-}
-
-.side-dock-ribbon-action {
-  border-radius: var(--radius-m) !important;
-  color: var(--text-muted) !important;
-  transition: all 0.15s ease !important;
-}
-
-.side-dock-ribbon-action:hover {
-  background-color: var(--background-modifier-hover) !important;
-  color: var(--text-normal) !important;
-}
-
-/* Tab Headers */
-.workspace-tab-header {
-  border-radius: var(--radius-m) var(--radius-m) 0 0 !important;
-  border: none !important;
-  font-size: 13px !important;
-  color: var(--text-muted) !important;
-  padding: 4px 12px !important;
-}
-
-.workspace-tab-header.is-active {
-  background-color: var(--tab-background-active) !important;
-  color: var(--text-normal) !important;
-  font-weight: 500 !important;
-}
-
-/* ==========================================================================
-   7. EDITOR & MARKDOWN TYPOGRAPHY (Note-First & Distraction-Free)
-   ========================================================================== */
-
-/* Centered Comfortable Reading Canvas */
-.markdown-source-view.mod-cm6 .cm-content,
-.markdown-rendered {
-  max-width: var(--file-line-width) !important;
-  margin-left: auto !important;
-  margin-right: auto !important;
-  line-height: var(--line-height-normal) !important;
-  letter-spacing: normal !important;
-}
-
-/* Headings */
-.markdown-rendered h1,
-.cm-header-1 {
-  font-size: var(--h1-size) !important;
-  font-weight: var(--h1-weight) !important;
-  letter-spacing: -0.02em !important;
-  color: var(--text-normal) !important;
-  margin-top: 1.5em !important;
-  margin-bottom: 0.5em !important;
-}
-
-.markdown-rendered h2,
-.cm-header-2 {
-  font-size: var(--h2-size) !important;
-  font-weight: var(--h2-weight) !important;
-  letter-spacing: -0.015em !important;
-  color: var(--text-normal) !important;
-  margin-top: 1.3em !important;
-  margin-bottom: 0.4em !important;
-}
-
-.markdown-rendered h3,
-.cm-header-3 {
-  font-size: var(--h3-size) !important;
-  font-weight: var(--h3-weight) !important;
-  letter-spacing: -0.01em !important;
-  color: var(--text-normal) !important;
-  margin-top: 1.1em !important;
-  margin-bottom: 0.3em !important;
-}
-
-/* Links */
-a.internal-link,
-a.external-link {
-  color: var(--interactive-accent) !important;
-  text-decoration: none !important;
-  border-bottom: 1px solid transparent !important;
-  transition: border-color 0.15s ease !important;
-}
-
-a.internal-link:hover,
-a.external-link:hover {
-  border-bottom-color: var(--interactive-accent) !important;
-  text-decoration: none !important;
-}
-
-/* Hashtags & Badges */
-.tag,
-.cm-hashtag {
-  background-color: var(--interactive-accent-subtle) !important;
-  color: var(--interactive-accent) !important;
+/* ChatGPT Pill Toggle Switches */
+.checkbox-container {
+  background-color: var(--background-secondary-alt) !important;
   border-radius: var(--radius-full) !important;
-  border: 1px solid transparent !important;
-  padding: 1px 8px !important;
-  font-size: 0.8rem !important;
-  font-weight: 500 !important;
-  text-decoration: none !important;
-  transition: all 0.15s ease !important;
+  border: 1px solid var(--background-modifier-border) !important;
+  width: 42px !important;
+  height: 24px !important;
+  transition: all 0.2s ease !important;
+  cursor: pointer !important;
 }
 
-.tag:hover,
-.cm-hashtag:hover {
-  border-color: var(--interactive-accent) !important;
+.checkbox-container.is-enabled {
   background-color: var(--interactive-accent) !important;
-  color: #FFFFFF !important;
+  border-color: var(--interactive-accent) !important;
 }
 
-/* Code Blocks in ChatGPT Style */
-.markdown-rendered pre,
-.cm-line.cm-math-line,
-pre[class*="language-"] {
-  background-color: var(--background-secondary-alt) !important;
-  border: 1px solid var(--background-modifier-border) !important;
-  border-radius: var(--radius-l) !important;
-  padding: 14px 16px !important;
-  font-family: var(--font-monospace) !important;
-  font-size: 0.875rem !important;
-  overflow-x: auto !important;
-}
-
-/* Inline Code */
-code:not(pre code) {
-  background-color: var(--background-secondary-alt) !important;
-  border: 1px solid var(--background-modifier-border) !important;
-  border-radius: var(--radius-xs) !important;
-  padding: 2px 5px !important;
-  font-family: var(--font-monospace) !important;
-  font-size: 0.875em !important;
-  color: var(--text-normal) !important;
-}
-
-/* Tables */
-.markdown-rendered table {
-  width: 100%;
-  border-collapse: separate;
-  border-spacing: 0;
-  border-radius: var(--radius-m);
-  border: 1px solid var(--background-modifier-border);
-  overflow: hidden;
-  margin: 16px 0;
-}
-
-.markdown-rendered th {
-  background-color: var(--background-secondary);
-  font-weight: 600;
-  font-size: 13px;
-  color: var(--text-normal);
-  padding: 10px 14px;
-  border-bottom: 1px solid var(--background-modifier-border);
-  text-align: left;
-}
-
-.markdown-rendered td {
-  padding: 10px 14px;
-  font-size: 13.5px;
-  border-bottom: 1px solid var(--background-modifier-border);
-  color: var(--text-normal);
-}
-
-.markdown-rendered tr:last-child td {
-  border-bottom: none;
-}
-
-.markdown-rendered tr:hover td {
-  background-color: var(--background-modifier-hover);
-}
-
-/* Task List Checkboxes */
-.task-list-item-checkbox {
-  appearance: none;
-  -webkit-appearance: none;
-  width: 16px;
-  height: 16px;
-  border: 1.5px solid var(--text-muted);
-  border-radius: 4px;
-  background-color: transparent;
-  cursor: pointer;
-  vertical-align: middle;
-  position: relative;
-  transition: all 0.15s ease;
-  margin-right: 6px;
-}
-
-.task-list-item-checkbox:hover {
-  border-color: var(--interactive-accent);
-}
-
-.task-list-item-checkbox:checked {
-  background-color: var(--interactive-accent);
-  border-color: var(--interactive-accent);
-}
-
-.task-list-item-checkbox:checked:after {
-  content: "";
-  position: absolute;
-  top: 2px;
-  left: 5px;
-  width: 4px;
-  height: 8px;
-  border: solid #FFFFFF;
-  border-width: 0 2px 2px 0;
-  transform: rotate(45deg);
-}
-
-/* ==========================================================================
-   8. COMMAND PALETTE & QUICK SWITCHER (ChatGPT Omnibar Look)
-   ========================================================================== */
-
-.prompt {
-  background-color: var(--prompt-background) !important;
-  border: 1px solid var(--background-modifier-border) !important;
-  border-radius: var(--radius-xl) !important;
-  box-shadow: var(--shadow-chatgpt-popover) !important;
-  backdrop-filter: blur(16px);
-  padding: 12px !important;
-}
-
-.prompt-input {
-  background-color: var(--background-secondary-alt) !important;
-  border: 1px solid var(--background-modifier-border) !important;
+.checkbox-container:after {
+  background-color: #FFFFFF !important;
   border-radius: var(--radius-full) !important;
-  padding: 10px 16px !important;
-  font-size: 14px !important;
-  color: var(--text-normal) !important;
+  width: 18px !important;
+  height: 18px !important;
+  top: 2px !important;
+  left: 2px !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2) !important;
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
 }
 
-.prompt-input:focus {
-  border-color: var(--background-modifier-border-focus) !important;
-  box-shadow: none !important;
-}
-
-.suggestion-item {
-  border-radius: var(--radius-m) !important;
-  padding: 8px 12px !important;
-  font-size: 13.5px !important;
-  color: var(--text-normal) !important;
-  transition: background-color 0.1s ease !important;
-}
-
-.suggestion-item.is-selected {
-  background-color: var(--background-modifier-active-hover) !important;
-  color: var(--text-normal) !important;
+.checkbox-container.is-enabled:after {
+  transform: translateX(18px) !important;
 }
 
 /* ==========================================================================
-   9. CHATGPT CALLOUTS (Optional Conversational Framing)
+   11. STATUS BAR & FLOATING ELEMENTS
    ========================================================================== */
 
-/* Standard Callouts Base */
-.callout {
-  border-radius: var(--radius-l) !important;
-  border: 1px solid var(--background-modifier-border) !important;
-  background-color: var(--background-secondary-alt) !important;
-  padding: 14px 18px !important;
-  margin: 16px 0 !important;
+.status-bar {
+  background-color: var(--status-bar-background) !important;
+  border-top: 1px solid var(--status-bar-border-color) !important;
+  font-size: 12px !important;
+  color: var(--text-faint) !important;
+  padding: 3px 14px !important;
 }
 
-/* User Prompt Callout (> [!user]) */
-.callout[data-callout="user"] {
-  border-color: var(--background-modifier-border) !important;
-  background-color: var(--background-secondary) !important;
+.status-bar-item {
+  color: var(--text-faint) !important;
+  transition: color 0.15s ease !important;
 }
 
-.callout[data-callout="user"] .callout-title {
+.status-bar-item:hover {
   color: var(--text-normal) !important;
-  font-weight: 600 !important;
-}
-
-/* Assistant Response Callout (> [!assistant]) */
-.callout[data-callout="assistant"] {
-  border-left: 3px solid var(--interactive-accent) !important;
-  border-top: 1px solid var(--background-modifier-border) !important;
-  border-right: 1px solid var(--background-modifier-border) !important;
-  border-bottom: 1px solid var(--background-modifier-border) !important;
-  background-color: var(--background-secondary-alt) !important;
-}
-
-.callout[data-callout="assistant"] .callout-title {
-  color: var(--interactive-accent) !important;
-  font-weight: 600 !important;
 }
