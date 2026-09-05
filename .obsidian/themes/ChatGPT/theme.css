@@ -482,11 +482,25 @@ body.chatgpt-width-full { --file-line-width: 100%; }
    6. TAB BAR & WORKSPACE HEADER (ChatGPT Clean Tab Navigation)
    ========================================================================== */
 
+/* Tab Bar Container (Integrated Titlebar / Tab Navigation) */
+.workspace-tabs.mod-top .workspace-tab-header-container,
+.mod-root .workspace-tabs.mod-top .workspace-tab-header-container,
 .workspace-tab-header-container {
   background-color: var(--background-secondary) !important;
   border-bottom: 1px solid var(--background-modifier-border) !important;
-  padding: 4px 8px 0 8px !important;
+  padding: 2px 8px 0 8px !important;
   gap: 2px !important;
+  display: flex !important;
+  visibility: visible !important;
+  height: var(--header-height, 40px) !important;
+  min-height: 38px !important;
+}
+
+.workspace-tab-header-container-inner {
+  display: flex !important;
+  align-items: center !important;
+  gap: 2px !important;
+  flex: 1 !important;
 }
 
 .workspace-tab-header {
@@ -498,6 +512,9 @@ body.chatgpt-width-full { --file-line-width: 100%; }
   font-size: 13px !important;
   font-weight: 450 !important;
   padding: 6px 14px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
   transition: all 0.15s ease !important;
 }
 
@@ -1048,13 +1065,7 @@ button.mod-cta:hover {
    ========================================================================== */
 
 /* Native Titlebar Window Controls (Windows / Electron frameless: _ [ ] X) */
-.titlebar {
-  background-color: var(--titlebar-background) !important;
-  height: 32px !important;
-  padding: 0 !important;
-  display: flex !important;
-  align-items: center !important;
-}
+/* Note: Do not force .titlebar { display: flex } as Obsidian natively hides it to integrate tabs */
 
 .titlebar-button-container {
   display: flex !important;
