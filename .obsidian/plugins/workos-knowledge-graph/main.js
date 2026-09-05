@@ -137688,20 +137688,31 @@ var GraphApp = ({ app }) => {
       setIsLoading(false);
     }
   }, [app, filterConfig]);
+  const loadDataRef = import_react5.default.useRef(loadData);
+  loadDataRef.current = loadData;
   (0, import_react5.useEffect)(() => {
     loadData();
+  }, [loadData]);
+  (0, import_react5.useEffect)(() => {
+    let timer2 = null;
     const onVaultChange = () => {
-      loadData();
+      if (timer2 !== null)
+        window.clearTimeout(timer2);
+      timer2 = window.setTimeout(() => {
+        loadDataRef.current();
+      }, 250);
     };
     const modifyEvent = app.vault.on("modify", onVaultChange);
     const deleteEvent = app.vault.on("delete", onVaultChange);
     const createEvent2 = app.vault.on("create", onVaultChange);
     return () => {
+      if (timer2 !== null)
+        window.clearTimeout(timer2);
       app.vault.offref(modifyEvent);
       app.vault.offref(deleteEvent);
       app.vault.offref(createEvent2);
     };
-  }, [app, loadData]);
+  }, [app]);
   const availableWorkstreams = (0, import_react5.useMemo)(() => {
     const wsSet = /* @__PURE__ */ new Set();
     data.nodes.forEach((n2) => {

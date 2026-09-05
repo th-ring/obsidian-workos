@@ -6,15 +6,17 @@ Dieses Dokument definiert die universellen Systemregeln und Schnittstellen für 
 
 ## 🏛️ 1. Clean Architecture & Rollenverteilung
 
-Das WorkOS-Ökosystem ist strikt in drei Säulen modularisiert:
+Das WorkOS-Ökosystem ist strikt in 5 spezialisierte Repositories modularisiert:
 
 1. **🏛️ Obsidian-WorkOS (Dieser Vault):**  
-   Reines Wissens-, Aufgaben- und Daten-Repository. Enthält keine Entwicklungswerkzeuge oder Skripte, sondern Datenverträge (`.schemas/`) und Markdown-Inhalte.
-2. **🤖 WorkOS Agent Suite (`obsidian-workos-agent-suite`):**  
-   Das zentrale MCP-Server- und Plugin-Paket. Stellt alle standardisierten Werkzeuge (`workos_*`) für externe Agenten und 1-Klick Aktionen in Obsidian bereit.
-3. **🛡️ Agent Lock Guard (`obsidian-agent-lock-guard`):**  
-   Das Concurrency-Plugin. Verhindert Schreibkollisionen in Obsidian durch automatischen Lesemodus und Live-Banner.
-4. **🌐 WorkOS Knowledge Graph (`obsidian-workos-knowledge-graph`):**  
+   Reines Wissens-, Aufgaben- und Daten-Repository. Enthält keine Entwicklungswerkzeuge oder Skripte, sondern Datenverträge (`.schemas/`), Templates, Workstreams und Markdown-Inhalte.
+2. **📊 WorkOS Dashboard (`obsidian-workos-dashboard`):**  
+   Interaktives React 18 + Tailwind Kanban-Dashboard, Workstream-Swimlanes, Omnibar & Agent Hub.
+3. **🤖 WorkOS Agent Suite (`obsidian-workos-agent-suite`):**  
+   Headless MCP-Server, CLI-Runner, Engine-Bridge und zentrale Werkzeuge (`workos_*`) für externe Agenten und 1-Klick-Aktionen in Obsidian.
+4. **🛡️ Agent Lock Guard (`obsidian-agent-lock-guard`):**  
+   Das Concurrency-Plugin. Verhindert Schreibkollisionen in Obsidian durch automatischen Lesemodus, Live-Banner und CodeMirror 6 Transaction-Blocker.
+5. **🌐 WorkOS Knowledge Graph (`obsidian-workos-knowledge-graph`):**  
    2D/3D Force Graph & Workstream-Mindmap mit OpenAI-Minimalist-UI zur visuellen Vault-Exploration.
 
 ---

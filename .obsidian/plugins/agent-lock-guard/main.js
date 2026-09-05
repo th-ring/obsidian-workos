@@ -51,11 +51,12 @@ var DEFAULT_SETTINGS = {
 
 // src/bannerView.ts
 var BannerViewManager = class {
+  lockManager;
+  settings = DEFAULT_SETTINGS;
+  timerInterval = null;
+  currentBannerEl = null;
+  currentLockedFile = null;
   constructor(lockManager, settings) {
-    this.settings = DEFAULT_SETTINGS;
-    this.timerInterval = null;
-    this.currentBannerEl = null;
-    this.currentLockedFile = null;
     this.lockManager = lockManager;
     if (settings)
       this.settings = settings;
@@ -185,10 +186,12 @@ var BannerViewManager = class {
 var import_state = require("@codemirror/state");
 var import_view = require("@codemirror/view");
 var import_obsidian2 = require("obsidian");
+var appInstance = null;
 var activeLockManager = null;
 var activeSettings = DEFAULT_SETTINGS;
 var lastNoticeTime = 0;
-function setEditorLockManager(manager, settings) {
+function setEditorLockManager(app, manager, settings) {
+  appInstance = app;
   activeLockManager = manager;
   if (settings)
     activeSettings = settings;
@@ -205,16 +208,26 @@ function showLockNotice() {
     new import_obsidian2.Notice("\u{1F512} Notiz ist durch KI-Agent gesperrt (Schreibschutz aktiv). Klicke oben auf 'Freigeben' zum Bearbeiten.", 3e3);
   }
 }
+function isCurrentViewLocked(viewDom) {
+  if (!activeLockManager || activeLockManager.getAllActiveLocks().length === 0)
+    return false;
+  const leafDom = viewDom ? viewDom.closest(".workspace-leaf") : document.querySelector(".workspace-leaf.mod-active");
+  if (leafDom?.querySelector(".agent-lock-banner") !== null) {
+    return true;
+  }
+  if (appInstance) {
+    const activeFile = appInstance.workspace.getActiveFile();
+    if (activeFile && activeLockManager.isFileLocked(activeFile)) {
+      return true;
+    }
+  }
+  return false;
+}
 function createEditorLockExtension() {
   const transactionBlocker = import_state.EditorState.transactionFilter.of((tr) => {
     if (!activeLockManager || !tr.docChanged || !activeSettings.enableHardBlock)
       return tr;
-    const isLocked = activeLockManager.getAllActiveLocks().length > 0;
-    if (!isLocked)
-      return tr;
-    const activeLeaf = document.querySelector(".workspace-leaf.mod-active");
-    const hasLockBanner = activeLeaf?.querySelector(".agent-lock-banner") !== null;
-    if (hasLockBanner) {
+    if (isCurrentViewLocked()) {
       showLockNotice();
       return [];
     }
@@ -227,9 +240,7 @@ function createEditorLockExtension() {
       if (event.key === "ArrowUp" || event.key === "ArrowDown" || event.key === "ArrowLeft" || event.key === "ArrowRight" || event.key === "PageUp" || event.key === "PageDown" || event.key === "Home" || event.key === "End" || event.key === "Escape" || event.key === "Control" || event.key === "Alt" || event.key === "Shift" || event.key === "Meta") {
         return false;
       }
-      const dom = view.dom.closest(".workspace-leaf");
-      const hasLockBanner = dom?.querySelector(".agent-lock-banner") !== null;
-      if (hasLockBanner) {
+      if (isCurrentViewLocked(view.dom)) {
         event.preventDefault();
         event.stopPropagation();
         showLockNotice();
@@ -238,9 +249,7 @@ function createEditorLockExtension() {
       return false;
     },
     paste(event, view) {
-      const dom = view.dom.closest(".workspace-leaf");
-      const hasLockBanner = dom?.querySelector(".agent-lock-banner") !== null;
-      if (hasLockBanner) {
+      if (isCurrentViewLocked(view.dom)) {
         event.preventDefault();
         event.stopPropagation();
         showLockNotice();
@@ -249,9 +258,7 @@ function createEditorLockExtension() {
       return false;
     },
     cut(event, view) {
-      const dom = view.dom.closest(".workspace-leaf");
-      const hasLockBanner = dom?.querySelector(".agent-lock-banner") !== null;
-      if (hasLockBanner) {
+      if (isCurrentViewLocked(view.dom)) {
         event.preventDefault();
         event.stopPropagation();
         showLockNotice();
@@ -260,9 +267,7 @@ function createEditorLockExtension() {
       return false;
     },
     drop(event, view) {
-      const dom = view.dom.closest(".workspace-leaf");
-      const hasLockBanner = dom?.querySelector(".agent-lock-banner") !== null;
-      if (hasLockBanner) {
+      if (isCurrentViewLocked(view.dom)) {
         event.preventDefault();
         event.stopPropagation();
         showLockNotice();
@@ -277,12 +282,14 @@ function createEditorLockExtension() {
 // src/lockManager.ts
 var import_obsidian3 = require("obsidian");
 var LockManager = class {
+  app;
+  locks = /* @__PURE__ */ new Map();
+  listeners = /* @__PURE__ */ new Set();
+  eventRefs = [];
+  onFileCompletedCallback;
+  autoUnlockTimer = null;
+  settings = DEFAULT_SETTINGS;
   constructor(app, onFileCompleted) {
-    this.locks = /* @__PURE__ */ new Map();
-    this.listeners = /* @__PURE__ */ new Set();
-    this.eventRefs = [];
-    this.autoUnlockTimer = null;
-    this.settings = DEFAULT_SETTINGS;
     this.app = app;
     this.onFileCompletedCallback = onFileCompleted;
   }
@@ -489,9 +496,10 @@ var LockManager = class {
 // src/lockModal.ts
 var import_obsidian4 = require("obsidian");
 var AgentLockOverviewModal = class extends import_obsidian4.Modal {
+  lockManager;
+  timerInterval = null;
   constructor(app, lockManager) {
     super(app);
-    this.timerInterval = null;
     this.lockManager = lockManager;
   }
   onOpen() {
@@ -626,6 +634,7 @@ var AgentLockOverviewModal = class extends import_obsidian4.Modal {
 // src/settings.ts
 var import_obsidian5 = require("obsidian");
 var AgentLockSettingTab = class extends import_obsidian5.PluginSettingTab {
+  plugin;
   constructor(app, plugin) {
     super(app, plugin);
     this.plugin = plugin;
@@ -737,10 +746,12 @@ var AgentLockSettingTab = class extends import_obsidian5.PluginSettingTab {
 
 // src/statusBar.ts
 var StatusBarManager = class {
+  app;
+  lockManager;
+  statusBarEl = null;
+  unsubscribe = null;
+  settings = DEFAULT_SETTINGS;
   constructor(app, lockManager, settings) {
-    this.statusBarEl = null;
-    this.unsubscribe = null;
-    this.settings = DEFAULT_SETTINGS;
     this.app = app;
     this.lockManager = lockManager;
     if (settings)
@@ -796,11 +807,11 @@ var StatusBarManager = class {
 
 // src/main.ts
 var AgentLockGuardPlugin = class extends import_obsidian6.Plugin {
-  constructor() {
-    super(...arguments);
-    this.settings = DEFAULT_SETTINGS;
-    this.ribbonIconEl = null;
-  }
+  settings = DEFAULT_SETTINGS;
+  lockManager;
+  bannerViewManager;
+  statusBarManager;
+  ribbonIconEl = null;
   async onload() {
     console.log("Loading Agent Lock Guard plugin...");
     await this.loadSettings();
@@ -812,7 +823,7 @@ var AgentLockGuardPlugin = class extends import_obsidian6.Plugin {
     });
     this.bannerViewManager = new BannerViewManager(this.lockManager, this.settings);
     this.bannerViewManager.init();
-    setEditorLockManager(this.lockManager, this.settings);
+    setEditorLockManager(this.app, this.lockManager, this.settings);
     this.registerEditorExtension(createEditorLockExtension());
     if (this.settings.enableRibbonIcon) {
       this.ribbonIconEl = this.addRibbonIcon("bot", "Agent Lock Guard: Gesperrte Dateien", () => {

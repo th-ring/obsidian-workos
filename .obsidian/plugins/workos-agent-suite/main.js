@@ -4131,6 +4131,9 @@ ${subtaskBoxes}`;
     const archivedSource = import_path2.default.join(archiveDir, import_path2.default.basename(sourceFilePath));
     data.status = "triaged";
     data.triaged_to = `[[${sanitizedTitle}]]`;
+    data.agent_state = "idle";
+    delete data.locked_by;
+    delete data.locked_at;
     import_fs2.default.writeFileSync(archivedSource, import_gray_matter2.default.stringify(content, data), "utf8");
     import_fs2.default.unlinkSync(sourceFilePath);
     return {
@@ -4164,6 +4167,9 @@ ${subtaskBoxes}`;
     const archivedSource = import_path2.default.join(archiveDir, import_path2.default.basename(sourceFilePath));
     data.status = "triaged";
     data.triaged_to = `[[${sanitizedTitle}]]`;
+    data.agent_state = "idle";
+    delete data.locked_by;
+    delete data.locked_at;
     import_fs2.default.writeFileSync(archivedSource, import_gray_matter2.default.stringify(content, data), "utf8");
     import_fs2.default.unlinkSync(sourceFilePath);
     return {
@@ -4183,6 +4189,9 @@ ${subtaskBoxes}`;
     const archivedSource = import_path2.default.join(archiveDir, import_path2.default.basename(sourceFilePath));
     data.status = "triaged";
     data.triaged_to = `[[${sanitizedTitle}]]`;
+    data.agent_state = "idle";
+    delete data.locked_by;
+    delete data.locked_at;
     import_fs2.default.writeFileSync(archivedSource, import_gray_matter2.default.stringify(content, data), "utf8");
     import_fs2.default.unlinkSync(sourceFilePath);
     return {
@@ -4195,6 +4204,9 @@ ${subtaskBoxes}`;
   } else {
     const archivedSource = import_path2.default.join(archiveDir, import_path2.default.basename(sourceFilePath));
     data.status = "archived";
+    data.agent_state = "idle";
+    delete data.locked_by;
+    delete data.locked_at;
     import_fs2.default.writeFileSync(archivedSource, import_gray_matter2.default.stringify(content, data), "utf8");
     import_fs2.default.unlinkSync(sourceFilePath);
     return {
@@ -4557,10 +4569,13 @@ var WorkOSAgentSuitePlugin = class extends import_obsidian3.Plugin {
       for (let i = 0; i < unprocessed.length; i++) {
         const item = unprocessed[i];
         modal.addLog(`[${i + 1}/${unprocessed.length}] Analysiere: ${item.file}`);
-        if (this.settings.lockNotesDuringProcessing) {
-          setFileLock(item.path, `agent:${this.settings.engine}`);
-        }
-        const prompt = `Analysiere folgende unstrukturierte Notiz aus der Inbox und entscheide, ob es ein 'task' (Aufgabe), 'note' (Wissen/Konzept) oder 'workstream' ist.
+        let isLocked = false;
+        try {
+          if (this.settings.lockNotesDuringProcessing) {
+            setFileLock(item.path, `agent:${this.settings.engine}`);
+            isLocked = true;
+          }
+          const prompt = `Analysiere folgende unstrukturierte Notiz aus der Inbox und entscheide, ob es ein 'task' (Aufgabe), 'note' (Wissen/Konzept) oder 'workstream' ist.
 Antworte AUSSCHLIESSLICH als valides JSON-Objekt in folgendem Schema:
 {
   "type": "task" | "note" | "workstream",
@@ -4575,17 +4590,23 @@ Antworte AUSSCHLIESSLICH als valides JSON-Objekt in folgendem Schema:
 Notiz-Titel: ${item.data.title || item.file}
 Notiz-Inhalt:
 ${item.content}`;
-        const llmRes = await this.engineRunner.runPrompt(prompt, "Du bist ein pr\xE4ziser Task & Knowledge Triage Agent f\xFCr Obsidian WorkOS.");
-        let decision = { type: "task", title: item.data.title || item.file.replace(".md", "") };
-        try {
-          const cleanJson = llmRes.content.replace(/```json\n?|\n?```/g, "").trim();
-          decision = JSON.parse(cleanJson);
-        } catch {
-          modal.addLog(`\u26A0\uFE0F Standard-Fallback f\xFCr ${item.file} genutzt.`);
+          const llmRes = await this.engineRunner.runPrompt(prompt, "Du bist ein pr\xE4ziser Task & Knowledge Triage Agent f\xFCr Obsidian WorkOS.");
+          let decision = { type: "task", title: item.data.title || item.file.replace(".md", "") };
+          try {
+            const cleanJson = llmRes.content.replace(/```json\n?|\n?```/g, "").trim();
+            decision = JSON.parse(cleanJson);
+          } catch {
+            modal.addLog(`\u26A0\uFE0F Standard-Fallback f\xFCr ${item.file} genutzt.`);
+          }
+          decision.reviewStatus = this.settings.defaultReviewStatus;
+          const triageResult = executeTriageAction(vaultPath, item.path, decision);
+          modal.addLog(`\u2705 ${triageResult.summary}`);
+        } catch (itemErr) {
+          modal.addLog(`\u274C Fehler bei ${item.file}: ${itemErr.message}`);
+          if (isLocked) {
+            releaseFileLock(item.path);
+          }
         }
-        decision.reviewStatus = this.settings.defaultReviewStatus;
-        const triageResult = executeTriageAction(vaultPath, item.path, decision);
-        modal.addLog(`\u2705 ${triageResult.summary}`);
       }
       if (this.settings.autoGitCommit) {
         modal.addLog("\u{1F4BE} Erstelle atomaren Git Turn-Commit...");
