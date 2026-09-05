@@ -513,14 +513,24 @@ body.chatgpt-width-full { --file-line-width: 100%; }
   max-width: 320px !important;
 }
 
-/* Sidebar tab headers (left and right split) remain compact and don't squeeze the center bar */
+/* Sidebar tab headers (left and right split) remain compact 32x32 icon buttons */
 .mod-left-split .workspace-tab-header,
 .mod-right-split .workspace-tab-header {
-  min-width: unset !important;
-  max-width: unset !important;
-  width: auto !important;
-  flex: 0 0 auto !important;
-  padding: 0 4px !important;
+  min-width: 32px !important;
+  max-width: 36px !important;
+  width: 32px !important;
+  height: 32px !important;
+  flex: 0 0 32px !important;
+  padding: 0 !important;
+  justify-content: center !important;
+}
+
+.mod-left-split .workspace-tab-header-inner,
+.mod-right-split .workspace-tab-header-inner {
+  justify-content: center !important;
+  padding: 0 !important;
+  gap: 0 !important;
+  width: 100% !important;
 }
 
 .workspace-tab-header {
@@ -571,7 +581,8 @@ body.chatgpt-width-full { --file-line-width: 100%; }
   color: inherit !important;
 }
 
-.workspace-tab-header-inner-title {
+/* Center editor tabs show titles; sidebar tabs hide text titles to remain sleek icon tabs */
+.mod-root .workspace-tab-header-inner-title {
   display: block !important;
   flex: 1 1 auto !important;
   overflow: hidden !important;
@@ -584,7 +595,13 @@ body.chatgpt-width-full { --file-line-width: 100%; }
   text-align: left !important;
 }
 
-.workspace-tab-header-inner-close-button {
+.mod-left-split .workspace-tab-header-inner-title,
+.mod-right-split .workspace-tab-header-inner-title {
+  display: none !important;
+}
+
+/* Center editor tabs have close buttons; sidebar tabs NEVER have close buttons */
+.mod-root .workspace-tab-header-inner-close-button {
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
@@ -595,6 +612,11 @@ body.chatgpt-width-full { --file-line-width: 100%; }
   opacity: 0.3 !important;
   margin-left: auto !important;
   transition: all 0.15s ease !important;
+}
+
+.mod-left-split .workspace-tab-header-inner-close-button,
+.mod-right-split .workspace-tab-header-inner-close-button {
+  display: none !important;
 }
 
 .workspace-tab-header:hover .workspace-tab-header-inner-close-button {
