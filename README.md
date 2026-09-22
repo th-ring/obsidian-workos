@@ -81,13 +81,63 @@ Obsidian blockiert bei neuen oder fremden Vaults aus Sicherheitsgründen standar
 
 ### (Optional) Schritt 5: KI-Agenten über MCP anbinden
 
-Wenn du externe KI-Agenten (Claude Code CLI, Antigravity, Cursor, Codex) an diesen Vault anbinden möchtest:
+WorkOS bringt einen vollwertigen **Headless MCP-Server (Model Context Protocol)** mit. Damit können externe Coding-Assistenten und autonome KI-Agenten (wie **Claude Code**, **Google Antigravity**, **Cursor**, **Windsurf** und **Codex**) deinen Vault strukturiert lesen und verändern – vollkommen schemakonform und mit automatischem Schreibkollisionsschutz (**Agent Lock Guard**).
 
+Der MCP-Server liegt direkt im Vault unter:
+`./.obsidian/plugins/workos-agent-suite/mcp-server.js`
+
+#### 🟣 Claude Code CLI
+Führe folgenden Befehl in deinem Terminal aus:
 ```bash
-# Beispiel für Claude Code CLI:
-claude mcp add workos -- node "pfad/zu/obsidian-workos-agent-suite/dist/mcp-server.js" --vault "pfad/zu/Obsidian WorkOS"
+claude mcp add workos -- node "<Pfad-zu-deinem-Vault>/.obsidian/plugins/workos-agent-suite/mcp-server.js" --vault "<Pfad-zu-deinem-Vault>"
 ```
-Der MCP-Server stellt Tools wie `workos_triage_inbox`, `workos_decompose_task` und `workos_vault_stats` direkt bereit.
+
+#### 🔵 Google Antigravity
+Füge in deiner Antigravity-Konfiguration (`~/.gemini/antigravity/mcp_config.json`) folgenden Eintrag unter `mcpServers` hinzu:
+```json
+{
+  "mcpServers": {
+    "workos": {
+      "command": "node",
+      "args": [
+        "<Pfad-zu-deinem-Vault>/.obsidian/plugins/workos-agent-suite/mcp-server.js",
+        "--vault",
+        "<Pfad-zu-deinem-Vault>"
+      ]
+    }
+  }
+}
+```
+
+#### ⚡ Cursor & Windsurf
+1. Öffne die Einstellungen: **Settings** ➔ **Features** ➔ **MCP**.
+2. Klicke auf **"Add New MCP Server"**:
+   * **Name:** `workos`
+   * **Type:** `command`
+   * **Command:**
+     ```bash
+     node "<Pfad-zu-deinem-Vault>/.obsidian/plugins/workos-agent-suite/mcp-server.js" --vault "<Pfad-zu-deinem-Vault>"
+     ```
+
+#### 🤖 Codex / CLI Daemons (JSON-RPC Stdio)
+Der Server kommuniziert über Standard-JSON-RPC via `stdio`:
+```bash
+node .obsidian/plugins/workos-agent-suite/mcp-server.js --vault .
+```
+
+---
+
+#### 🛠️ Bereitgestellte MCP-Tools auf einen Blick
+
+Sobald der Server angebunden ist, erkennt dein KI-Agent automatisch folgende Werkzeuge:
+
+| MCP-Tool | Zweck & Verhalten |
+| :--- | :--- |
+| **`workos_vault_stats`** | Liefert Live-Metriken (Aufgabenverteilung nach Status/Prio, offene Inbox, aktive Locks). |
+| **`workos_triage_inbox`** | Scannt `00_Inbox/`, wandelt Braindumps in Tasks, Notizen oder Workstreams um und archiviert das Original. |
+| **`workos_decompose_task`** | Ergänzt konkrete Checkbox-Teilaufgaben (`- [ ]`) unter `## Subtasks` zu bestehenden Aufgaben. |
+| **`workos_create_workstream`** | Erstellt eine neue gekapselte Initiative (`20_Workstreams/<Name>/`) mit README, AGENTS.md, Tasks und Notes. |
+| **`workos_lock_guard`** | Setzt oder löst den Concurrency-Schreibschutz (Agent Lock Guard) auf Dateien während der Bearbeitung. |
 
 ---
 
