@@ -1,72 +1,71 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+﻿@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
 /* @settings
-name: ChatGPT
-id: chatgpt-theme
+name: WorkOS Theme
+id: workos-theme
 settings:
     - 
-        id: chatgpt-accent
-        title: "Akzentfarbe"
-        description: "Wähle die gewünschte ChatGPT-Akzentfarbe (Standard ChatGPT-Grün)."
+        id: workos-accent
+        title: "Akzentfarbe"`r`n        description: "Wähle die gewünschte WorkOS-Akzentfarbe (Standard Emerald Grün)."
         type: class-select
         allowEmpty: false
-        default: chatgpt-accent-green
+        default: workos-accent-green
         options:
             - 
-                label: "Grün (Original #10A37F)"
-                value: chatgpt-accent-green
+                label: "Emerald Grün (#10A37F)"
+                value: workos-accent-green
             - 
                 label: "Blau (#3B82F6)"
-                value: chatgpt-accent-blue
+                value: workos-accent-blue
             - 
                 label: "Gelb (#EAB308)"
-                value: chatgpt-accent-yellow
+                value: workos-accent-yellow
             - 
                 label: "Rosa (#EC4899)"
-                value: chatgpt-accent-pink
+                value: workos-accent-pink
             - 
                 label: "Orange (#F97316)"
-                value: chatgpt-accent-orange
+                value: workos-accent-orange
             - 
                 label: "Violett (#8B5CF6)"
-                value: chatgpt-accent-purple
+                value: workos-accent-purple
             - 
                 label: "Weiß / Monochrome"
-                value: chatgpt-accent-white
+                value: workos-accent-white
             - 
                 label: "Standard (Schiefergrau #6E6E80)"
-                value: chatgpt-accent-standard
+                value: workos-accent-standard
     - 
-        id: chatgpt-editor-width
+        id: workos-editor-width
         title: "Editor-Lesebreite"
         description: "Maximale Breite des Notizenbereichs für optimalen Lesekomfort."
         type: class-select
         allowEmpty: false
-        default: chatgpt-width-normal
+        default: workos-width-normal
         options:
             - 
-                label: "ChatGPT Standard (48rem / 768px)"
-                value: chatgpt-width-normal
+                label: "WorkOS Standard (48rem / 768px)"
+                value: workos-width-normal
             - 
                 label: "Weit (56rem / 896px)"
-                value: chatgpt-width-wide
+                value: workos-width-wide
             - 
                 label: "Volle Breite (100%)"
-                value: chatgpt-width-full
+                value: workos-width-full
     - 
-        id: chatgpt-font-style
+        id: workos-font-style
         title: "Schriftart"
         description: "Typografie-Familie für Notizen und Menüs."
         type: class-select
         allowEmpty: false
-        default: chatgpt-font-sans
+        default: workos-font-sans
         options:
             - 
                 label: "OpenAI Sans (Söhne / Inter / System)"
-                value: chatgpt-font-sans
+                value: workos-font-sans
             - 
                 label: "System Native"
-                value: chatgpt-font-system
+                value: workos-font-system
 */
 
 /* ==========================================================================
@@ -112,11 +111,11 @@ settings:
   --header-height: 44px;
 
   /* Shadows (ChatGPT Multi-Stop Ambient Shadows) */
-  --shadow-chatgpt-subtle: 0 1px 2px 0 rgba(0, 0, 0, 0.04);
-  --shadow-chatgpt-card: 0 2px 8px -2px rgba(0, 0, 0, 0.06), 0 1px 4px -1px rgba(0, 0, 0, 0.04);
-  --shadow-chatgpt-popover: 0 12px 32px -4px rgba(0, 0, 0, 0.12), 0 4px 12px -2px rgba(0, 0, 0, 0.08);
-  --shadow-chatgpt-modal: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-  --shadow-chatgpt-prompt: 0 4px 20px 0 rgba(0, 0, 0, 0.07);
+  --shadow-workos-subtle: 0 1px 2px 0 rgba(0, 0, 0, 0.04);
+  --shadow-workos-card: 0 2px 8px -2px rgba(0, 0, 0, 0.06), 0 1px 4px -1px rgba(0, 0, 0, 0.04);
+  --shadow-workos-popover: 0 12px 32px -4px rgba(0, 0, 0, 0.12), 0 4px 12px -2px rgba(0, 0, 0, 0.08);
+  --shadow-workos-modal: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  --shadow-workos-prompt: 0 4px 20px 0 rgba(0, 0, 0, 0.07);
 }
 
 /* ==========================================================================
@@ -159,17 +158,17 @@ settings:
   --interactive-hover: #F4F4F4;
 
   /* Inverted Action Pill Buttons (like "Upgrade" / "+ Neuer Chat") */
-  --chatgpt-btn-pill-bg: #000000;
-  --chatgpt-btn-pill-text: #FFFFFF;
-  --chatgpt-btn-pill-hover: #262626;
+  --workos-btn-pill-bg: #000000;
+  --workos-btn-pill-text: #FFFFFF;
+  --workos-btn-pill-hover: #262626;
 
   /* Sidebar Active File Highlight */
-  --chatgpt-sidebar-active: #ECECEC;
-  --chatgpt-sidebar-hover: #F0F0F0;
+  --workos-sidebar-active: #ECECEC;
+  --workos-sidebar-hover: #F0F0F0;
 
   /* User Message Bubble */
-  --chatgpt-user-bubble-bg: #F4F4F4;
-  --chatgpt-user-bubble-border: transparent;
+  --workos-user-bubble-bg: #F4F4F4;
+  --workos-user-bubble-border: transparent;
 
   /* Modals & Omnibar */
   --modal-background: #FFFFFF;
@@ -217,17 +216,17 @@ settings:
   --interactive-hover: #333333;
 
   /* Inverted Action Pill Buttons (like "Upgrade" / "+ Neuer Chat") */
-  --chatgpt-btn-pill-bg: #FFFFFF;
-  --chatgpt-btn-pill-text: #000000;
-  --chatgpt-btn-pill-hover: #E5E5E5;
+  --workos-btn-pill-bg: #FFFFFF;
+  --workos-btn-pill-text: #000000;
+  --workos-btn-pill-hover: #E5E5E5;
 
   /* Sidebar Active File Highlight */
-  --chatgpt-sidebar-active: rgba(255, 255, 255, 0.10);
-  --chatgpt-sidebar-hover: rgba(255, 255, 255, 0.06);
+  --workos-sidebar-active: rgba(255, 255, 255, 0.10);
+  --workos-sidebar-hover: rgba(255, 255, 255, 0.06);
 
   /* User Message Bubble */
-  --chatgpt-user-bubble-bg: #2F2F2F;
-  --chatgpt-user-bubble-border: rgba(255, 255, 255, 0.06);
+  --workos-user-bubble-bg: #2F2F2F;
+  --workos-user-bubble-border: rgba(255, 255, 255, 0.06);
 
   /* Modals & Omnibar */
   --modal-background: #212121;
@@ -236,11 +235,11 @@ settings:
 }
 
 /* ==========================================================================
-   4. CHATGPT 8-ACCENT COLOR SYSTEM
+   4. WORKOS 8-ACCENT COLOR SYSTEM
    ========================================================================== */
 
 /* 1. Grün (Default) */
-body.chatgpt-accent-green,
+body.workos-accent-green,
 :root {
   --interactive-accent: #10A37F;
   --interactive-accent-hover: #0E8C6D;
@@ -251,7 +250,7 @@ body.chatgpt-accent-green,
 }
 
 /* 2. Blau */
-body.chatgpt-accent-blue {
+body.workos-accent-blue {
   --interactive-accent: #3B82F6;
   --interactive-accent-hover: #2563EB;
   --text-accent: #3B82F6;
@@ -261,7 +260,7 @@ body.chatgpt-accent-blue {
 }
 
 /* 3. Gelb */
-body.chatgpt-accent-yellow {
+body.workos-accent-yellow {
   --interactive-accent: #EAB308;
   --interactive-accent-hover: #CA8A04;
   --text-accent: #EAB308;
@@ -271,7 +270,7 @@ body.chatgpt-accent-yellow {
 }
 
 /* 4. Rosa */
-body.chatgpt-accent-pink {
+body.workos-accent-pink {
   --interactive-accent: #EC4899;
   --interactive-accent-hover: #DB2777;
   --text-accent: #EC4899;
@@ -281,7 +280,7 @@ body.chatgpt-accent-pink {
 }
 
 /* 5. Orange */
-body.chatgpt-accent-orange {
+body.workos-accent-orange {
   --interactive-accent: #F97316;
   --interactive-accent-hover: #EA580C;
   --text-accent: #F97316;
@@ -291,7 +290,7 @@ body.chatgpt-accent-orange {
 }
 
 /* 6. Violett */
-body.chatgpt-accent-purple {
+body.workos-accent-purple {
   --interactive-accent: #8B5CF6;
   --interactive-accent-hover: #7C3AED;
   --text-accent: #8B5CF6;
@@ -301,7 +300,7 @@ body.chatgpt-accent-purple {
 }
 
 /* 7. Weiß / Monochrome */
-body.chatgpt-accent-white {
+body.workos-accent-white {
   --interactive-accent: var(--text-normal);
   --interactive-accent-hover: var(--text-muted);
   --text-accent: var(--text-normal);
@@ -311,7 +310,7 @@ body.chatgpt-accent-white {
 }
 
 /* 8. Standard */
-body.chatgpt-accent-standard {
+body.workos-accent-standard {
   --interactive-accent: #6E6E80;
   --interactive-accent-hover: #565869;
   --text-accent: #6E6E80;
@@ -321,12 +320,12 @@ body.chatgpt-accent-standard {
 }
 
 /* Width Settings */
-body.chatgpt-width-normal { --file-line-width: 48rem; }
-body.chatgpt-width-wide { --file-line-width: 56rem; }
-body.chatgpt-width-full { --file-line-width: 100%; }
+body.workos-width-normal { --file-line-width: 48rem; }
+body.workos-width-wide { --file-line-width: 56rem; }
+body.workos-width-full { --file-line-width: 100%; }
 
 /* ==========================================================================
-   5. CHATGPT SIDEBAR & NAVIGATION (Conversation History Style)
+   5. WORKOS SIDEBAR & NAVIGATION (Conversation History Style)
    ========================================================================== */
 
 /* Left Sidebar Base */
@@ -365,7 +364,7 @@ body.chatgpt-width-full { --file-line-width: 100%; }
   border: 1px solid var(--background-modifier-border) !important;
   border-radius: var(--radius-m) !important;
   color: var(--text-normal) !important;
-  box-shadow: var(--shadow-chatgpt-subtle) !important;
+  box-shadow: var(--shadow-workos-subtle) !important;
   font-weight: 500 !important;
 }
 
@@ -415,13 +414,13 @@ body.chatgpt-width-full { --file-line-width: 100%; }
 
 .nav-file-title:hover,
 .nav-folder-title:hover {
-  background-color: var(--chatgpt-sidebar-hover) !important;
+  background-color: var(--workos-sidebar-hover) !important;
   color: var(--text-normal) !important;
 }
 
 /* Active Selected File */
 .nav-file-title.is-active {
-  background-color: var(--chatgpt-sidebar-active) !important;
+  background-color: var(--workos-sidebar-active) !important;
   color: var(--text-normal) !important;
   font-weight: 500 !important;
 }
@@ -746,7 +745,7 @@ body.chatgpt-width-full { --file-line-width: 100%; }
   border-radius: var(--radius-l) !important;
   padding: 12px 16px !important;
   margin: 16px 0 28px 0 !important;
-  box-shadow: var(--shadow-chatgpt-subtle) !important;
+  box-shadow: var(--shadow-workos-subtle) !important;
 }
 
 .metadata-properties-heading {
@@ -860,7 +859,7 @@ code:not(pre code) {
   color: var(--text-normal) !important;
 }
 
-/* Modern ChatGPT Code Blocks */
+/* Modern WorkOS Code Blocks */
 .markdown-rendered pre,
 .cm-line.cm-math-line,
 pre[class*="language-"] {
@@ -871,7 +870,7 @@ pre[class*="language-"] {
   font-family: var(--font-monospace) !important;
   font-size: 0.875rem !important;
   line-height: 1.55 !important;
-  box-shadow: var(--shadow-chatgpt-subtle) !important;
+  box-shadow: var(--shadow-workos-subtle) !important;
   position: relative !important;
   overflow-x: auto !important;
 }
@@ -966,7 +965,7 @@ pre[class*="language-"] {
 }
 
 /* ==========================================================================
-   9. CHATGPT CALLOUTS (User Bubble & Assistant Response from Screenshot 2)
+   9. WORKOS CALLOUTS (User Bubble & Assistant Response from Screenshot 2)
    ========================================================================== */
 
 /* Standard Callout Frame */
@@ -980,14 +979,14 @@ pre[class*="language-"] {
 
 /* User Prompt Callout (> [!user]): EXACT Replica of User Bubble in Screenshot 2 */
 .callout[data-callout="user"] {
-  background-color: var(--chatgpt-user-bubble-bg) !important;
-  border: 1px solid var(--chatgpt-user-bubble-border) !important;
+  background-color: var(--workos-user-bubble-bg) !important;
+  border: 1px solid var(--workos-user-bubble-border) !important;
   border-radius: 20px 20px 4px 20px !important;
   max-width: 75% !important;
   margin-left: auto !important;
   margin-right: 0 !important;
   padding: 12px 18px !important;
-  box-shadow: var(--shadow-chatgpt-subtle) !important;
+  box-shadow: var(--shadow-workos-subtle) !important;
 }
 
 .callout[data-callout="user"] .callout-title {
@@ -1024,7 +1023,7 @@ pre[class*="language-"] {
   background-color: var(--prompt-background) !important;
   border: 1px solid var(--background-modifier-border) !important;
   border-radius: var(--radius-2xl) !important;
-  box-shadow: var(--shadow-chatgpt-popover) !important;
+  box-shadow: var(--shadow-workos-popover) !important;
   backdrop-filter: blur(16px) !important;
   padding: 14px !important;
 }
@@ -1064,7 +1063,7 @@ pre[class*="language-"] {
   border-radius: var(--modal-radius) !important;
   border: 1px solid var(--background-modifier-border) !important;
   background-color: var(--modal-background) !important;
-  box-shadow: var(--shadow-chatgpt-modal) !important;
+  box-shadow: var(--shadow-workos-modal) !important;
 }
 
 .modal.mod-settings .vertical-tabs-container {
@@ -1099,13 +1098,13 @@ pre[class*="language-"] {
 }
 
 /* ==========================================================================
-   INTERACTIVE BUTTONS & DIALOG CONTROLS (ChatGPT Aesthetic)
+   INTERACTIVE BUTTONS & DIALOG CONTROLS (WorkOS Aesthetic)
    ========================================================================== */
 
 /* Primary Inverted Pill Action (like "Upgrade" / Confirm) */
 button.mod-cta {
-  background-color: var(--chatgpt-btn-pill-bg) !important;
-  color: var(--chatgpt-btn-pill-text) !important;
+  background-color: var(--workos-btn-pill-bg) !important;
+  color: var(--workos-btn-pill-text) !important;
   border-radius: var(--radius-full) !important;
   border: none !important;
   padding: 7px 18px !important;
@@ -1117,7 +1116,7 @@ button.mod-cta {
 }
 
 button.mod-cta:hover {
-  background-color: var(--chatgpt-btn-pill-hover) !important;
+  background-color: var(--workos-btn-pill-hover) !important;
   transform: translateY(-0.5px);
 }
 
@@ -1407,3 +1406,4 @@ button.mod-cta:hover {
 .status-bar-item:hover {
   color: var(--text-normal) !important;
 }
+

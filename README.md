@@ -4,7 +4,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![React 18](https://img.shields.io/badge/React-18-cyan?logo=react)](https://reactjs.org/)
 [![MCP Ready](https://img.shields.io/badge/MCP-Server%20Ready-blue)](https://modelcontextprotocol.io)
-[![Theme](https://img.shields.io/badge/Theme-ChatGPT%20Dark-emerald)](https://github.com/th-ring/obsidian-chatgpt-theme)
+[![Theme](https://img.shields.io/badge/Theme-WorkOS%20Theme-emerald)](https://github.com/th-ring/obsidian-workos-theme)
 
 Willkommen bei **Obsidian WorkOS** – dem produktionsreifen Second-Brain-, Aufgaben- und Wissenssystem für [Obsidian](https://obsidian.md).
 
@@ -19,7 +19,7 @@ WorkOS verbindet ein **atomares, schemavalidiertes Datenmodell** mit einer **gek
 * 🛡️ **Agent Lock Guard (Kollisionsschutz):** Sperrt Notizen während KI-Agenten schreiben (automatischer Lesemodus, CodeMirror-Schreibblocker und Live-Banner mit Stoppuhr).
 * 🤖 **WorkOS Agent Suite & MCP-Server:** 1-Klick-Triage für Braindumps, Task-Zerlegung in Teilaufgaben und ein nativer MCP-Server für Claude Code, Antigravity und Codex.
 * 🌐 **2D/3D Knowledge Graph & Mindmap:** Hardware-beschleunigter 2D-Force-Graph, 3D-WebGL-Raum und Workstream-Mindmap mit OpenAI-Minimalist-Design.
-* 🎨 **ChatGPT Minimalist Dark Theme:** Vorkonfiguriertes Theme im schlichten OpenAI-Design mit Inter-Typografie.
+* 🎨 **WorkOS Minimalist Dark Theme:** Vorkonfiguriertes Theme mit Inter-Typografie und 8 umschaltbaren Akzentfarben via Style Settings.
 * 🔄 **Automatisierte Plugin-Updates (BRAT):** Das vorinstallierte BRAT-Plugin hält Dashboard, Agent Suite, Lock Guard und Knowledge Graph vollautomatisch über GitHub Releases aktuell.
 * 🗂️ **Zero-Build Out-of-the-Box:** Alle Plugins und Themes sind bereits vorkompiliert und einsatzbereit im Vault enthalten.
 
@@ -66,7 +66,7 @@ Obsidian blockiert bei neuen oder fremden Vaults aus Sicherheitsgründen standar
 1. Obsidian zeigt beim ersten Start ein Popup: **"Restricted mode is on"** / *"Do you trust the author of this vault?"*.
 2. Klicke auf **"Turn on community plugins"** (*Eingeschränkten Modus deaktivieren*).
    *(Alternativ: Zahnrad-Icon ➔ "Community plugins" ➔ "Turn on community plugins").*
-3. Alle vorinstallierten WorkOS-Plugins (**Dashboard**, **Agent Lock Guard**, **Agent Suite**, **Knowledge Graph**, **BRAT**) und das **ChatGPT-Theme** werden sofort aktiv!
+3. Alle vorinstallierten WorkOS-Plugins (**Dashboard**, **Agent Lock Guard**, **Agent Suite**, **Knowledge Graph**, **BRAT**) und das **WorkOS-Theme** werden sofort aktiv!
 
 ---
 
@@ -168,25 +168,30 @@ Obsidian WorkOS/
 ├── 30_Notes/                    # Globale Wissensnotizen, Konzepte & Referenzen (type: note)
 ├── 40_Archive/                  # Abgeschlossene Tasks & archivierte Workstreams
 │
-├── .obsidian/                   # Vault-Konfiguration, ChatGPT-Theme & vorinstallierte Plugins
+├── .obsidian/                   # Vault-Konfiguration, WorkOS-Theme & vorinstallierte Plugins
 │   ├── plugins/                 # Kompilierte Plugins (Dashboard, Lock Guard, Suite, Graph)
-│   └── themes/                  # ChatGPT Dark Theme
+│   └── themes/                  # WorkOS Theme
 │
 └── .schemas/                    # JSON-Schema-Definitionen für task, note, braindump
 ```
 
 ---
 
-## 🏛️ Das modulare WorkOS Ökosystem (Entwickler-Repositories)
+## 🏛️ Das modulare WorkOS Ökosystem
 
-Für Entwickler, die an den einzelnen Modulen mitwirken möchten:
+Das WorkOS-Ökosystem ist modular in spezialisierte Repositories unterteilt:
 
-1. 🏛️ **[Obsidian-WorkOS](https://github.com/th-ring/obsidian-workos)** (Dieser Vault): Wissensdatenbank, Workstreams & Schemas.
-2. 📊 **[obsidian-workos-dashboard](https://github.com/th-ring/obsidian-workos-dashboard)**: React 18 + Tailwind Kanban Dashboard.
-3. 🤖 **[obsidian-workos-agent-suite](https://github.com/th-ring/obsidian-workos-agent-suite)**: Headless MCP-Server & Plugin Bridge.
-4. 🛡️ **[obsidian-agent-lock-guard](https://github.com/th-ring/obsidian-agent-lock-guard)**: Concurrency Control & Read-Only Guard.
-5. 🌐 **[obsidian-workos-knowledge-graph](https://github.com/th-ring/obsidian-workos-knowledge-graph)**: 2D/3D Force Graph & Mindmap.
-6. 🎨 **[obsidian-chatgpt-theme](https://github.com/th-ring/obsidian-chatgpt-theme)**: Minimalistisches OpenAI Dark Theme für Obsidian.
+### 🏛️ Vault Starter-Kit (Haupt-Repository)
+* 🏛️ **[obsidian-workos](https://github.com/th-ring/obsidian-workos)**: Das schlüsselfertige Obsidian-Vault-Repository mit Datenverträgen (`.schemas/`), Templates, Workstreams und vorkompilierten Plugins.
+
+### 🧩 Community Plugins
+* 📊 **[obsidian-workos-dashboard](https://github.com/th-ring/obsidian-workos-dashboard)**: Interaktives React 18 + Tailwind Kanban Dashboard, Workstream-Swimlanes, Omnibar-Schnellerfassung und Agent Hub.
+* 🤖 **[obsidian-workos-agent-suite](https://github.com/th-ring/obsidian-workos-agent-suite)**: Headless MCP-Server, Universal CLI Runner (Codex, Claude, Antigravity, Ollama) und Obsidian Plugin Bridge.
+* 🛡️ **[obsidian-agent-lock-guard](https://github.com/th-ring/obsidian-agent-lock-guard)**: Multi-Agent Concurrency Control, Live-Banner mit Stoppuhr und CodeMirror 6 Transaction-Blocker.
+* 🌐 **[obsidian-workos-knowledge-graph](https://github.com/th-ring/obsidian-workos-knowledge-graph)**: 2D Canvas Force Graph, 3D WebGL Space und 2-Way Workstream-Mindmap mit minimalistischer UI.
+
+### 🎨 Themes
+* 🎨 **[obsidian-workos-theme](https://github.com/th-ring/obsidian-workos-theme)**: Minimalistisches High-End Dark- & Light-Theme für Obsidian mit Inter-Typografie und 8-Farben-Akzentsystem via Style Settings.
 
 ---
 
