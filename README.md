@@ -20,7 +20,8 @@ WorkOS verbindet ein **atomares, schemavalidiertes Datenmodell** mit einer **gek
 * 🤖 **WorkOS Agent Suite & MCP-Server:** 1-Klick-Triage für Braindumps, Task-Zerlegung in Teilaufgaben und ein nativer MCP-Server für Claude Code, Antigravity und Codex.
 * 🌐 **2D/3D Knowledge Graph & Mindmap:** Hardware-beschleunigter 2D-Force-Graph, 3D-WebGL-Raum und Workstream-Mindmap mit OpenAI-Minimalist-Design.
 * 🎨 **ChatGPT Minimalist Dark Theme:** Vorkonfiguriertes Theme im schlichten OpenAI-Design mit Inter-Typografie.
-* 🗂️ **Zero-Build Out-of-the-Box:** Alle Plugins und Themes sind bereits vorkompiliert im Vault enthalten.
+* 🔄 **Automatisierte Plugin-Updates (BRAT):** Das vorinstallierte BRAT-Plugin hält Dashboard, Agent Suite, Lock Guard und Knowledge Graph vollautomatisch über GitHub Releases aktuell.
+* 🗂️ **Zero-Build Out-of-the-Box:** Alle Plugins und Themes sind bereits vorkompiliert und einsatzbereit im Vault enthalten.
 
 ---
 
@@ -28,7 +29,7 @@ WorkOS verbindet ein **atomares, schemavalidiertes Datenmodell** mit einer **gek
 
 ### Voraussetzungen
 * Installiertes [Obsidian](https://obsidian.md) (Version 1.5 oder neuer auf Windows, macOS oder Linux).
-* *(Optional)* [Git](https://git-scm.com/) für bequeme Updates.
+* *(Optional)* [Git](https://git-scm.com/) für bequemes Klonen.
 * *(Optional für KI/MCP)* [Node.js](https://nodejs.org/) v18+, falls du den externen MCP-Server für Claude Code oder Antigravity nutzen möchtest.
 
 ---
@@ -65,7 +66,7 @@ Obsidian blockiert bei neuen oder fremden Vaults aus Sicherheitsgründen standar
 1. Obsidian zeigt beim ersten Start ein Popup: **"Restricted mode is on"** / *"Do you trust the author of this vault?"*.
 2. Klicke auf **"Turn on community plugins"** (*Eingeschränkten Modus deaktivieren*).
    *(Alternativ: Zahnrad-Icon ➔ "Community plugins" ➔ "Turn on community plugins").*
-3. Alle vorinstallierten WorkOS-Plugins (**Dashboard**, **Agent Lock Guard**, **Agent Suite**, **Knowledge Graph**) und das **ChatGPT-Theme** werden sofort aktiv!
+3. Alle vorinstallierten WorkOS-Plugins (**Dashboard**, **Agent Lock Guard**, **Agent Suite**, **Knowledge Graph**, **BRAT**) und das **ChatGPT-Theme** werden sofort aktiv!
 
 ---
 
@@ -90,25 +91,21 @@ Der MCP-Server stellt Tools wie `workos_triage_inbox`, `workos_decompose_task` u
 
 ---
 
-## 🔄 Wie erhält man Plugin-Updates?
+## 🔄 Wie erhält man Plugin-Updates? (Auto-Updates via BRAT)
 
-Da die WorkOS-Plugins tief in dieses System integriert sind und (noch) nicht im offiziellen Obsidian Community Store gelistet sind, gibt es drei unkomplizierte Wege für Updates:
+WorkOS liefert das bewährte Community-Plugin **[BRAT (Beta Reviewer's Auto-update Tester)](https://github.com/TfTHacker/obsidian42-brat)** bereits **vollständig vorinstalliert und vorkonfiguriert** mit.
 
-### Weg 1: Per `git pull` (Für Git-Nutzer – am einfachsten)
-Da alle kompilierten Plugin-Bundles direkt im Vault-Repository unter `.obsidian/plugins/` versioniert werden, aktualisierst du das gesamte System mit einem Befehl:
+### 🌟 1. Vollautomatisches Update (Standard für alle Benutzer)
+* **Keine manuelle Einrichtung nötig:** Die 4 WorkOS-Repositories (`obsidian-workos-dashboard`, `obsidian-workos-agent-suite`, `obsidian-agent-lock-guard`, `obsidian-workos-knowledge-graph`) sind bereits in der Konfiguration von BRAT hinterlegt.
+* **Auto-Check beim Start:** Bei jedem Start von Obsidian fragt BRAT die GitHub-Releases ab. Sobald du als Maintainer eine neue Version auf GitHub veröffentlichst, lädt BRAT die aktualisierten Dateien (`main.js`, `manifest.json`, `styles.css`) automatisch herunter.
+* **Manuelles Update jederzeit anstoßen:**  
+  Drücke `Strg + P` / `Cmd + P` ➔ tippe **`BRAT: Check for updates to all beta plugins and themes`** ➔ `Enter`.
+
+### 💻 2. Für Git-Nutzer: `git pull`
+Da alle kompilierten Plugin-Bundles zusätzlich im Vault-Repository unter `.obsidian/plugins/` versioniert sind, aktualisierst du das gesamte System alternativ einfach im Terminal:
 ```bash
 git pull
 ```
-Obsidian lädt veränderte Plugins automatisch neu oder du drückst `Strg + R` zum Neuladen.
-
-### Weg 2: Über das BRAT-Plugin (Nativ in Obsidian)
-Mit dem beliebten Community-Plugin **[BRAT (Beta Reviewer's Auto-update Tester)](https://github.com/TfTHacker/obsidian42-brat)** lassen sich GitHub-Plugins ohne Store automatisch aktuell halten:
-1. Installiere das Plugin `BRAT` in Obsidian.
-2. Füge die Repositories hinzu (z. B. `th-ring/obsidian-workos-dashboard`).
-3. BRAT prüft bei jedem Obsidian-Start auf neue GitHub-Releases und aktualisiert die Plugins im Hintergrund.
-
-### Weg 3: Manuelles Update
-Lade bei einem neuen Release einfach die 3 Dateien (`main.js`, `manifest.json`, `styles.css`) aus den Releases des jeweiligen Plugin-Repositories herunter und ersetze sie im entsprechenden Ordner unter `.obsidian/plugins/<plugin-name>/`.
 
 ---
 

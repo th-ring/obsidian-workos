@@ -1,0 +1,20 @@
+{
+  "pluginList": [
+    "th-ring/obsidian-workos-dashboard",
+    "th-ring/obsidian-workos-agent-suite",
+    "th-ring/obsidian-agent-lock-guard",
+    "th-ring/obsidian-workos-knowledge-graph"
+  ],
+  "pluginSubListFrozenVersion": [],
+  "themesList": [],
+  "updateAtStartup": true,
+  "updateThemesAtStartup": true,
+  "enableAfterInstall": true,
+  "loggingEnabled": false,
+  "loggingPath": "BRAT-log",
+  "loggingVerboseEnabled": false,
+  "debuggingMode": false,
+  "notificationsEnabled": true,
+  "selectLatestPluginVersionByDefault": true,
+  "allowIncompatiblePlugins": false
+}
